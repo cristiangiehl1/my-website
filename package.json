@@ -1,7 +1,11 @@
 {
-  "name": "my-portfolio",
+  "name": "my-website",
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "name": "Cristian Giehl",
+    "email": "cristiangiehl@gmail.com"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -21,6 +25,7 @@
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
