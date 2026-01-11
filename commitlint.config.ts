@@ -32,6 +32,7 @@ const Configuration: UserConfig = {
         'deps',
         'docs',
         'release',
+        'seo',
 
         // Application layers / domains
         'api',
