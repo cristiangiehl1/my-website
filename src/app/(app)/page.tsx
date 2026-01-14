@@ -8,7 +8,7 @@ import {
   FaWhatsapp,
 } from 'react-icons/fa'
 
-import { Navbar } from '../_components/navbar'
+import { AppHeader } from '../_components/app-header'
 import { Button } from '../_components/ui/button'
 
 const CTA_BUTTONS: Array<{ icon: IconType; href: string }> = [
@@ -23,8 +23,8 @@ const CTA_BUTTONS: Array<{ icon: IconType; href: string }> = [
 
 export default function HomePage() {
   return (
-    <div className='bg-background relative h-screen w-full overflow-hidden'>
-      <Navbar />
+    <div className='bg-background h-screen w-full'>
+      <AppHeader />
 
       {/* Animated Background Elements */}
       <div className='pointer-events-none absolute inset-0 overflow-hidden'>
