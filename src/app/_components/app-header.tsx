@@ -7,25 +7,10 @@ import { cn } from '@/lib/utils'
 
 import { NavLink } from './nav-link'
 import { Button } from './ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from './ui/dropdown-menu'
 
 const navLinks: Array<{ label: string; href: string }> = [
-  { label: 'Home', href: '/' },
+  { label: 'Projetos', href: '/projects' },
   { label: 'Sobre', href: '#' },
-  { label: 'Projetos', href: '#' },
   { label: 'Skills', href: '#' },
   { label: 'Contato', href: '#' },
 ]
@@ -40,7 +25,7 @@ export function AppHeader() {
 
   return (
     <header className='bg-background/80 border-border fixed top-0 right-0 left-0 z-50 border-b backdrop-blur-md'>
-      <div className='relative mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8'>
+      <div className='relative mx-auto flex max-w-6xl items-center justify-between px-4 py-5 sm:px-6 lg:px-8'>
         {/* Logo */}
         <Link href='/' className='flex items-center gap-2'>
           <div className='bg-primary flex h-8 w-8 items-center justify-center rounded-lg'>

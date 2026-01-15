@@ -838,8 +838,6 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
                         const IconComponent = option?.icon
                         const customStyle = option?.style
 
-                        console.log({ IconComponent, customStyle })
-
                         if (!option) {
                           return null
                         }
