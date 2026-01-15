@@ -1,0 +1,11 @@
+export type Technology =
+  | 'Next.js'
+  | 'React'
+  | 'TypeScript'
+  | 'Node.js'
+  | 'PostgreSQL'
+  | 'Tailwind'
+  | 'Rust'
+  | 'Python'
+  | 'GSAP'
+  | 'Zod'
