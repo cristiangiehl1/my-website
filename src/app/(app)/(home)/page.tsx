@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import type { IconType } from 'react-icons'
 import { BiCodeAlt } from 'react-icons/bi'
 import {
@@ -8,8 +9,7 @@ import {
   FaWhatsapp,
 } from 'react-icons/fa'
 
-import { AppHeader } from '../_components/app-header'
-import { Button } from '../_components/ui/button'
+import { Button } from '@/app/_components/ui/button'
 
 const CTA_BUTTONS: Array<{ icon: IconType; href: string }> = [
   { icon: FaGithub, href: 'https://github.com/cristiangiehl1' },
@@ -24,28 +24,14 @@ const CTA_BUTTONS: Array<{ icon: IconType; href: string }> = [
 export default function HomePage() {
   return (
     <div className='bg-background h-screen w-full'>
-      <AppHeader />
-
       {/* Animated Background Elements */}
       <div className='pointer-events-none absolute inset-0 overflow-hidden'>
         <div className='bg-primary/10 animate-glow absolute top-1/4 left-1/4 h-96 w-96 rounded-full blur-3xl' />
         <div className='bg-secondary/10 animate-glow absolute right-1/4 bottom-1/4 h-96 w-96 rounded-full blur-3xl' />
       </div>
 
-      {/* Grid Pattern Overlay */}
-      <div
-        className='pointer-events-none absolute inset-0 opacity-20'
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, rgb(var(--color-border) / 0.1) 1px, transparent 1px),
-            linear-gradient(to bottom, rgb(var(--color-border) / 0.1) 1px, transparent 1px)
-          `,
-          backgroundSize: '4rem 4rem',
-        }}
-      />
-
       {/* Main Content */}
-      <div className='relative flex h-full items-center justify-center px-4 sm:px-6 lg:px-8'>
+      <main className='relative flex h-full items-center justify-center px-4 sm:px-6 lg:px-8'>
         <div className='mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-2'>
           {/* Left Column - Text Content */}
           <div className='space-y-8 text-center lg:text-left'>
@@ -74,12 +60,15 @@ export default function HomePage() {
               <Button
                 size='lg'
                 className='bg-primary text-primary-foreground hover:bg-primary/90 group'
+                asChild
               >
-                Ver Projetos
-                <FaArrowRight
-                  className='ml-2 transition-transform group-hover:translate-x-1'
-                  size={20}
-                />
+                <Link href={'/projects'}>
+                  Ver Projetos
+                  <FaArrowRight
+                    className='ml-2 transition-transform group-hover:translate-x-1'
+                    size={20}
+                  />
+                </Link>
               </Button>
               <Button
                 size='lg'
@@ -157,14 +146,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Scroll Indicator (optional, hidden by default since no scroll) */}
-      <footer className='text-muted-foreground absolute bottom-8 left-1/2 -translate-x-1/2 text-sm opacity-50'>
-        <div className='flex flex-col items-center gap-2'>
-          <span className='text-xs'>Use a navbar para navegar</span>
-        </div>
-      </footer>
+      </main>
     </div>
   )
 }
