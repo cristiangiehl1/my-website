@@ -2,17 +2,23 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import type { AnchorHTMLAttributes } from 'react'
 
 import { cn } from '@/lib/utils'
 
-interface NavLinkProps {
+interface NavLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   label: string
   href: string
   handleClick?: () => void
-  className?: string
 }
 
-export function NavLink({ href, label, handleClick, className }: NavLinkProps) {
+export function NavLink({
+  href,
+  label,
+  handleClick,
+  className,
+  ...props
+}: NavLinkProps) {
   const pathName = usePathname()
 
   return (
@@ -20,13 +26,14 @@ export function NavLink({ href, label, handleClick, className }: NavLinkProps) {
       href={href}
       onClick={handleClick}
       className={cn(
-        'relative inline-flex items-center gap-2',
+        'nav-link relative inline-flex items-center gap-2',
         'text-foreground hover:text-primary focus:text-primary transition-colors',
         className,
         pathName === href
           ? 'text-foreground after:scale-100'
           : 'text-muted-foreground'
       )}
+      {...props}
     >
       {label}
     </Link>

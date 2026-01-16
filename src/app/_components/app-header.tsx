@@ -3,13 +3,21 @@
 import Link from 'next/link'
 import { useState } from 'react'
 
+import type { NavLinkWithSubRoutes } from '@/@types/nav-links'
 import { cn } from '@/lib/utils'
 
-import { NavLink } from './nav-link'
-import { Button } from './ui/button'
+import { NavMenuItems } from './nav-menu-items'
 
-const navLinks: Array<{ label: string; href: string }> = [
-  { label: 'Projetos', href: '/projects' },
+const navLinks: Array<NavLinkWithSubRoutes> = [
+  {
+    label: 'Portfólio',
+    href: '/portfolio',
+    subRoutes: [
+      { label: 'Projetos', href: '/portfolio/projects' },
+      { label: 'Animações', href: '/portfolio/animations' },
+      { label: 'Conceitos', href: '/portfolio/concepts' },
+    ],
+  },
   { label: 'Sobre', href: '#' },
   { label: 'Skills', href: '#' },
   { label: 'Contato', href: '#' },
@@ -18,10 +26,6 @@ const navLinks: Array<{ label: string; href: string }> = [
 export function AppHeader() {
   const [isOpen, setIsOpen] = useState(false)
   const menuBtnClass = 'h-0.5 w-5 origin-center bg-white duration-400'
-
-  const handleNavClick = () => {
-    setIsOpen(false)
-  }
 
   return (
     <header className='bg-background/80 border-border fixed top-0 right-0 left-0 z-50 border-b backdrop-blur-md'>
@@ -39,18 +43,7 @@ export function AppHeader() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className='hidden items-center gap-8 md:flex'>
-          {navLinks.map(({ label, href }, i) => (
-            <NavLink key={i} label={label} href={href} />
-          ))}
-        </nav>
-
-        {/* CTA Button */}
-        <div className='hidden md:block'>
-          <Button className='bg-primary text-primary-foreground hover:bg-primary/90'>
-            Contratar
-          </Button>
-        </div>
+        <NavMenuItems navLinks={navLinks} className='hidden md:flex' />
 
         {/* Mobile Menu Button */}
         <button
@@ -86,38 +79,34 @@ export function AppHeader() {
         {/* OVERLAY */}
         <div
           className={cn(
-            'inset-0 z-10 h-screen w-full',
+            'inset-0 z-10 h-screen w-full md:hidden',
             isOpen ? 'fixed' : 'hidden'
           )}
           onPointerDown={() => setIsOpen(false)}
         />
 
         {/* MENU */}
-        <nav
+        <div
+          id='navbar'
           className={cn(
-            'bg-background/90 boder-white absolute left-0 z-20 flex w-[50%] flex-col items-start gap-4 border p-4 transition-all duration-400 md:hidden',
+            'bg-background/90 boder-white absolute left-0 z-20 flex flex-col items-start gap-4 border p-4 transition-all duration-400 md:hidden',
             isOpen
-              ? 'top-[110%] opacity-100'
-              : 'pointer-events-none top-[80%] opacity-0'
+              ? 'translate-y-20 opacity-100'
+              : 'pointer-events-none translate-y-10 opacity-0'
           )}
-          onPointerDown={(e) => e.stopPropagation()}
+          onFocus={() => setIsOpen(true)}
+          onBlur={(e) => {
+            const nextFocused = e.relatedTarget as HTMLElement | null
+
+            if (nextFocused && e.currentTarget.contains(nextFocused)) {
+              return
+            }
+
+            setIsOpen(false)
+          }}
         >
-          {navLinks.map(({ label, href }, i) => (
-            <NavLink
-              key={i}
-              label={label}
-              href={href}
-              handleClick={handleNavClick}
-              className={cn(
-                "relative after:content-['']",
-                'after:ml-2 after:h-1.5 after:w-1.5',
-                'after:rounded-full after:bg-current',
-                'after:scale-0 after:transition-transform after:duration-200',
-                'hover:after:scale-100 focus-visible:after:scale-100'
-              )}
-            />
-          ))}
-        </nav>
+          <NavMenuItems navLinks={navLinks} />
+        </div>
       </div>
     </header>
   )
