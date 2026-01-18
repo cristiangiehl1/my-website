@@ -32,161 +32,192 @@ export const TECHNOLOGY_DATA: Record<
   string,
   {
     value: string
+    label: string
     icon: IconType
-    iconColor?: string
+    style?: {
+      /** Custom badge color */
+      badgeColor?: string
+      /** Custom icon color */
+      iconColor?: string
+      /** Gradient background for badge */
+      gradient?: string
+    }
     category: TechonologyCategory
   }
 > = {
-  JavaScript: {
+  javascript: {
     value: 'javascript',
+    label: 'Javascript',
     icon: SiJavascript,
-    iconColor: 'text-yellow-500',
+    style: { iconColor: 'text-yellow-500' },
     category: 'Programming Language',
   },
 
-  TypeScript: {
+  typescript: {
     value: 'typescript',
+    label: 'Typescript',
     icon: SiTypescript,
-    iconColor: 'text-blue-600',
+    style: { iconColor: 'text-blue-600' },
     category: 'Programming Language',
   },
 
-  Rust: {
+  rust: {
     value: 'rust',
+    label: 'Rust',
     icon: SiRust,
-    iconColor: 'text-orange-600',
+    style: { iconColor: 'text-orange-600' },
     category: 'Programming Language',
   },
 
-  Python: {
+  python: {
     value: 'python',
+    label: 'Python',
     icon: SiPython,
-    iconColor: 'text-blue-400',
+    style: { iconColor: 'text-blue-400' },
     category: 'Programming Language',
   },
 
-  Node: {
+  node: {
     value: 'node',
+    label: 'Node.js',
     icon: SiNodedotjs,
-    iconColor: 'text-green-600',
+    style: { iconColor: 'text-green-600' },
     category: 'Runtime',
   },
 
-  React: {
+  react: {
     value: 'react',
+    label: 'React',
     icon: SiReact,
-    iconColor: 'text-cyan-400',
+    style: { iconColor: 'text-cyan-400' },
     category: 'Framework',
   },
 
-  Next: {
+  next: {
     value: 'next',
+    label: 'Next.js',
     icon: SiNextdotjs,
-    iconColor: 'text-white',
+    style: { iconColor: 'text-white' },
     category: 'Framework',
   },
 
-  Loco: {
+  loco: {
     value: 'loco',
+    label: 'Loco.rs',
     icon: GiSteamLocomotive,
-    iconColor: 'text-red-500',
+    style: { iconColor: 'text-red-500' },
     category: 'Framework',
   },
 
-  GSAP: {
+  gsap: {
     value: 'gsap',
+    label: 'GSAP',
     icon: TbBrandFramerMotion,
-    iconColor: 'text-green-500',
+    style: { iconColor: 'text-green-500' },
     category: 'Animation',
   },
 
-  Zod: {
+  zod: {
     value: 'zod',
+    label: 'Zod',
     icon: SiZod,
-    iconColor: 'text-blue-500',
+    style: { iconColor: 'text-blue-500' },
     category: 'Validation',
   },
 
-  TanStack: {
+  tanstack: {
     value: 'tanstack',
+    label: 'TanStack',
     icon: LuTreePalm,
-    iconColor: 'text-orange-500',
+    style: { iconColor: 'text-orange-500' },
     category: 'State Management',
   },
 
-  Docker: {
+  docker: {
     value: 'docker',
+    label: 'Docker',
     icon: FaDocker,
-    iconColor: 'text-blue-500',
+    style: { iconColor: 'text-blue-500' },
     category: 'DevOps',
   },
 
-  Jest: {
+  jest: {
     value: 'jest',
+    label: 'Jest',
     icon: SiJest,
-    iconColor: 'text-red-500',
+    style: { iconColor: 'text-red-500' },
     category: 'Testing',
   },
 
-  Cypress: {
+  cypress: {
     value: 'cypress',
+    label: 'Cypress',
     icon: TbBrandCypress,
-    iconColor: 'text-teal-500',
+    style: { iconColor: 'text-teal-500' },
     category: 'Testing',
   },
 
-  PostgreSQL: {
+  postgresql: {
     value: 'postgresql',
+    label: 'PostgreSQL',
     icon: SiPostgresql,
-    iconColor: 'text-blue-700',
+    style: { iconColor: 'text-blue-700' },
     category: 'Database',
   },
 
-  Redis: {
+  redis: {
     value: 'redis',
+    label: 'Redis',
     icon: DiRedis,
-    iconColor: 'text-red-500',
+    style: { iconColor: 'text-red-500' },
     category: 'Database',
   },
 
-  SeaORM: {
+  seaorm: {
     value: 'seaorm',
+    label: 'SeaORM',
     icon: GiWaveCrest,
-    iconColor: 'text-cyan-500',
+    style: { iconColor: 'text-cyan-500' },
     category: 'ORM',
   },
 
-  Prisma: {
+  prisma: {
     value: 'prisma',
+    label: 'Prisma',
     icon: SiPrisma,
-    iconColor: 'text-cyan-500',
+    style: { iconColor: 'text-cyan-500' },
     category: 'ORM',
   },
 
-  Tailwind: {
+  tailwind: {
     value: 'tailwind',
+    label: 'Tailwind',
     icon: SiTailwindcss,
-    iconColor: 'text-cyan-500',
+    style: { iconColor: 'text-cyan-500' },
     category: 'Styling',
   },
-  Fastify: {
+
+  fastify: {
     value: 'fastify',
+    label: 'Fastify',
     icon: SiFastify,
-    iconColor: 'text-black dark:text-white',
+    style: { iconColor: 'text-black dark:text-white' },
     category: 'Framework',
   },
 
-  Express: {
+  express: {
     value: 'express',
+    label: 'Express',
     icon: SiExpress,
-    iconColor: 'text-gray-700 dark:text-gray-200',
+    style: { iconColor: 'text-gray-700 dark:text-gray-200' },
     category: 'Framework',
   },
 
-  Axios: {
+  axios: {
     value: 'axios',
+    label: 'Axios',
     icon: SiAxios,
-    iconColor: 'text-purple-500',
+    style: { iconColor: 'text-purple-500' },
     category: 'Tool',
   },
 }
@@ -194,18 +225,15 @@ export const TECHNOLOGY_DATA: Record<
 export function getTechOptions(): Array<MultiSelectGroup> {
   const groupMap = new Map<TechnologyName, Array<MultiSelectOption>>()
 
-  for (const [techName, { category, icon, value, iconColor }] of Object.entries(
-    TECHNOLOGY_DATA
-  )) {
+  for (const [, tech] of Object.entries(TECHNOLOGY_DATA)) {
+    const { category, ...techData } = tech
     const options = groupMap.get(category)
 
     if (!options) {
-      groupMap.set(category, [
-        { label: techName, value, icon, style: { iconColor } },
-      ])
+      groupMap.set(category, [techData])
       continue
     }
-    options.push({ label: techName, value, icon, style: { iconColor } })
+    options.push(techData)
   }
 
   const optionsArr = Array.from(groupMap.entries()).map(

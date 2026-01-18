@@ -1,11 +1,10 @@
 'use client'
 
 import Image from 'next/image'
-import { useState } from 'react'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import { FaGithub } from 'react-icons/fa6'
 
-import type { Project } from '@/@types/projects'
+import type { Project } from '@/@types/work'
 import { TECHNOLOGY_DATA } from '@/constants/technology-data'
 
 import { Button } from './ui/button'
@@ -17,21 +16,8 @@ interface ProjectCardProps {
 export function ProjectCard({
   project: { description, featured, image, technologies, title, demo, github },
 }: ProjectCardProps) {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    setMousePosition({
-      x: ((e.clientX - rect.left) / rect.width - 0.5) * 20,
-      y: ((e.clientY - rect.top) / rect.height - 0.5) * 20,
-    })
-  }
-
   return (
-    <div
-      className='group bg-card border-border hover:border-primary hover:shadow-primary/20 relative flex flex-col justify-between overflow-hidden rounded-lg border transition-all duration-300 hover:shadow-2xl'
-      onMouseMove={handleMouseMove}
-    >
+    <div className='group bg-card border-border hover:border-primary hover:shadow-primary/20 relative flex flex-col justify-between overflow-hidden rounded-lg border transition-all duration-300 hover:shadow-2xl'>
       {featured && (
         <div className='bg-primary text-primary-foreground absolute top-4 right-4 z-10 rounded-full px-3 py-1 text-xs font-bold'>
           Destaque
@@ -66,8 +52,7 @@ export function ProjectCard({
 
         <div className='flex flex-wrap items-center gap-x-4 gap-y-2'>
           {technologies.map((tech, idx) => {
-            console.log(tech)
-            const { icon, iconColor } = TECHNOLOGY_DATA[tech]
+            const { icon, style } = TECHNOLOGY_DATA[tech]
 
             const Icon = icon
 
@@ -76,7 +61,7 @@ export function ProjectCard({
                 key={idx}
                 className='text-muted-foreground flex items-center gap-1 text-sm'
               >
-                <Icon className={iconColor} />
+                <Icon className={style?.iconColor} />
                 {tech}
               </span>
             )
@@ -112,14 +97,6 @@ export function ProjectCard({
           )}
         </div>
       </div>
-
-      {/* Hover Glow Effect */}
-      <div
-        className='pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100'
-        style={{
-          background: `radial-gradient(600px circle at ${mousePosition.x + 50}% ${mousePosition.y + 50}%, rgba(var(--color-primary) / 0.1), transparent 40%)`,
-        }}
-      />
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import type { TechnologyName } from './technology'
 
-export interface Project {
+export interface Work {
   id: string
   title: string
   description: string
