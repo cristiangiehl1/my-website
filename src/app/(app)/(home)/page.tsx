@@ -62,7 +62,7 @@ export default function HomePage() {
                 className='bg-primary text-primary-foreground hover:bg-primary/90 group'
                 asChild
               >
-                <Link href={'/projects'}>
+                <Link href={'/portfolio/projects'}>
                   Ver Projetos
                   <FaArrowRight
                     className='ml-2 transition-transform group-hover:translate-x-1'

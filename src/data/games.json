@@ -1,0 +1,11 @@
+[
+  {
+    "id": "1",
+    "title": "Card War",
+    "description": "A turn-based card game for two players built with TypeScript and Next.js, using webhooks to synchronize real-time matches. Each player draws one card per turn, and the player with the highest card value wins the round.",
+    "technologies": ["typescript", "next", "socketio", "node"],
+    "github": "https://github.com/seu-usuario/ecommerce-store",
+    "demo": "https://sneakers-store-demo.vercel.app",
+    "featured": true
+  }
+]

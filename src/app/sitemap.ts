@@ -16,6 +16,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}about`,
       priority: 0.5,
     },
+    {
+      url: `${baseUrl}contact`,
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}skills`,
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}portfolio/projects`,
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}portfolio/animations`,
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}portfolio/games`,
+      priority: 0.5,
+    },
   ]
 
   const defaultSitemapEntry: SitemapEntryWithoutUrl = {

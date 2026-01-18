@@ -16,12 +16,11 @@ const navLinks: Array<NavLinkWithSubRoutes> = [
       { label: 'Projetos', href: '/portfolio/projects' },
       { label: 'Animações', href: '/portfolio/animations' },
       { label: 'Games', href: '/portfolio/games' },
-      { label: 'Conceitos', href: '/portfolio/concepts' },
     ],
   },
   { label: 'Sobre', href: '/about' },
-  { label: 'Skills', href: '#' },
-  { label: 'Contato', href: '#' },
+  { label: 'Skills', href: '/skills' },
+  { label: 'Contato', href: '/contact' },
 ]
 
 export function AppHeader() {

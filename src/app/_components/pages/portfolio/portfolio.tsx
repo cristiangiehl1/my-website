@@ -2,22 +2,21 @@
 
 import { BiCodeAlt } from 'react-icons/bi'
 
+import type { Work } from '@/@types/work'
 import { useFilteredWorks } from '@/hooks/use-filtered-works'
 
-import { ProjectCard } from '../../project-card'
 import { TechnologyFilters } from '../../tecnhology-filter'
+import { WorkCard } from '../../work-card'
 
 interface PortfolioHeanderProps {
-  title: string
+  title: React.ReactNode
   description: string
 }
 
 export function PortfolioHeader({ title, description }: PortfolioHeanderProps) {
   return (
     <div className='mb-12 space-y-4 text-center'>
-      <h1 className='text-5xl font-bold text-balance sm:text-6xl'>
-        Meus <span className='text-primary'>{title}</span>
-      </h1>
+      <h1 className='text-5xl font-bold text-balance sm:text-6xl'>{title}</h1>
       <p className='text-muted-foreground mx-auto max-w-2xl text-xl leading-relaxed text-pretty'>
         {description}
       </p>
@@ -46,16 +45,17 @@ export function PortfolioEmptyDataFallback({
 interface PorfolioMainProps {
   header: PortfolioHeanderProps
   fallback: PortfolioEmptyDataFallbackProps
+  works: Array<Work>
 }
 
-export function PorfolioMain({ fallback, header }: PorfolioMainProps) {
+export function PorfolioMain({ fallback, header, works }: PorfolioMainProps) {
   const {
-    works,
+    filteredWorks,
     isExactMatchEnable,
     selectedTechs,
     setIsExactMatchEnable,
     setSelectedTechs,
-  } = useFilteredWorks()
+  } = useFilteredWorks(works)
 
   return (
     <main className='relative px-4 pt-24 pb-16 sm:px-6 lg:px-8'>
@@ -67,7 +67,7 @@ export function PorfolioMain({ fallback, header }: PorfolioMainProps) {
         />
 
         <TechnologyFilters
-          works={works}
+          works={filteredWorks}
           isExactMatchEnable={isExactMatchEnable}
           selectedTechs={selectedTechs}
           setIsExactMatchEnable={setIsExactMatchEnable}
@@ -76,13 +76,13 @@ export function PorfolioMain({ fallback, header }: PorfolioMainProps) {
 
         {/* Works Grid */}
         <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-3'>
-          {works.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+          {filteredWorks.map((project) => (
+            <WorkCard key={project.id} work={project} />
           ))}
         </div>
 
         {/* No Results */}
-        {works.length === 0 && (
+        {filteredWorks.length === 0 && (
           <PortfolioEmptyDataFallback title={fallback.title} />
         )}
       </div>

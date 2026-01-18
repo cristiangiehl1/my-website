@@ -3,25 +3,24 @@
 import { useState } from 'react'
 
 import type { Work } from '@/@types/work'
-import projects from '@/data/projects.json'
 
-export function useFilteredWorks() {
+export function useFilteredWorks(works: Array<Work>) {
   const [selectedTechs, setSelectedTechs] = useState<string[]>([])
   const [isExactMatchEnable, setIsExactMatchEnable] = useState(true)
 
   const filteredWorks: Array<Work> =
     selectedTechs.length === 0
-      ? projects
+      ? works
       : isExactMatchEnable
-        ? projects.filter((project) =>
+        ? works.filter((project) =>
             selectedTechs.every((tech) => project.technologies.includes(tech))
           )
-        : projects.filter((project) =>
+        : works.filter((project) =>
             selectedTechs.some((tech) => project.technologies.includes(tech))
           )
 
   return {
-    works: filteredWorks,
+    filteredWorks,
     selectedTechs,
     setSelectedTechs,
     isExactMatchEnable,

@@ -16,6 +16,7 @@ import {
   SiPython,
   SiReact,
   SiRust,
+  SiSocketdotio,
   SiTailwindcss,
   SiTypescript,
   SiZod,
@@ -218,6 +219,14 @@ export const TECHNOLOGY_DATA: Record<
     label: 'Axios',
     icon: SiAxios,
     style: { iconColor: 'text-purple-500' },
+    category: 'Tool',
+  },
+
+  socketio: {
+    value: 'socketio',
+    label: 'Socket.IO',
+    icon: SiSocketdotio,
+    style: { iconColor: 'text-white dark:text-black' },
     category: 'Tool',
   },
 }

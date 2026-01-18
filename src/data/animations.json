@@ -1,0 +1,11 @@
+[
+  {
+    "id": "1",
+    "title": "Header Menu Animation",
+    "description": "Animação de menu desenvolvida com GSAP, React e TypeScript, focada em microinterações fluidas, transições suaves e uma experiência de navegação moderna e responsiva.",
+    "technologies": ["gsap", "typescript", "react"],
+    "github": "https://github.com/seu-usuario/header-menu-animation",
+    "demo": "https://header-menu-animation.vercel.app",
+    "featured": false
+  }
+]

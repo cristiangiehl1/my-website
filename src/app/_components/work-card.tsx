@@ -4,18 +4,18 @@ import Image from 'next/image'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import { FaGithub } from 'react-icons/fa6'
 
-import type { Project } from '@/@types/work'
+import type { Work } from '@/@types/work'
 import { TECHNOLOGY_DATA } from '@/constants/technology-data'
 
 import { Button } from './ui/button'
 
-interface ProjectCardProps {
-  project: Project
+interface WorkCardProps {
+  work: Work
 }
 
-export function ProjectCard({
-  project: { description, featured, image, technologies, title, demo, github },
-}: ProjectCardProps) {
+export function WorkCard({
+  work: { description, featured, image, technologies, title, demo, github },
+}: WorkCardProps) {
   return (
     <div className='group bg-card border-border hover:border-primary hover:shadow-primary/20 relative flex flex-col justify-between overflow-hidden rounded-lg border transition-all duration-300 hover:shadow-2xl'>
       {featured && (
