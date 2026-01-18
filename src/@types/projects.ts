@@ -1,9 +1,10 @@
-import type { Technology } from './technology'
+import type { TechnologyName } from './technology'
 
 export interface Project {
+  id: string
   title: string
   description: string
-  technologies: Array<Technology>
+  technologies: Array<TechnologyName>
   image?: string
   github?: string
   demo?: string

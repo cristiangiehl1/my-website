@@ -20,7 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const defaultSitemapEntry: SitemapEntryWithoutUrl = {
     changeFrequency: 'yearly',
-    lastModified: new Date(),
+    lastModified: '2026',
   }
 
   const routes = customRoutes.map((route) => ({

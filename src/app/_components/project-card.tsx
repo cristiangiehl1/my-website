@@ -6,7 +6,7 @@ import { FaExternalLinkAlt } from 'react-icons/fa'
 import { FaGithub } from 'react-icons/fa6'
 
 import type { Project } from '@/@types/projects'
-import { TECHNOLOGY_ICON } from '@/constants/technology-icon'
+import { TECHNOLOGY_DATA } from '@/constants/technology-data'
 
 import { Button } from './ui/button'
 
@@ -66,7 +66,9 @@ export function ProjectCard({
 
         <div className='flex flex-wrap items-center gap-x-4 gap-y-2'>
           {technologies.map((tech, idx) => {
-            const { icon, className } = TECHNOLOGY_ICON[tech]
+            console.log(tech)
+            const { icon, iconColor } = TECHNOLOGY_DATA[tech]
+
             const Icon = icon
 
             return (
@@ -74,7 +76,7 @@ export function ProjectCard({
                 key={idx}
                 className='text-muted-foreground flex items-center gap-1 text-sm'
               >
-                <Icon className={className} />
+                <Icon className={iconColor} />
                 {tech}
               </span>
             )

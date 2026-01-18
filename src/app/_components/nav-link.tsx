@@ -30,8 +30,8 @@ export function NavLink({
         'text-foreground hover:text-primary focus:text-primary transition-colors',
         className,
         pathName === href
-          ? 'text-foreground after:scale-100'
-          : 'text-muted-foreground'
+          ? 'decoration-primary underline decoration-2 underline-offset-8'
+          : ''
       )}
       {...props}
     >

@@ -15,10 +15,11 @@ const navLinks: Array<NavLinkWithSubRoutes> = [
     subRoutes: [
       { label: 'Projetos', href: '/portfolio/projects' },
       { label: 'Animações', href: '/portfolio/animations' },
+      { label: 'Games', href: '/portfolio/games' },
       { label: 'Conceitos', href: '/portfolio/concepts' },
     ],
   },
-  { label: 'Sobre', href: '#' },
+  { label: 'Sobre', href: '/about' },
   { label: 'Skills', href: '#' },
   { label: 'Contato', href: '#' },
 ]

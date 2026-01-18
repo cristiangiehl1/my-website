@@ -5,7 +5,7 @@ import { BiCodeAlt } from 'react-icons/bi'
 
 import { ProjectCard } from '@/app/_components/project-card'
 import { MultiSelect } from '@/app/_components/ui/multi-select'
-import { TECH_OPTIONS } from '@/constants/technology-icon'
+import { getTechOptions } from '@/constants/technology-data'
 import { PROJECTS } from '@/data/projects'
 
 export default function ProjectsPage() {
@@ -61,7 +61,7 @@ export default function ProjectsPage() {
               <h2 className='text-lg font-semibold'>Filtrar por tecnologias</h2>
             </div>
             <MultiSelect
-              options={TECH_OPTIONS}
+              options={getTechOptions()}
               value={selectedFilters}
               onValueChange={setSelectedFilters}
               placeholder='Selecione as tecnologias...'
@@ -78,8 +78,8 @@ export default function ProjectsPage() {
 
           {/* Projects Grid */}
           <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-3'>
-            {filteredProjects.map((project, i) => (
-              <ProjectCard key={i} project={project} />
+            {filteredProjects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
             ))}
           </div>
 

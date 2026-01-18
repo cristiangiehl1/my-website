@@ -24,7 +24,9 @@ export function NavMenuItems({
           if (subRoutes) {
             return (
               <NavigationMenuItem key={i}>
-                <NavigationMenuTrigger>{label}</NavigationMenuTrigger>
+                <NavigationMenuTrigger className='text-foreground'>
+                  {label}
+                </NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className='flex flex-col gap-2 p-2'>
                     {subRoutes.map((subLink, j) => (

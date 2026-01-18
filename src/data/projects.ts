@@ -2,20 +2,16 @@ import type { Project } from '@/@types/projects'
 
 export const PROJECTS: Array<Project> = [
   {
+    id: '1',
     title: 'E-commerce Sneakers Store',
     description: 'Plataforma completa de e-commerce especializada em tênis...',
-    technologies: [
-      'Next.js',
-      'TypeScript',
-      'PostgreSQL',
-      'Tailwind',
-      'Node.js',
-    ],
+    technologies: ['Next', 'TypeScript', 'PostgreSQL', 'Tailwind', 'Node'],
     github: 'https://github.com/seu-usuario/ecommerce-store',
     demo: 'https://sneakers-store-demo.vercel.app',
     featured: true,
   },
   {
+    id: '2',
     title: 'API REST de Gerenciamento Financeiro',
     description: 'API robusta desenvolvida em Rust...',
     technologies: ['Rust', 'PostgreSQL'],
@@ -23,6 +19,7 @@ export const PROJECTS: Array<Project> = [
     featured: true,
   },
   {
+    id: '3',
     title: 'Landing Page Interativa - SaaS Marketing',
     description: 'Landing page moderna para produto SaaS...',
     technologies: ['React', 'TypeScript', 'GSAP', 'Tailwind'],
@@ -31,20 +28,16 @@ export const PROJECTS: Array<Project> = [
     featured: false,
   },
   {
+    id: '4',
     title: 'Dashboard Analytics em Tempo Real',
     description: 'Dashboard para visualização de métricas...',
-    technologies: [
-      'Next.js',
-      'TypeScript',
-      'Node.js',
-      'PostgreSQL',
-      'Tailwind',
-    ],
+    technologies: ['Next', 'TypeScript', 'Node', 'PostgreSQL', 'Tailwind'],
     github: 'https://github.com/seu-usuario/analytics-dashboard',
     demo: 'https://analytics-demo.vercel.app',
     featured: false,
   },
   {
+    id: '5',
     title: 'Sistema de Machine Learning para Predição',
     description: 'Pipeline completo de machine learning...',
     technologies: ['Python', 'PostgreSQL', 'React', 'TypeScript'],
@@ -52,9 +45,10 @@ export const PROJECTS: Array<Project> = [
     featured: true,
   },
   {
+    id: '6',
     title: 'Portfolio Criativo com Animações 3D',
     description: 'Website de portfólio pessoal...',
-    technologies: ['Next.js', 'TypeScript', 'GSAP', 'Tailwind'],
+    technologies: ['Next', 'TypeScript', 'GSAP', 'Tailwind'],
     demo: 'https://portfolio-3d-demo.vercel.app',
     featured: false,
   },
