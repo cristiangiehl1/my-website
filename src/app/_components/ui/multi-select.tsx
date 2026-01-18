@@ -458,9 +458,9 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
       }
       if (responsive === true) {
         const defaultResponsive = {
-          mobile: { maxCount: 2, hideIcons: false, compactMode: true },
-          tablet: { maxCount: 4, hideIcons: false, compactMode: false },
-          desktop: { maxCount: 6, hideIcons: false, compactMode: false },
+          mobile: { maxCount: 1, hideIcons: false, compactMode: true },
+          tablet: { maxCount: 2, hideIcons: false, compactMode: false },
+          desktop: { maxCount: 3, hideIcons: false, compactMode: false },
         }
         const currentSettings = defaultResponsive[screenSize]
         return {
