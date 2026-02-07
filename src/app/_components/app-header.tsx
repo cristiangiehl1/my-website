@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 
@@ -26,15 +27,13 @@ export function AppHeader() {
     <header className='bg-background/80 border-border fixed top-0 right-0 left-0 z-50 border-b backdrop-blur-md'>
       <div className='relative mx-auto flex max-w-6xl items-center justify-between px-4 py-5 sm:px-6 lg:px-8'>
         {/* Logo */}
-        <Link href='/' className='flex items-center gap-2'>
-          <div className='bg-primary flex h-8 w-8 items-center justify-center rounded-lg'>
-            <span className='text-primary-foreground text-lg font-bold'>
-              {'</>'}
-            </span>
-          </div>
-          <span className='hidden text-lg font-bold sm:block'>
-            DevPortfolio
-          </span>
+        <Link href='/' className='flex items-center gap-2 overflow-hidden'>
+          <Image
+            src={'/icons/android-chrome-512x512.png'}
+            alt='Cristian Giehl website logo'
+            width={40}
+            height={40}
+          />
         </Link>
 
         {/* Desktop Navigation */}
@@ -98,7 +97,7 @@ export function AppHeader() {
 
             setIsOpen(false)
           }}>
-          <NavMenuItems navLinks={navLinks} />
+          <NavMenuItems navLinks={navLinks} onClick={() => setIsOpen(false)} />
         </div>
       </div>
     </header>

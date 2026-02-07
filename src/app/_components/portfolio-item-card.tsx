@@ -38,14 +38,11 @@ export function PortfolioItemCard({
         </div>
       )}
 
+      {/* Image */}
       <Link
         href={`/post/${slugify(title)}`}
-        className='bg-secondary text-shadow-background absolute top-4 left-4 z-10 rounded-full px-3 py-1 text-xs font-bold text-white text-shadow-xs'>
-        Saiba mais
-      </Link>
-
-      {/* Image */}
-      <div className='bg-muted relative h-48 overflow-hidden'>
+        className='bg-muted relative h-48 overflow-hidden'
+        aria-label={`Navegue até a postagem sobre ${title}`}>
         <Image
           src={coverUrl || '/images/project-placeholder.jpg'}
           alt={title}
@@ -58,7 +55,7 @@ export function PortfolioItemCard({
           className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-110'
         />
         <div className='from-card absolute inset-0 bg-linear-to-t to-transparent opacity-60' />
-      </div>
+      </Link>
 
       {/* Content */}
       <div className='flex flex-col space-y-4 p-6'>
@@ -82,14 +79,12 @@ export function PortfolioItemCard({
             .map((tech, idx) => {
               const { icon: Icon, style, link } = TECHNOLOGY_DATA[tech]
               return (
-                <a
-                  href={link}
-                  target='_blank'
-                  key={idx}
-                  className='text-foreground hover:border-primary bg-background focus:border-primary flex items-center gap-1 rounded-sm border p-2 text-sm transition-colors duration-300'>
-                  <Icon className={style?.iconColor} />
-                  {tech}
-                </a>
+                <Button key={idx} variant={'outline'} asChild>
+                  <a href={link} target='_blank'>
+                    <Icon className={style?.iconColor} />
+                    {tech}
+                  </a>
+                </Button>
               )
             })}
 

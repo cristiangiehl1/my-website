@@ -8,6 +8,8 @@ import type { Project } from '@/@types/project'
 import { TECHNOLOGY_DATA } from '@/constants/technology-data'
 import { cn } from '@/lib/utils'
 
+import { Button } from '../../ui/button'
+
 interface PostHeaderProps {
   project: Project & { readTime: string }
 }
@@ -102,14 +104,12 @@ export function PostHeader({
         {technologies.sort().map((tech, idx) => {
           const { icon: Icon, style, link } = TECHNOLOGY_DATA[tech]
           return (
-            <a
-              href={link}
-              target='_blank'
-              key={idx}
-              className='text-foreground hover:border-primary bg-background focus:border-primary flex min-w-40 items-center justify-center gap-1 rounded-sm border p-2 text-sm transition-colors duration-300'>
-              <Icon className={cn(style?.iconColor, 'text-lg')} />
-              {tech}
-            </a>
+            <Button key={idx} asChild variant={'outline'}>
+              <a href={link} target='_blank'>
+                <Icon className={cn(style?.iconColor, 'text-lg')} />
+                {tech}
+              </a>
+            </Button>
           )
         })}
       </div>

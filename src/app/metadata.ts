@@ -65,7 +65,7 @@ export const websiteMetadata: Metadata = {
     description:
       'Portfolio com projetos reais em React, Next.js, Node.js e TypeScript.',
     creator: '@cristiangiehl',
-    images: ['/images/og-img.jpg'],
+    images: ['/images/og-img.png'],
   },
 
   robots: {

@@ -5,7 +5,6 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
 } from './ui/navigation-menu'
@@ -13,13 +12,15 @@ import {
 export function NavMenuItems({
   navLinks,
   className,
+  onClick,
 }: {
   navLinks: NavLinkWithSubRoutes[]
   className?: string
+  onClick?: () => void
 }) {
   return (
     <NavigationMenu className={className}>
-      <NavigationMenuList className='flex-wrap'>
+      <NavigationMenuList className='flex-wrap gap-4'>
         {navLinks.map(({ href, label, subRoutes }, i) => {
           if (subRoutes) {
             return (
@@ -31,9 +32,11 @@ export function NavMenuItems({
                   <ul className='flex flex-col gap-2 p-2'>
                     {subRoutes.map((subLink, j) => (
                       <li key={j}>
-                        <NavigationMenuLink asChild>
-                          <NavLink href={subLink.href} label={subLink.label} />
-                        </NavigationMenuLink>
+                        <NavLink
+                          href={subLink.href}
+                          label={subLink.label}
+                          onClick={onClick}
+                        />
                       </li>
                     ))}
                   </ul>
@@ -43,9 +46,7 @@ export function NavMenuItems({
           }
           return (
             <NavigationMenuItem key={i}>
-              <NavigationMenuLink asChild>
-                <NavLink href={href} label={label} />
-              </NavigationMenuLink>
+              <NavLink href={href} label={label} onClick={onClick} />
             </NavigationMenuItem>
           )
         })}

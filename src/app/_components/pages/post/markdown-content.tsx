@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import type { Components } from 'react-markdown'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -83,9 +84,8 @@ const markdownComponents: Components = {
   ),
   hr: () => <hr className='border-border my-8' />,
   img: ({ src, alt }) => (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={src || '/placeholder.svg'}
+    <Image
+      src={(src as string) || '/placeholder.svg'}
       alt={alt ?? ''}
       className='border-border my-6 max-w-full rounded-lg border'
     />
