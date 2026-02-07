@@ -12,11 +12,6 @@ const navLinks: Array<NavLinkWithSubRoutes> = [
   {
     label: 'Portfólio',
     href: '/portfolio',
-    subRoutes: [
-      { label: 'Projetos', href: '/portfolio/projects' },
-      { label: 'Animações', href: '/portfolio/animations' },
-      { label: 'Games', href: '/portfolio/games' },
-    ],
   },
   { label: 'Sobre', href: '/about' },
   { label: 'Skills', href: '/skills' },
@@ -49,8 +44,7 @@ export function AppHeader() {
         <button
           className='space-y-2 p-2 md:hidden'
           aria-label={`botão para ${isOpen ? 'fechar' : 'abrir'} o menu de navegação`}
-          onClick={() => setIsOpen((prev) => !prev)}
-        >
+          onClick={() => setIsOpen((prev) => !prev)}>
           <div
             className={cn(
               menuBtnClass,
@@ -103,8 +97,7 @@ export function AppHeader() {
             }
 
             setIsOpen(false)
-          }}
-        >
+          }}>
           <NavMenuItems navLinks={navLinks} />
         </div>
       </div>

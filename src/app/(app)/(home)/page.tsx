@@ -60,8 +60,7 @@ export default function HomePage() {
               <Button
                 size='lg'
                 className='bg-primary text-primary-foreground hover:bg-primary/90 group'
-                asChild
-              >
+                asChild>
                 <Link href={'/portfolio/projects'}>
                   Ver Projetos
                   <FaArrowRight
@@ -73,8 +72,7 @@ export default function HomePage() {
               <Button
                 size='lg'
                 variant='outline'
-                className='border-border hover:bg-muted bg-transparent'
-              >
+                className='border-border hover:bg-muted bg-transparent'>
                 Entre em Contato
               </Button>
             </div>
@@ -87,8 +85,7 @@ export default function HomePage() {
                   href={href}
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='bg-muted hover:bg-primary hover:text-primary-foreground flex h-12 w-12 transform items-center justify-center rounded-lg transition-all duration-300 hover:scale-110'
-                >
+                  className='bg-muted hover:bg-primary hover:text-primary-foreground flex h-12 w-12 transform items-center justify-center rounded-lg transition-all duration-300 hover:scale-110'>
                   <Icon size={20} />
                 </a>
               ))}
@@ -101,8 +98,7 @@ export default function HomePage() {
               {/* Floating Code Blocks */}
               <div
                 className='bg-card border-border animate-float absolute top-0 right-0 rounded-lg border p-4 shadow-2xl'
-                style={{ animationDelay: '0s' }}
-              >
+                style={{ animationDelay: '0s' }}>
                 <div className='mb-2 flex items-center gap-2'>
                   <div className='bg-destructive h-3 w-3 rounded-full' />
                   <div className='h-3 w-3 rounded-full bg-yellow-500' />
@@ -118,8 +114,7 @@ export default function HomePage() {
 
               <div
                 className='bg-card border-border animate-float absolute bottom-0 left-0 rounded-lg border p-4 shadow-2xl'
-                style={{ animationDelay: '2s' }}
-              >
+                style={{ animationDelay: '2s' }}>
                 <div className='mb-2 flex items-center gap-2'>
                   <div className='bg-destructive h-3 w-3 rounded-full' />
                   <div className='h-3 w-3 rounded-full bg-yellow-500' />

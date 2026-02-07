@@ -2,11 +2,11 @@
 
 import { BiCodeAlt } from 'react-icons/bi'
 
-import type { Work } from '@/@types/work'
-import { useFilteredWorks } from '@/hooks/use-filtered-works'
+import type { Project } from '@/@types/project'
+import { useFilteredPortfolioItems } from '@/hooks/use-filtered-works'
 
-import { TechnologyFilters } from '../../tecnhology-filter'
-import { WorkCard } from '../../work-card'
+import { PortfolioFilters } from '../../portfolio-filters'
+import { PortfolioItemCard } from '../../portfolio-item-card'
 
 interface PortfolioHeanderProps {
   title: React.ReactNode
@@ -45,17 +45,17 @@ export function PortfolioEmptyDataFallback({
 interface PorfolioMainProps {
   header: PortfolioHeanderProps
   fallback: PortfolioEmptyDataFallbackProps
-  works: Array<Work>
+  items: Array<Project>
 }
 
-export function PorfolioMain({ fallback, header, works }: PorfolioMainProps) {
+export function PorfolioMain({ fallback, header, items }: PorfolioMainProps) {
   const {
-    filteredWorks,
+    filteredItems,
     isExactMatchEnable,
     selectedTechs,
     setIsExactMatchEnable,
     setSelectedTechs,
-  } = useFilteredWorks(works)
+  } = useFilteredPortfolioItems(items)
 
   return (
     <main className='relative px-4 pt-24 pb-16 sm:px-6 lg:px-8'>
@@ -66,23 +66,23 @@ export function PorfolioMain({ fallback, header, works }: PorfolioMainProps) {
           description={header.description}
         />
 
-        <TechnologyFilters
-          works={filteredWorks}
+        <PortfolioFilters
+          items={filteredItems}
           isExactMatchEnable={isExactMatchEnable}
           selectedTechs={selectedTechs}
           setIsExactMatchEnable={setIsExactMatchEnable}
           setSelectedTechs={setSelectedTechs}
         />
 
-        {/* Works Grid */}
+        {/* Portfolio Items Grid */}
         <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-3'>
-          {filteredWorks.map((project) => (
-            <WorkCard key={project.id} work={project} />
+          {filteredItems.map((item) => (
+            <PortfolioItemCard key={item.id} item={item} />
           ))}
         </div>
 
         {/* No Results */}
-        {filteredWorks.length === 0 && (
+        {filteredItems.length === 0 && (
           <PortfolioEmptyDataFallback title={fallback.title} />
         )}
       </div>

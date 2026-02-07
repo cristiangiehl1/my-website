@@ -16,8 +16,6 @@ const config = {
   bracketSpacing: true,
   arrowParens: 'always',
   endOfLine: 'auto',
-  bracketSameLine: false,
-  arrowParens: 'always',
   proseWrap: 'preserve', // 'always', 'never'
 }
 

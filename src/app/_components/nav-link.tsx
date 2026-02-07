@@ -26,15 +26,14 @@ export function NavLink({
       href={href}
       onClick={handleClick}
       className={cn(
-        'nav-link relative inline-flex items-center gap-2',
-        'text-foreground hover:text-primary focus:text-primary transition-colors',
+        'nav-link relative inline-flex items-center gap-2 bg-transparent',
+        'text-foreground hover:boder-primary focus:border-primary border border-transparent transition-colors',
         className,
         pathName === href
           ? 'decoration-primary underline decoration-2 underline-offset-8'
           : ''
       )}
-      {...props}
-    >
+      {...props}>
       {label}
     </Link>
   )

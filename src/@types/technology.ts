@@ -14,3 +14,6 @@ export type TechonologyCategory =
   | 'Validation'
   | 'DevOps'
   | 'Tool'
+  | 'Deploy'
+  | 'Dev Tool'
+  | 'Security'

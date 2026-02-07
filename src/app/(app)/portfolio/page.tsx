@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
 
 import { PorfolioMain } from '@/app/_components/pages/portfolio/portfolio'
-import projects from '@/data/projects.json'
+import { __PORTFOLIO__ } from '@/data/portfolio'
 
 export const metadata: Metadata = {
-  title: 'Projetos',
+  title: 'Portfólio',
 }
 
-export default function ProjectsPage() {
+export default function PortfolioPage() {
   return (
     <>
       {/* Main Content */}
@@ -19,10 +19,10 @@ export default function ProjectsPage() {
             </>
           ),
           description:
-            'Desenvolvimento de soluções completas: APIs, landing pages, dashboards e muito mais',
+            'Desenvolvimento de soluções completas: APIs, landing pages, games e muito mais',
         }}
         fallback={{ title: 'Nenhum projeto encontrado' }}
-        works={projects}
+        items={__PORTFOLIO__}
       />
     </>
   )

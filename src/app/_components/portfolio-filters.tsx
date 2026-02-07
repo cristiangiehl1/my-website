@@ -1,22 +1,22 @@
 import { BiCodeAlt } from 'react-icons/bi'
 
-import type { Work } from '@/@types/work'
+import type { Project } from '@/@types/project'
 import { getTechOptions } from '@/constants/technology-data'
 
 import { MatchTechnologyPopover } from './match-technology-popover'
 import { MultiSelect } from './ui/multi-select'
 
 interface TechnologyFilters {
-  works: Array<Work>
+  items: Array<Project>
   selectedTechs: Array<string>
   setSelectedTechs: (techs: Array<string>) => void
   isExactMatchEnable: boolean
   setIsExactMatchEnable: (isEnable: boolean) => void
 }
 
-export function TechnologyFilters({
+export function PortfolioFilters({
   isExactMatchEnable,
-  works,
+  items,
   selectedTechs,
   setIsExactMatchEnable,
   setSelectedTechs,
@@ -45,9 +45,9 @@ export function TechnologyFilters({
 
       {selectedTechs.length > 0 && (
         <p className='text-muted-foreground mt-3 text-sm'>
-          {works.length} resultado
-          {works.length !== 1 ? 's' : ''} encontrado
-          {works.length !== 1 ? 's' : ''}
+          {items.length} resultado
+          {items.length !== 1 ? 's' : ''} encontrado
+          {items.length !== 1 ? 's' : ''}
         </p>
       )}
     </div>
