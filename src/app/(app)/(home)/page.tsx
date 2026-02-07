@@ -61,7 +61,7 @@ export default function HomePage() {
                 size='lg'
                 className='bg-primary text-primary-foreground hover:bg-primary/90 group'
                 asChild>
-                <Link href={'/portfolio/projects'}>
+                <Link href={'/portfolio'}>
                   Ver Projetos
                   <FaArrowRight
                     className='ml-2 transition-transform group-hover:translate-x-1'
