@@ -1,5 +1,8 @@
 import type { MetadataRoute } from 'next'
 
+import { __PORTFOLIO__ } from '@/data/portfolio'
+import { slugify } from '@/helpers/slugify'
+
 import { websiteMetadata } from './metadata'
 
 type SitemapEntryWithoutUrl = Omit<MetadataRoute.Sitemap[0], 'url'>
@@ -25,15 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.5,
     },
     {
-      url: `${baseUrl}portfolio/projects`,
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}portfolio/animations`,
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}portfolio/games`,
+      url: `${baseUrl}portfolio`,
       priority: 0.5,
     },
   ]
@@ -42,6 +37,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: 'yearly',
     lastModified: '2026',
   }
+
+  __PORTFOLIO__.forEach((project) =>
+    customRoutes.push({
+      url: `${baseUrl}post/${slugify(project.title)}`,
+      priority: 1,
+      images: [project.coverUrl ?? '/images/project-placeholder.jpg'],
+    })
+  )
 
   const routes = customRoutes.map((route) => ({
     ...defaultSitemapEntry,
