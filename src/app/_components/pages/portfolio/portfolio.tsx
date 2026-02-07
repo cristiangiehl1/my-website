@@ -58,7 +58,7 @@ export function PorfolioMain({ fallback, header, items }: PorfolioMainProps) {
   } = useFilteredPortfolioItems(items)
 
   return (
-    <main className='relative px-4 pt-24 pb-16 sm:px-6 lg:px-8'>
+    <main className='relative px-4 pt-32 pb-20 sm:px-6 lg:px-8'>
       <div className='container mx-auto max-w-7xl'>
         {/* Header */}
         <PortfolioHeader

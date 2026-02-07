@@ -14,18 +14,6 @@ export default function PortfolioLayout({
         />
       </div>
 
-      {/* Grid Pattern Overlay */}
-      <div
-        className='pointer-events-none fixed inset-0 opacity-20'
-        style={{
-          backgroundImage: `
-                linear-gradient(to right, rgb(var(--color-border) / 0.1) 1px, transparent 1px),
-                linear-gradient(to bottom, rgb(var(--color-border) / 0.1) 1px, transparent 1px)
-              `,
-          backgroundSize: '4rem 4rem',
-        }}
-      />
-
       {/* Main Content */}
       {children}
     </>

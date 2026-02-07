@@ -1,13 +1,17 @@
 import type { Metadata } from 'next'
 
+import { Container, MainContainer } from '@/app/_components/container'
+
 export const metadata: Metadata = {
   title: 'Skills',
 }
 
 export default function SkillsPage() {
   return (
-    <div className='min-h-[92vh] w-full'>
-      <h1>Skills</h1>
-    </div>
+    <Container>
+      <MainContainer>
+        <h1>Skills</h1>
+      </MainContainer>
+    </Container>
   )
 }

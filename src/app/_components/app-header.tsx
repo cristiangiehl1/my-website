@@ -24,8 +24,11 @@ export function AppHeader() {
   const menuBtnClass = 'h-0.5 w-5 origin-center bg-white duration-400'
 
   return (
-    <header className='bg-background/80 border-border fixed top-0 right-0 left-0 z-50 border-b backdrop-blur-md'>
-      <div className='relative mx-auto flex max-w-6xl items-center justify-between px-4 py-5 sm:px-6 lg:px-8'>
+    <header
+      className={cn(
+        'bg-background/80 border-border fixed top-0 right-0 left-0 z-50 border-b backdrop-blur-md'
+      )}>
+      <div className='relative mx-auto flex max-w-7xl items-center justify-between px-4 py-5 sm:px-6 lg:px-8'>
         {/* Logo */}
         <Link href='/' className='flex items-center gap-2 overflow-hidden'>
           <Image

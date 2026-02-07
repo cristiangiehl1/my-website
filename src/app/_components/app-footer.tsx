@@ -1,24 +1,16 @@
-'use client'
-
-import { usePathname } from 'next/navigation'
+import type { HTMLAttributes } from 'react'
 
 import { cn } from '@/lib/utils'
 
-interface AppFooterProps {
+interface AppFooterProps extends HTMLAttributes<HTMLDivElement> {
   className?: string
 }
 
-export function AppFooter({ className }: AppFooterProps) {
-  const pathName = usePathname()
-
+export function AppFooter({ className, ...props }: AppFooterProps) {
   return (
     <footer
-      className={cn(
-        'border-border w-full border-t py-6',
-        className,
-        pathName === '/' ? 'absolute right-0 bottom-0 left-0' : ''
-      )}
-    >
+      className={cn('border-border w-full border-t py-6', className)}
+      {...props}>
       <p className='text-muted-foreground text-center text-xs'>
         © 2026 Cristian Giehl
       </p>
