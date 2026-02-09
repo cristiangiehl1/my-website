@@ -22,8 +22,7 @@ export function MatchTechnologyPopover({
       className={cn(
         'relative flex items-center justify-start gap-2',
         containerClassName
-      )}
-    >
+      )}>
       {/* Checkbox */}
       <Checkbox
         id='match-all-tech'
@@ -33,8 +32,7 @@ export function MatchTechnologyPopover({
 
       <label
         htmlFor='match-all-tech'
-        className='text-muted-foreground cursor-pointer text-sm'
-      >
+        className='text-muted-foreground cursor-pointer text-sm'>
         Match all technologies
       </label>
 
@@ -43,8 +41,7 @@ export function MatchTechnologyPopover({
         <HoverCardTrigger asChild>
           <button
             type='button'
-            className='text-muted-foreground hover:text-foreground mb-1'
-          >
+            className='text-muted-foreground hover:text-foreground mb-1'>
             <Info className='h-4 w-4' />
           </button>
         </HoverCardTrigger>
@@ -52,8 +49,7 @@ export function MatchTechnologyPopover({
         <HoverCardContent
           side='top'
           align='start'
-          className='bg-background/90 w-72 rounded-md p-4 text-xs leading-relaxed shadow-lg'
-        >
+          className='bg-background/90 w-72 rounded-md p-4 text-xs leading-relaxed shadow-lg'>
           <p className='mb-1 font-medium'>How this filter works</p>
 
           <p>

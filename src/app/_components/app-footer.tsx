@@ -9,7 +9,7 @@ interface AppFooterProps extends HTMLAttributes<HTMLDivElement> {
 export function AppFooter({ className, ...props }: AppFooterProps) {
   return (
     <footer
-      className={cn('border-border w-full border-t py-6', className)}
+      className={cn('border-border mt-auto w-full border-t py-6', className)}
       {...props}>
       <p className='text-muted-foreground text-center text-xs'>
         © 2026 Cristian Giehl

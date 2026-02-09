@@ -26,7 +26,7 @@ export default function HomePage() {
   return (
     <Container>
       {/* Main Content */}
-      <MainContainer className='grid h-full gap-12 lg:grid-cols-2'>
+      <MainContainer className='grid gap-12 lg:grid-cols-2'>
         {/* Left Column - Text Content */}
         <div className='space-y-8 text-center lg:text-left'>
           {/* Badge */}
