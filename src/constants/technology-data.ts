@@ -31,7 +31,11 @@ import {
   SiTypescript,
   SiZod,
 } from 'react-icons/si'
-import { TbBrandCypress, TbBrandFramerMotion } from 'react-icons/tb'
+import {
+  TbBrandCypress,
+  TbBrandFramerMotion,
+  TbBrandReactNative,
+} from 'react-icons/tb'
 
 import type { TechonologyCategory } from '@/@types/technology'
 import type {
@@ -92,6 +96,14 @@ export const TECHNOLOGY_DATA = {
     style: { iconColor: 'text-cyan-400' },
     category: 'Framework',
     link: 'https://github.com/facebook/react',
+  },
+  'react-native': {
+    value: 'react-native',
+    label: 'React Native',
+    icon: TbBrandReactNative,
+    style: { iconColor: 'text-cyan-400' },
+    category: 'Framework',
+    link: 'https://reactnative.dev/',
   },
   next: {
     value: 'next',
