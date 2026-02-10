@@ -14,7 +14,7 @@ export const websiteMetadata: Metadata = {
   },
 
   description:
-    'Portfolio de Cristian Giehl, desenvolvedor Full Stack especializado em React, Next.js, Node.js e automações. Projetos reais, soluções modernas e foco em performance.',
+    'Portfólio de Cristian Giehl, desenvolvedor Full Stack com experiência em TypeScript, Next.js, Rust e Python. Atuando em startups americanas com foco em performance e escalabilidade.',
 
   keywords: [
     'Cristian Giehl',

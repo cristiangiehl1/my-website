@@ -1,4 +1,5 @@
 import { Cpu } from 'lucide-react'
+import type { Metadata } from 'next'
 
 import type { Skill } from '@/@types/skill'
 import { Container, MainContainer } from '@/app/_components/container'
@@ -89,6 +90,10 @@ const toolsSkills: Skill[] = [
     description: 'Containers, Docker Compose',
   },
 ]
+
+export const metadata: Metadata = {
+  title: 'Skills',
+}
 
 export default function SkillsPage() {
   return (
