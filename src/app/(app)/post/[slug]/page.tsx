@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 
+import { Container, MainContainer } from '@/app/_components/container'
 import { MarkdownContent } from '@/app/_components/pages/post/markdown-content'
 import { PostFooter } from '@/app/_components/pages/post/post-footer'
 import { PostHeader } from '@/app/_components/pages/post/post-header'
@@ -35,12 +36,12 @@ export default async function PostPage({ params }: PostPageParams) {
   const { text } = generateReadingTime(content)
 
   return (
-    <div className='bg-background min-h-screen'>
-      <main className='relative mx-auto max-w-6xl px-6 pt-28 pb-20'>
+    <Container>
+      <MainContainer className='relative'>
         <PostHeader project={{ ...project, readTime: text }} />
         <MarkdownContent content={content} />
         <PostFooter />
-      </main>
-    </div>
+      </MainContainer>
+    </Container>
   )
 }
