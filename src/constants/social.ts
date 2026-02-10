@@ -1,8 +1,8 @@
+import { Mail } from 'lucide-react'
 import { FaGithubAlt, FaLinkedin } from 'react-icons/fa'
 import { IoLogoWhatsapp } from 'react-icons/io'
-import { MdContactMail } from 'react-icons/md'
 
-export const __CONTACT__ = {
+export const __SOCIAL__ = {
   github: {
     href: 'https://github.com/cristiangiehl1',
     icon: FaGithubAlt,
@@ -12,5 +12,5 @@ export const __CONTACT__ = {
     icon: FaLinkedin,
   },
   whatsapp: { href: 'https://wa.me/+5521999815903', icon: IoLogoWhatsapp },
-  email: { href: 'mailto:cristiangiehl@email.com', icon: MdContactMail },
+  email: { href: 'mailto:cristiangiehl@email.com', icon: Mail },
 }

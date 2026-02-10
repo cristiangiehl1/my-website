@@ -1,16 +1,16 @@
 import { ExternalLink, Mail, MapPin } from 'lucide-react'
 import React from 'react'
 
-import { __CONTACT__ } from '@/constants/contact'
+import { __SOCIAL__ } from '@/constants/social'
 
-import { ContactLink } from '../../contact-link'
+import { SocialLink } from '../../social-link'
 
-const contactLinks = [
+const SocialLinks = [
   {
-    icon: __CONTACT__.whatsapp.icon,
+    icon: __SOCIAL__.whatsapp.icon,
     label: 'WhatsApp',
     value: '+55 (21) 99981-5903',
-    href: __CONTACT__.whatsapp.href,
+    href: __SOCIAL__.whatsapp.href,
     description: 'Respondo rapidamente',
   },
   {
@@ -31,14 +31,14 @@ const contactLinks = [
 
 const socialLinks = [
   {
-    icon: __CONTACT__.github.icon,
+    icon: __SOCIAL__.github.icon,
     label: 'GitHub',
-    href: __CONTACT__.github.href,
+    href: __SOCIAL__.github.href,
   },
   {
-    icon: __CONTACT__.linkedin.icon,
+    icon: __SOCIAL__.linkedin.icon,
     label: 'LinkedIn',
-    href: __CONTACT__.linkedin.href,
+    href: __SOCIAL__.linkedin.href,
   },
 ]
 
@@ -57,7 +57,7 @@ export function ContactInfo() {
       </div>
 
       <div className='flex flex-col gap-4'>
-        {contactLinks.map((item) => (
+        {SocialLinks.map((item) => (
           <ContactCard key={item.label} {...item} />
         ))}
       </div>
@@ -68,7 +68,7 @@ export function ContactInfo() {
         </h3>
         <div className='flex gap-3'>
           {socialLinks.map(({ href, icon: Icon, label }, i) => (
-            <ContactLink key={i} Icon={Icon} href={href} ariaLabel={label} />
+            <SocialLink key={i} Icon={Icon} href={href} ariaLabel={label} />
           ))}
         </div>
       </div>

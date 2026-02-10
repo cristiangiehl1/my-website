@@ -12,7 +12,7 @@ import {
 } from '@react-email/components'
 import * as React from 'react'
 
-import { __CONTACT__ } from '@/constants/contact'
+import { __SOCIAL__ } from '@/constants/social'
 
 interface ContactConfirmationProps {
   name: string
@@ -76,7 +76,7 @@ export default function ContactConfirmation({
             </Text>
 
             <Section style={buttonContainer}>
-              <Link href={__CONTACT__.whatsapp.href} style={whatsappButton}>
+              <Link href={__SOCIAL__.whatsapp.href} style={whatsappButton}>
                 Falar no WhatsApp
               </Link>
             </Section>
@@ -89,11 +89,11 @@ export default function ContactConfirmation({
               responda diretamente a este e-mail.
             </Text>
             <Text style={footerLinks}>
-              <Link href={__CONTACT__.github.href} style={footerLink}>
+              <Link href={__SOCIAL__.github.href} style={footerLink}>
                 GitHub
               </Link>
               {' | '}
-              <Link href={__CONTACT__.linkedin.href} style={footerLink}>
+              <Link href={__SOCIAL__.linkedin.href} style={footerLink}>
                 LinkedIn
               </Link>
             </Text>

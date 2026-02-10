@@ -43,7 +43,7 @@ export function AboutExperience() {
             <a href={link} key={label}>
               <Badge
                 variant='outline'
-                className='hover:bg-muted-foreground gap-2 px-4 py-2 [&>svg]:size-5'>
+                className='hover:bg-primary gap-2 px-4 py-2 transition-all duration-300 hover:scale-110 hover:text-black [&>svg]:size-5 hover:[&>svg]:text-black'>
                 <Icon className={style.iconColor} />
                 {label}
               </Badge>

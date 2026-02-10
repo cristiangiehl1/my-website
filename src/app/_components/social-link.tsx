@@ -3,19 +3,19 @@ import type { IconType } from 'react-icons'
 
 import { cn } from '@/lib/utils'
 
-interface ContactLinkProps extends HTMLAttributes<HTMLAnchorElement> {
+interface SocialLinkProps extends HTMLAttributes<HTMLAnchorElement> {
   Icon: IconType
   href: string
   ariaLabel: string
 }
 
-export function ContactLink({
+export function SocialLink({
   Icon,
   href,
   ariaLabel,
   className,
   ...props
-}: ContactLinkProps) {
+}: SocialLinkProps) {
   return (
     <a
       href={href}

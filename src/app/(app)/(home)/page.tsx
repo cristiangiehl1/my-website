@@ -3,30 +3,25 @@ import type { IconType } from 'react-icons'
 import { BiCodeAlt } from 'react-icons/bi'
 import { FaArrowRight } from 'react-icons/fa'
 
-import { ContactLink } from '@/app/_components/contact-link'
 import { Container, MainContainer } from '@/app/_components/container'
+import { SocialLink } from '@/app/_components/social-link'
 import { Button } from '@/app/_components/ui/button'
-import { __CONTACT__ } from '@/constants/contact'
+import { __SOCIAL__ } from '@/constants/social'
 
 const CTA_BUTTONS: Array<{ icon: IconType; href: string; label: string }> = [
   {
-    icon: __CONTACT__.github.icon,
-    href: __CONTACT__.github.href,
+    icon: __SOCIAL__.github.icon,
+    href: __SOCIAL__.github.href,
     label: 'Github',
   },
   {
-    icon: __CONTACT__.linkedin.icon,
-    href: __CONTACT__.linkedin.href,
+    icon: __SOCIAL__.linkedin.icon,
+    href: __SOCIAL__.linkedin.href,
     label: 'Linkedin',
   },
   {
-    icon: __CONTACT__.email.icon,
-    href: __CONTACT__.email.href,
-    label: 'Email',
-  },
-  {
-    icon: __CONTACT__.whatsapp.icon,
-    href: __CONTACT__.whatsapp.href,
+    icon: __SOCIAL__.whatsapp.icon,
+    href: __SOCIAL__.whatsapp.href,
     label: 'Whatsapp',
   },
 ]
@@ -75,15 +70,16 @@ export default function HomePage() {
             <Button
               size='lg'
               variant='outline'
-              className='border-border hover:bg-muted bg-transparent'>
-              Entre em Contato
+              className='border-border hover:bg-muted bg-transparent'
+              asChild>
+              <Link href={'/contact'}>Entre em Contato</Link>
             </Button>
           </div>
 
           {/* Social Links */}
           <div className='flex justify-center gap-4 pt-4 lg:justify-start'>
             {CTA_BUTTONS.map(({ icon: Icon, href, label }, i) => (
-              <ContactLink key={i} Icon={Icon} href={href} ariaLabel={label} />
+              <SocialLink key={i} Icon={Icon} href={href} ariaLabel={label} />
             ))}
           </div>
         </div>
