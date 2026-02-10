@@ -33,7 +33,7 @@ export function ContactForm() {
 
   async function onSubmit(data: ContactFormData) {
     try {
-      const res = await fetch('/api/emails/confirmation', {
+      const res = await fetch('/api/emails/contact', {
         method: 'POST',
         body: JSON.stringify(data),
       })
