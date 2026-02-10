@@ -26,9 +26,9 @@ export function AppHeader() {
   return (
     <header
       className={cn(
-        'bg-background/80 border-border fixed top-0 right-0 left-0 z-50 border-b backdrop-blur-md'
+        'bg-background/80 border-border fixed top-0 right-0 left-0 z-50 border-b px-4 py-5 backdrop-blur-md sm:px-6 lg:px-8'
       )}>
-      <div className='relative mx-auto flex max-w-7xl items-center justify-between px-4 py-5 sm:px-6 lg:px-8'>
+      <div className='relative mx-auto flex max-w-7xl items-center justify-between'>
         {/* Logo */}
         <Link href='/' className='flex items-center gap-2 overflow-hidden'>
           <Image

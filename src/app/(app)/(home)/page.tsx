@@ -1,25 +1,34 @@
 import Link from 'next/link'
 import type { IconType } from 'react-icons'
 import { BiCodeAlt } from 'react-icons/bi'
-import {
-  FaArrowRight,
-  FaEnvelope,
-  FaGithub,
-  FaLinkedin,
-  FaWhatsapp,
-} from 'react-icons/fa'
+import { FaArrowRight } from 'react-icons/fa'
 
+import { ContactLink } from '@/app/_components/contact-link'
 import { Container, MainContainer } from '@/app/_components/container'
 import { Button } from '@/app/_components/ui/button'
+import { __CONTACT__ } from '@/constants/contact'
 
-const CTA_BUTTONS: Array<{ icon: IconType; href: string }> = [
-  { icon: FaGithub, href: 'https://github.com/cristiangiehl1' },
+const CTA_BUTTONS: Array<{ icon: IconType; href: string; label: string }> = [
   {
-    icon: FaLinkedin,
-    href: 'https://www.linkedin.com/in/cristian-giehl-5b3539b4/',
+    icon: __CONTACT__.github.icon,
+    href: __CONTACT__.github.href,
+    label: 'Github',
   },
-  { icon: FaEnvelope, href: 'mailto:cristiangiehl@email.com' },
-  { icon: FaWhatsapp, href: 'https://wa.me/+5521999815903' },
+  {
+    icon: __CONTACT__.linkedin.icon,
+    href: __CONTACT__.linkedin.href,
+    label: 'Linkedin',
+  },
+  {
+    icon: __CONTACT__.email.icon,
+    href: __CONTACT__.email.href,
+    label: 'Email',
+  },
+  {
+    icon: __CONTACT__.whatsapp.icon,
+    href: __CONTACT__.whatsapp.href,
+    label: 'Whatsapp',
+  },
 ]
 
 export default function HomePage() {
@@ -73,15 +82,8 @@ export default function HomePage() {
 
           {/* Social Links */}
           <div className='flex justify-center gap-4 pt-4 lg:justify-start'>
-            {CTA_BUTTONS.map(({ icon: Icon, href }, i) => (
-              <a
-                key={i}
-                href={href}
-                target='_blank'
-                rel='noopener noreferrer'
-                className='bg-muted hover:bg-primary hover:text-primary-foreground flex h-12 w-12 transform items-center justify-center rounded-lg transition-all duration-300 hover:scale-110'>
-                <Icon size={20} />
-              </a>
+            {CTA_BUTTONS.map(({ icon: Icon, href, label }, i) => (
+              <ContactLink key={i} Icon={Icon} href={href} ariaLabel={label} />
             ))}
           </div>
         </div>
