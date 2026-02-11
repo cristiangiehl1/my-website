@@ -51,7 +51,7 @@ export const websiteMetadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/images/og-img.jpg',
+        url: '/images/og-img.png',
         width: 1200,
         height: 630,
         alt: 'Portfolio de Cristian Giehl',
