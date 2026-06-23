@@ -39,3 +39,27 @@ export async function sendEmail({
     throw err
   }
 }
+
+export async function sendHtmlEmail({
+  to,
+  subject,
+  html,
+  text,
+  from,
+}: {
+  to: string[]
+  subject: string
+  html?: string
+  text?: string
+  from?: string
+}) {
+  const resend = initClient()
+
+  return await resend.emails.send({
+    from: from ?? 'contact@cristiangiehl.com.br',
+    to,
+    subject,
+    ...(html && { html }),
+    ...(text && { text }),
+  })
+}
