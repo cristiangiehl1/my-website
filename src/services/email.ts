@@ -1,4 +1,4 @@
-import { Resend } from 'resend'
+import { type CreateEmailOptions, Resend } from 'resend'
 
 const from = 'contact@cristiangiehl.com.br'
 export const contactReceivedObj = {
@@ -59,7 +59,7 @@ export async function sendHtmlEmail({
     from: from ?? 'contact@cristiangiehl.com.br',
     to,
     subject,
-    ...(html && { html }),
-    ...(text && { text }),
-  })
+    html,
+    text,
+  } as CreateEmailOptions)
 }
