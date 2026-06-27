@@ -32,7 +32,7 @@ export const __PORTFOLIO__: Project[] = [
     github: 'https://github.com/cristiangiehl1/vinyl-store',
     deploy: 'https://vinyl-market.netlify.app/',
 
-    featured: true,
+    featured: false,
     createdAt: '03/02/2026',
   },
   {

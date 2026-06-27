@@ -22,7 +22,9 @@ export default function PortfolioPage() {
             'Desenvolvimento de soluções completas: APIs, landing pages, games e muito mais',
         }}
         fallback={{ title: 'Nenhum projeto encontrado' }}
-        items={__PORTFOLIO__}
+        items={__PORTFOLIO__.toSorted((a, b) =>
+          a.featured === b.featured ? 0 : a.featured ? -1 : 1
+        )}
       />
     </>
   )

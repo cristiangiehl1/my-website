@@ -3,37 +3,44 @@ import { TECHNOLOGY_DATA } from '@/constants/technology-data'
 import { Badge } from '../../ui/badge'
 import { Separator } from '../../ui/separator'
 
-const skills = [
-  'TanStack',
-  'shadcn/ui',
-  'Zod',
-  'Tailwind CSS',
-  'Jest',
-  'Cypress',
-]
-
 export function AboutExperience() {
   return (
     <section className='flex flex-col gap-6 pt-16'>
       <Separator className='mb-2' />
       <h2 className='text-foreground text-2xl font-bold tracking-tight'>
-        Experiencia & Stack
+        Experiência & Stack
       </h2>
 
       <div className='border-border bg-card rounded-xl border p-6'>
         <p className='text-muted-foreground leading-relaxed'>
-          Ao longo da minha trajetoria, adquiri solida experiencia com as
-          principais bibliotecas e ferramentas do ecossistema frontend, como{' '}
+          Atualmente atuo como{' '}
+          <span className='text-foreground font-medium'>
+            desenvolvedor pleno no Grupo Koch SA
+          </span>
+          , onde venho me especializando em Inteligência Artificial aplicada ao
+          desenvolvimento de plataformas corporativas com integração de
+          multi-agentes. Utilizo ferramentas como{' '}
+          <span className='text-foreground font-medium'>Claude Code</span>,{' '}
+          <span className='text-foreground font-medium'>opencode</span> e{' '}
+          <span className='text-foreground font-medium'>OpenAI</span> para
+          orquestrar agentes inteligentes que automatizam processos e
+          centralizam interações internas.
+        </p>
+      </div>
+
+      <div className='border-border bg-card rounded-xl border p-6'>
+        <p className='text-muted-foreground leading-relaxed'>
+          Ao longo de mais de 2 anos de experiência, adquiri sólida base no
+          ecossistema frontend com{' '}
           <span className='text-foreground font-medium'>TanStack</span>,{' '}
           <span className='text-foreground font-medium'>shadcn/ui</span>,{' '}
           <span className='text-foreground font-medium'>Zod</span> e{' '}
           <span className='text-foreground font-medium'>Tailwind CSS</span>,
-          alem da aplicacao consistente de boas praticas de testes, incluindo
-          testes unitarios, de integracao e end-to-end, utilizando
-          principalmente{' '}
-          <span className='text-foreground font-medium'>Jest</span> e, em alguns
-          projetos, <span className='text-foreground font-medium'>Cypress</span>
-          .
+          além de boas práticas de testes com{' '}
+          <span className='text-foreground font-medium'>Jest</span> e{' '}
+          <span className='text-foreground font-medium'>Cypress</span>. No
+          backend, trabalho com Node.js, APIs REST e integrações com sistemas
+          legados.
         </p>
       </div>
 

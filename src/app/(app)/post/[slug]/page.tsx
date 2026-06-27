@@ -6,6 +6,7 @@ import { PostFooter } from '@/app/_components/pages/post/post-footer'
 import { PostHeader } from '@/app/_components/pages/post/post-header'
 import { generateReadingTime } from '@/helpers/generate-reading-time'
 import { getMarkdown } from '@/helpers/get-markdown'
+import { getNearbyProjects } from '@/helpers/get-nearby-projects'
 import { getProjectBySlug } from '@/helpers/get-project'
 
 interface PostPageParams {
@@ -40,7 +41,7 @@ export default async function PostPage({ params }: PostPageParams) {
       <MainContainer className='relative'>
         <PostHeader project={{ ...project, readTime: text }} />
         <MarkdownContent content={content} />
-        <PostFooter />
+        <PostFooter nearbyProjects={getNearbyProjects(slug)} />
       </MainContainer>
     </Container>
   )

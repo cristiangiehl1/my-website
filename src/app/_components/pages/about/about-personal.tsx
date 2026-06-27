@@ -14,7 +14,8 @@ export function AboutPersonal() {
         <div className='border-border bg-card hover:border-primary/40 flex items-start gap-3 rounded-xl border p-5 transition-colors'>
           <Briefcase className='text-muted-foreground mt-0.5 h-5 w-5 shrink-0' />
           <p className='text-muted-foreground text-sm leading-relaxed'>
-            Ex-analista de credito no mercado financeiro e corretor de imoveis.
+            Ex-analista de crédito e corretor de imóveis em transição de
+            carreira para tecnologia.
           </p>
         </div>
 
@@ -22,9 +23,9 @@ export function AboutPersonal() {
           <Monitor className='text-primary mt-0.5 h-5 w-5 shrink-0' />
           <p className='text-muted-foreground text-sm leading-relaxed'>
             <span className='text-foreground font-medium'>
-              Fullstack Developer
+              Desenvolvedor Pleno no Grupo Koch SA
             </span>{' '}
-            — construindo interfaces e backends robustos.
+            — especializado em IA e plataformas com multi-agentes.
           </p>
         </div>
 
@@ -40,7 +41,7 @@ export function AboutPersonal() {
           <Dumbbell className='text-primary mt-0.5 h-5 w-5 shrink-0' />
           <p className='text-muted-foreground text-sm leading-relaxed'>
             <span className='text-foreground font-medium'>Gym rat</span> — foco
-            tambem na saude e bem-estar.
+            também na saúde e bem-estar.
           </p>
         </div>
       </div>
