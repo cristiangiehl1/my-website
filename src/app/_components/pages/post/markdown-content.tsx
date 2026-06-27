@@ -87,6 +87,10 @@ const markdownComponents: Components = {
     <Image
       src={(src as string) || '/placeholder.svg'}
       alt={alt ?? ''}
+      width={0}
+      height={0}
+      sizes='100vw'
+      style={{ width: '100%', height: 'auto' }}
       className='border-border my-6 max-w-full rounded-lg border'
     />
   ),

@@ -2,10 +2,10 @@ import type { IconType } from 'react-icons'
 import { BiLogoPostgresql } from 'react-icons/bi'
 import { DiRedis } from 'react-icons/di'
 import { FaDocker, FaNode } from 'react-icons/fa'
-import { GiSteamLocomotive, GiWaveCrest } from 'react-icons/gi'
+import { GiBull, GiSteamLocomotive, GiWaveCrest } from 'react-icons/gi'
 import { GrValidate } from 'react-icons/gr'
 import { LuTreePalm } from 'react-icons/lu'
-import { MdHttp } from 'react-icons/md'
+import { MdBarChart, MdEditNote, MdHttp } from 'react-icons/md'
 import {
   SiAuth0,
   SiAxios,
@@ -20,17 +20,22 @@ import {
   SiHtml5,
   SiJavascript,
   SiJest,
+  SiMarkdown,
   SiNetlify,
   SiNextdotjs,
   SiNodedotjs,
   SiNodemon,
+  SiOpenai,
+  SiOracle,
   SiPrisma,
   SiPython,
   SiReact,
   SiRust,
   SiServerless,
   SiSocketdotio,
+  SiSupabase,
   SiTailwindcss,
+  SiTelegram,
   SiThreedotjs,
   SiTypescript,
   SiZod,
@@ -289,6 +294,22 @@ export const TECHNOLOGY_DATA = {
     category: 'Database',
     link: 'https://neon.tech/',
   },
+  oracle: {
+    value: 'oracle',
+    label: 'Oracle',
+    icon: SiOracle,
+    style: { iconColor: 'text-red-600' },
+    category: 'Database',
+    link: 'https://www.oracle.com/database/',
+  },
+  supabase: {
+    value: 'supabase',
+    label: 'Supabase',
+    icon: SiSupabase,
+    style: { iconColor: 'text-emerald-500' },
+    category: 'Database',
+    link: 'https://supabase.com/',
+  },
 
   // Tool
   axios: {
@@ -346,6 +367,66 @@ export const TECHNOLOGY_DATA = {
     style: { iconColor: 'text-blue-500' },
     category: 'Security',
     link: 'https://next-auth.js.org/',
+  },
+
+  // AI
+  openai: {
+    value: 'openai',
+    label: 'OpenAI',
+    icon: SiOpenai,
+    style: { iconColor: 'text-emerald-400' },
+    category: 'AI',
+    link: 'https://openai.com/',
+  },
+
+  // Queue
+  bullmq: {
+    value: 'bullmq',
+    label: 'BullMQ',
+    icon: GiBull,
+    style: { iconColor: 'text-orange-500' },
+    category: 'Tool',
+    link: 'https://bullmq.io/',
+  },
+
+  // Chart
+  recharts: {
+    value: 'recharts',
+    label: 'Recharts',
+    icon: MdBarChart,
+    style: { iconColor: 'text-cyan-400' },
+    category: 'Tool',
+    link: 'https://recharts.org/',
+  },
+
+  // Form
+  'react-hook-form': {
+    value: 'react-hook-form',
+    label: 'React Hook Form',
+    icon: MdEditNote,
+    style: { iconColor: 'text-pink-500' },
+    category: 'Tool',
+    link: 'https://react-hook-form.com/',
+  },
+
+  // Markdown
+  'react-markdown': {
+    value: 'react-markdown',
+    label: 'React Markdown',
+    icon: SiMarkdown,
+    style: { iconColor: 'text-white' },
+    category: 'Tool',
+    link: 'https://github.com/remarkjs/react-markdown',
+  },
+
+  // Communication
+  telegram: {
+    value: 'telegram',
+    label: 'Telegram',
+    icon: SiTelegram,
+    style: { iconColor: 'text-sky-500' },
+    category: 'Tool',
+    link: 'https://telegram.org/',
   },
 
   tailwind: {

@@ -17,3 +17,4 @@ export type TechonologyCategory =
   | 'Deploy'
   | 'Dev Tool'
   | 'Security'
+  | 'AI'
