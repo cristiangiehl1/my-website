@@ -1,7 +1,5 @@
 ## Sobre o Projeto
 
-![AI Agent](/images/ai-agent.png)
-
 Plataforma corporativa de assistente inteligente que centraliza as interações internas da empresa em uma única interface conversacional. Os usuários interagem com o sistema via chat em linguagem natural para realizar consultas operacionais, analíticas e institucionais, eliminando a necessidade de navegar entre múltiplos sistemas.
 
 **Arquitetura e Abordagem**
