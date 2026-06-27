@@ -35,4 +35,37 @@ export const __PORTFOLIO__: Project[] = [
     featured: true,
     createdAt: '03/02/2026',
   },
+  {
+    id: 2,
+
+    title: 'Voting Lists',
+    description:
+      'Sistema de criação de listas para votação com Next.js. Cada usuário pode criar listas, adicionar participantes, cadastrar candidatos e acompanhar os resultados em tempo real. Suporte a listas públicas e privadas, convite por email, votação restrita a participantes, ranking com percentuais e temas claro/escuro.',
+    coverUrl: generateImgUrl('voting-system.png'),
+
+    technologies: [
+      'typescript',
+      'next',
+      'react',
+      'tailwind',
+      'postgresql',
+      'prisma',
+      'neondb',
+      'docker',
+      'zod',
+      'tanstack',
+      'nextauth',
+      'cloudinary',
+      'threejs',
+      'gsap',
+    ],
+    category: 'full-stack',
+
+    author: getAuthorBySlug('cristian-giehl'),
+    github: 'https://github.com/cristiangiehl1/voting-system',
+    deploy: 'https://voting-system-nu-gray.vercel.app/',
+
+    featured: true,
+    createdAt: '06/26/2026',
+  },
 ]

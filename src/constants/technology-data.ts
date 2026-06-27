@@ -7,7 +7,9 @@ import { GrValidate } from 'react-icons/gr'
 import { LuTreePalm } from 'react-icons/lu'
 import { MdHttp } from 'react-icons/md'
 import {
+  SiAuth0,
   SiAxios,
+  SiCloudinary,
   SiCookiecutter,
   SiCryptpad,
   SiCss3,
@@ -26,8 +28,10 @@ import {
   SiPython,
   SiReact,
   SiRust,
+  SiServerless,
   SiSocketdotio,
   SiTailwindcss,
+  SiThreedotjs,
   SiTypescript,
   SiZod,
 } from 'react-icons/si'
@@ -147,6 +151,14 @@ export const TECHNOLOGY_DATA = {
     category: 'Animation',
     link: 'https://github.com/greensock/GSAP',
   },
+  threejs: {
+    value: 'threejs',
+    label: 'Three.js',
+    icon: SiThreedotjs,
+    style: { iconColor: 'text-blue-500' },
+    category: 'Animation',
+    link: 'https://github.com/mrdoob/three.js/',
+  },
 
   // Validation
   zod: {
@@ -200,6 +212,14 @@ export const TECHNOLOGY_DATA = {
     style: { iconColor: 'text-teal-500' },
     category: 'Deploy',
     link: 'https://github.com/dougmoscrop/serverless-http',
+  },
+  cloudinary: {
+    value: 'cloudinary',
+    label: 'Cloudinary',
+    icon: SiCloudinary,
+    style: { iconColor: 'text-blue-500' },
+    category: 'Deploy',
+    link: 'https://cloudinary.com/',
   },
 
   // Testing
@@ -261,6 +281,14 @@ export const TECHNOLOGY_DATA = {
     category: 'Database',
     link: 'https://github.com/salsita/node-pg-migrate',
   },
+  neondb: {
+    value: 'neondb',
+    label: 'NeonDB',
+    icon: SiServerless,
+    style: { iconColor: 'text-green-500' },
+    category: 'Database',
+    link: 'https://neon.tech/',
+  },
 
   // Tool
   axios: {
@@ -310,6 +338,14 @@ export const TECHNOLOGY_DATA = {
     style: { iconColor: 'text-red-600' },
     category: 'Security',
     link: 'https://github.com/dcodeIO/bcrypt.js',
+  },
+  nextauth: {
+    value: 'nextauth',
+    label: 'NextAuth.js',
+    icon: SiAuth0,
+    style: { iconColor: 'text-blue-500' },
+    category: 'Security',
+    link: 'https://next-auth.js.org/',
   },
 
   tailwind: {
