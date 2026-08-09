@@ -44,6 +44,8 @@ Infraestrutura
 
 ## Pipeline de Ingestão
 
+![Página de ingestão do LangChain RAG Lab](/images/rag-ingestao.png)
+
 A página `/ingest` expõe cada etapa da preparação dos documentos:
 
 1. **Documento** — cole o texto ou anexe `.txt` / `.md` / `.pdf` (PDF via `PDFLoader` do LangChain).
@@ -52,6 +54,8 @@ A página `/ingest` expõe cada etapa da preparação dos documentos:
 4. **Confirmar e gerar embeddings** — cada chunk é embutido via HuggingFace Inference API e gravado no pgvector com metadados (`source`, `chunkIndex`, etc.). Alterar o texto ou a configuração invalida o preview e exige pré-visualizar novamente.
 
 ## Chat com RAG
+
+![Página de chat RAG do LangChain RAG Lab](/images/rag-chat.png)
 
 Na página `/chat`, o app embute a pergunta, busca os `topK` chunks mais similares no pgvector, monta o contexto e chama o LLM via OpenRouter **com streaming**.
 
