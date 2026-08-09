@@ -18,8 +18,10 @@ import {
   SiExpress,
   SiFastify,
   SiHtml5,
+  SiHuggingface,
   SiJavascript,
   SiJest,
+  SiLangchain,
   SiMarkdown,
   SiNetlify,
   SiNextdotjs,
@@ -44,6 +46,8 @@ import {
   TbBrandCypress,
   TbBrandFramerMotion,
   TbBrandReactNative,
+  TbRouter,
+  TbVector,
 } from 'react-icons/tb'
 
 import type { TechonologyCategory } from '@/@types/technology'
@@ -310,6 +314,14 @@ export const TECHNOLOGY_DATA = {
     category: 'Database',
     link: 'https://supabase.com/',
   },
+  pgvector: {
+    value: 'pgvector',
+    label: 'pgvector',
+    icon: TbVector,
+    style: { iconColor: 'text-purple-500' },
+    category: 'Database',
+    link: 'https://github.com/pgvector/pgvector',
+  },
 
   // Tool
   axios: {
@@ -377,6 +389,30 @@ export const TECHNOLOGY_DATA = {
     style: { iconColor: 'text-emerald-400' },
     category: 'AI',
     link: 'https://openai.com/',
+  },
+  langchain: {
+    value: 'langchain',
+    label: 'LangChain',
+    icon: SiLangchain,
+    style: { iconColor: 'text-teal-500' },
+    category: 'AI',
+    link: 'https://github.com/langchain-ai/langchainjs',
+  },
+  huggingface: {
+    value: 'huggingface',
+    label: 'HuggingFace',
+    icon: SiHuggingface,
+    style: { iconColor: 'text-yellow-400' },
+    category: 'AI',
+    link: 'https://huggingface.co/',
+  },
+  openrouter: {
+    value: 'openrouter',
+    label: 'OpenRouter',
+    icon: TbRouter,
+    style: { iconColor: 'text-indigo-400' },
+    category: 'AI',
+    link: 'https://openrouter.ai/',
   },
 
   // Queue
