@@ -32,6 +32,8 @@ export function ContactForm() {
     },
   })
 
+  const phoneField = register('phone')
+
   async function onSubmit(data: ContactFormData) {
     try {
       const res = await fetch('/api/emails/contact', {
@@ -117,9 +119,15 @@ export function ContactForm() {
         <Input
           id='phone'
           type='tel'
+          inputMode='tel'
           placeholder='(00) 00000-0000'
+          maxLength={16}
           className='border-border bg-muted/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-12 rounded-lg transition-colors'
-          {...register('phone')}
+          {...phoneField}
+          onChange={(e) => {
+            e.target.value = maskPhone(e.target.value)
+            phoneField.onChange(e)
+          }}
         />
         {errors.phone && <ErrorMsg msg={errors.phone.message} />}
       </div>
@@ -158,6 +166,19 @@ export function ContactForm() {
       </Button>
     </form>
   )
+}
+
+function maskPhone(value: string) {
+  const digits = value.replace(/\D/g, '').slice(0, 11)
+
+  if (digits.length === 0) return ''
+  if (digits.length <= 2) return `(${digits}`
+  if (digits.length <= 6) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`
+  if (digits.length <= 10) {
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`
+  }
+
+  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`
 }
 
 function ErrorMsg({

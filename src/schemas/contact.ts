@@ -5,7 +5,9 @@ export const contactSchema = z.object({
   email: z.email('Informe um formato de e-mail válido'),
   phone: z
     .string()
-    .max(20, 'O telefone não pode ultrapassar 20 caracteres')
+    .refine((val) => val === '' || /^\(\d{2}\) \d{4,5}-\d{4}$/.test(val), {
+      message: 'Informe um telefone no formato (DD) XXXXX-XXXX',
+    })
     .optional()
     .or(z.literal('')),
   subject: z
