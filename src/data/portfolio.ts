@@ -99,7 +99,7 @@ export const __PORTFOLIO__: Project[] = [
     title: 'LangChain RAG Lab',
     coverUrl: generateImgUrl('rag-chat.png'),
     description:
-      'Laboratório interativo de Retrieval-Augmented Generation (RAG) construído com Next.js e LangChain. Permite carregar documentos (.txt, .md, .pdf), pré-visualizar como são divididos em chunks, gerar embeddings via HuggingFace Inference API e persistir os vetores no PostgreSQL + pgvector (índice HNSW / cosseno). O chat responde em streaming via OpenRouter, exibindo as fontes recuperadas com seus scores de similaridade e controle fino de cada parâmetro do pipeline (splitter, topK, temperature, top_p, penalties e system prompt). Camada de domínio OOP com ambiente validado por zod e deploy em Vercel + Supabase.',
+      'Estudo de caso de Retrieval-Augmented Generation (RAG) construído com Next.js e LangChain, focado nos trade-offs de rodar um RAG sobre recursos gratuitos (modelos free tier, embeddings de baixa dimensionalidade e quantização). Permite carregar documentos (.txt, .md, .pdf), pré-visualizar como são divididos em chunks, gerar embeddings via HuggingFace Inference API (384d) e persistir os vetores no PostgreSQL + pgvector (índice HNSW / cosseno). O chat responde em streaming via OpenRouter, exibindo as fontes recuperadas com seus scores de similaridade e controle fino de cada parâmetro do pipeline (splitter, topK, temperature, top_p, penalties e system prompt). Camada de domínio OOP com ambiente validado por zod e deploy em Vercel + Supabase.',
     technologies: [
       'typescript',
       'next',

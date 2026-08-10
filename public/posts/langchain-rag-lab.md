@@ -1,8 +1,8 @@
 ## Sobre o Projeto
 
-O **LangChain RAG Lab** é um laboratório interativo de _Retrieval-Augmented Generation_ (RAG). Ele permite carregar documentos (`.txt`, `.md`, `.pdf`), inspecionar como eles são divididos em _chunks_, gerar embeddings via **HuggingFace Inference API**, persistir os vetores no **PostgreSQL + pgvector** e, por fim, conversar com o conteúdo através de um LLM com **respostas em streaming** e **citação das fontes recuperadas**.
+O **LangChain RAG Lab** é um **estudo de caso** sobre _Retrieval-Augmented Generation_ (RAG): um laboratório interativo em que **cada etapa do pipeline é explícita, pré-visualizável e configurável**. Ele permite carregar documentos (`.txt`, `.md`, `.pdf`), inspecionar como eles são divididos em _chunks_, gerar embeddings via **HuggingFace Inference API**, persistir os vetores no **PostgreSQL + pgvector** e, por fim, conversar com o conteúdo através de um LLM com **respostas em streaming** e **citação das fontes recuperadas**.
 
-O objetivo é ser transparente: cada etapa do pipeline (split, embedding, recuperação, geração) é explícita, pré-visualizável e configurável pela interface.
+Mais do que um produto acabado, o foco é **entender os trade-offs** de um RAG construído sobre recursos gratuitos: modelos _free tier_, embeddings de baixa dimensionalidade e LLMs quantizados. A interface expõe deliberadamente os parâmetros de cada etapa (split, embedding, recuperação, geração) para tornar visível **como cada decisão afeta a qualidade e a assertividade** das respostas.
 
 **Diferenciais**
 
@@ -64,6 +64,54 @@ Na página `/chat`, o app embute a pergunta, busca os `topK` chunks mais similar
   - **Recuperação:** `topK` e limiar mínimo de score.
   - **Geração:** `temperature`, `top_p`, `top_k` (sampling — distinto do `topK` de recuperação), `max_tokens`, `frequency_penalty`, `presence_penalty` e `system prompt`.
 - O **prompt é estruturado** (`promptConfig` + templates) e montado em `SystemMessage` (persona/regras) + `HumanMessage` (contexto/pergunta), com _override_ opcional por system prompt livre.
+
+## Estudo de Caso: escolhas e trade-offs
+
+Como o objetivo é aprender, o projeto foi montado **inteiramente sobre recursos gratuitos**. Isso é ótimo para custo zero e para deixar o pipeline reproduzível por qualquer pessoa, mas cobra um preço em qualidade — e enxergar esse preço com clareza é justamente o ponto do laboratório.
+
+### 1. Modelos gratuitos (_free tier_)
+
+O LLM de chat usa um modelo `:free` do OpenRouter (por padrão `google/gemma-4-26b-a4b-it:free`). Modelos gratuitos são, em geral, **menores e/ou mais fortemente otimizados** que os pagos, o que se traduz em:
+
+- **Menos capacidade de raciocínio** e maior tendência a alucinar quando o contexto recuperado é fraco ou ambíguo.
+- **Rate limits e filas** — a disponibilidade oscila e a latência sobe em horários de pico; ids `:free` podem até sair do ar (por isso o modelo é configurável por env).
+- **Janela de contexto e _throughput_ limitados**, restringindo quantos chunks dá para injetar no prompt.
+
+Em um RAG, a qualidade da geração depende **tanto** do modelo **quanto** da qualidade da recuperação. Com um modelo mais fraco, a recuperação precisa ser ainda mais certeira — o que nos leva ao segundo trade-off.
+
+### 2. Dimensionalidade do embedding
+
+Os embeddings usam `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`, um modelo **multilíngue de apenas 384 dimensões** (contra 768, 1024 ou 1536+ de modelos maiores). A dimensão do vetor é, na prática, o "orçamento" que o modelo tem para descrever o significado de um trecho:
+
+- **Menos dimensões = menor poder de representação semântica.** Nuances de sentido "colidem" no mesmo espaço, e a busca por similaridade fica **menos assertiva** — trechos relevantes podem ficar de fora do `topK`, e trechos apenas superficialmente parecidos podem entrar.
+- Em compensação, 384d é **mais barato e rápido**: vetores menores ocupam menos espaço no pgvector, o índice HNSW fica mais leve e a latência de busca cai.
+- A dimensão é **acoplada ao schema** (`vector(384)`): trocar o modelo de embedding por um de outra dimensão exige recriar a coluna e **re-ingerir todos os documentos**.
+
+Escolher 384d multilíngue foi um trade-off consciente: bom o suficiente para português, barato e serverless-friendly, ao custo de precisão de recuperação.
+
+### 3. Quantização
+
+Reduzir o tamanho do modelo trocando a forma como os pesos são representados. Ex.: passar de 16 bits para 8 bits — ou até 4 bits — **diminui o tamanho do modelo e acelera a inferência**, mas pode **impactar a qualidade** das respostas.
+
+A ideia é reduzir a precisão numérica usada para **armazenar** (e às vezes **calcular**) os pesos, de modo que o modelo ocupe menos memória e rode mais rápido — ao custo de alguma perda de qualidade.
+
+Os **sufixos no nome do modelo** indicam quantos bits são usados. Tomando como exemplo `Llama-3-8B-Instruct-`**`q4f32_1`**`-MLC`:
+
+- **`q4`** → os _pesos_ (weights) do modelo foram armazenados em **4 bits**.
+- **`f32`** → as _ativações_ (tensores/cálculos intermediários durante a inferência) ficam em **float32** (32 bits), enquanto o original costuma ser float16.
+- **`_1`** → identificador interno da variante/receita de quantização usada pelo MLC (diferenças de algoritmo, calibração, esquema de empacotamento, etc.).
+
+O modelo fica menor **principalmente por causa dos pesos em 4 bits**, enquanto manter as ativações em float32 ajuda a **preservar estabilidade numérica e qualidade** de inferência. Em resumo, a quantização é o botão que troca **precisão** por **memória e velocidade** — e entendê-la é essencial para escolher, comparar ou rodar modelos localmente (por exemplo, builds MLC/WebLLM no navegador).
+
+### Resumindo os trade-offs
+
+| Escolha                    | Ganho                          | Custo                                          |
+| -------------------------- | ------------------------------ | ---------------------------------------------- |
+| LLM `:free` (OpenRouter)   | Custo zero, sem infra          | Menos capacidade, rate limits, mais alucinação |
+| Embedding 384d multilíngue | Rápido, barato, serverless     | Recuperação menos assertiva                    |
+| Quantização (ex.: q4)      | Menos memória, mais velocidade | Perda de precisão numérica                     |
+
+**Como mitigar** (caminhos naturais de evolução do estudo): subir para embeddings de maior dimensão, aumentar `topK` com um limiar de score mais rígido, melhorar o _chunking_ (tamanho/overlap por tipo de documento), adicionar _re-ranking_ e, quando o orçamento permitir, trocar o LLM `:free` por um modelo pago ou por um local menos quantizado.
 
 ## Tecnologias Utilizadas
 
