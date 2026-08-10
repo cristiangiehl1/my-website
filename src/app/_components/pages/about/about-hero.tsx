@@ -28,7 +28,8 @@ export function AboutHero() {
             backend. Atualmente sou desenvolvedor pleno no{' '}
             <span className='text-foreground font-medium'>Grupo Koch SA</span> e
             me especializo em Inteligencia Artificial, criando plataformas com
-            integracao de multiagentes usando Claude Code, opencode e OpenAI.
+            integracao de multiagentes usando Claude Code, opencode e OpenAI,
+            alem de pipelines de RAG e automacao de processos corporativos.
           </p>
         </div>
       </div>
@@ -52,7 +53,9 @@ export function AboutHero() {
           </div>
           <div>
             <p className='text-card-foreground font-semibold'>Backend</p>
-            <p className='text-muted-foreground text-sm'>Node.js & APIs</p>
+            <p className='text-muted-foreground text-sm'>
+              Node.js, Oracle & Filas
+            </p>
           </div>
         </div>
 
@@ -63,7 +66,7 @@ export function AboutHero() {
           <div>
             <p className='text-card-foreground font-semibold'>IA & Agentes</p>
             <p className='text-muted-foreground text-sm'>
-              OpenAI & Multiagentes
+              OpenAI, RAG & Multiagentes
             </p>
           </div>
         </div>

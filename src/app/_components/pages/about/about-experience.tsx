@@ -39,8 +39,20 @@ export function AboutExperience() {
           além de boas práticas de testes com{' '}
           <span className='text-foreground font-medium'>Jest</span> e{' '}
           <span className='text-foreground font-medium'>Cypress</span>. No
-          backend, trabalho com Node.js, APIs REST e integrações com sistemas
-          legados.
+          backend, trabalho com Node.js e Next.js (Server Actions), bancos{' '}
+          <span className='text-foreground font-medium'>OracleDB</span> e{' '}
+          <span className='text-foreground font-medium'>
+            PostgreSQL / pgvector
+          </span>
+          , filas assíncronas com{' '}
+          <span className='text-foreground font-medium'>Redis</span> e{' '}
+          <span className='text-foreground font-medium'>BullMQ</span>, e
+          integrações com ERPs e sistemas legados. Também construo pipelines de{' '}
+          <span className='text-foreground font-medium'>RAG</span> e ingestão de
+          documentos com LLMs usando{' '}
+          <span className='text-foreground font-medium'>LangChain</span>,{' '}
+          <span className='text-foreground font-medium'>OpenAI</span> e{' '}
+          <span className='text-foreground font-medium'>HuggingFace</span>.
         </p>
       </div>
 
