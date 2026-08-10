@@ -27,6 +27,7 @@ export function ContactForm() {
       name: '',
       subject: '',
       email: '',
+      phone: '',
       message: '',
     },
   })
@@ -104,6 +105,23 @@ export function ContactForm() {
           {...register('subject')}
         />
         {errors.subject && <ErrorMsg msg={errors.subject.message} />}
+      </div>
+
+      <div className='flex flex-col gap-2'>
+        <Label
+          htmlFor='phone'
+          className='text-foreground/80 text-sm font-medium'>
+          Telefone{' '}
+          <span className='text-muted-foreground font-normal'>(opcional)</span>
+        </Label>
+        <Input
+          id='phone'
+          type='tel'
+          placeholder='(00) 00000-0000'
+          className='border-border bg-muted/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-12 rounded-lg transition-colors'
+          {...register('phone')}
+        />
+        {errors.phone && <ErrorMsg msg={errors.phone.message} />}
       </div>
 
       <div className='flex flex-col gap-2'>

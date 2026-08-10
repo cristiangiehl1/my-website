@@ -5,7 +5,7 @@ import { contactReceivedObj, initClient } from '@/services/email'
 
 export async function POST(req: Request) {
   const body = await req.json()
-  const { email, message, name, subject } = contactSchema.parse(body)
+  const { email, message, name, phone, subject } = contactSchema.parse(body)
 
   const resend = initClient()
 
@@ -17,6 +17,7 @@ export async function POST(req: Request) {
           email,
           message,
           name,
+          phone,
           subject,
         }),
       },

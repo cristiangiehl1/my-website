@@ -14,6 +14,7 @@ import * as React from 'react'
 interface ContactReceivedProps {
   name: string
   email: string
+  phone?: string
   subject: string
   message: string
 }
@@ -21,6 +22,7 @@ interface ContactReceivedProps {
 export default function ContactReceived({
   name = 'Visitante',
   email = 'email@exemplo.com',
+  phone = '',
   subject = 'Mensagem de contato',
   message = 'Mensagem enviada pelo formulário...',
 }: ContactReceivedProps) {
@@ -55,6 +57,11 @@ export default function ContactReceived({
               <Text style={infoItem}>
                 <strong>Email:</strong> {email}
               </Text>
+              {phone ? (
+                <Text style={infoItem}>
+                  <strong>Telefone:</strong> {phone}
+                </Text>
+              ) : null}
               <Text style={infoItem}>
                 <strong>Assunto:</strong> {subject}
               </Text>
