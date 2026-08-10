@@ -49,7 +49,7 @@ Infraestrutura
 A página `/ingest` expõe cada etapa da preparação dos documentos:
 
 1. **Documento** — cole o texto ou anexe `.txt` / `.md` / `.pdf` (PDF via `PDFLoader` do LangChain).
-2. **Configuração do split** — escolha o splitter (`RecursiveCharacterTextSplitter` ou `CharacterTextSplitter`), `chunkSize`, `chunkOverlap` e separadores opcionais.
+2. **Configuração do split** — usando o `RecursiveCharacterTextSplitter`, ajuste `chunkSize`, `chunkOverlap` e separadores opcionais.
 3. **Pré-visualizar chunks** — mostra todos os chunks numerados e com tamanho. **Nada é enviado ao modelo nem ao banco nesta etapa.**
 4. **Confirmar e gerar embeddings** — cada chunk é embutido via HuggingFace Inference API e gravado no pgvector com metadados (`source`, `chunkIndex`, etc.). Alterar o texto ou a configuração invalida o preview e exige pré-visualizar novamente.
 
@@ -64,6 +64,43 @@ Na página `/chat`, o app embute a pergunta, busca os `topK` chunks mais similar
   - **Recuperação:** `topK` e limiar mínimo de score.
   - **Geração:** `temperature`, `top_p`, `top_k` (sampling — distinto do `topK` de recuperação), `max_tokens`, `frequency_penalty`, `presence_penalty` e `system prompt`.
 - O **prompt é estruturado** (`promptConfig` + templates) e montado em `SystemMessage` (persona/regras) + `HumanMessage` (contexto/pergunta), com _override_ opcional por system prompt livre.
+
+## Prompt Estruturado
+
+Em vez de escrever um _system prompt_ como um bloco de texto solto, o projeto trata o prompt como **dado estruturado e versionável**. A configuração vive em `src/lib/prompt/prompt.config.json` e é **validada com zod** (`promptConfigSchema`) no boot — se algo estiver malformado, a aplicação falha na inicialização em vez de mandar um prompt quebrado para o LLM.
+
+O config separa **o que o modelo deve fazer** de **como o texto é montado**:
+
+```jsonc
+{
+  "task": "Responder perguntas do usuário com base exclusivamente nos documentos recuperados",
+  "role": "assistente especializado em consultar e extrair informações via RAG",
+  "instructions": [
+    "Use APENAS as informações do contexto recuperado para responder",
+    "Se o contexto não for suficiente, diga claramente que não encontrou a resposta",
+    "Nunca invente fatos que não estejam no contexto",
+    "Quando citar um trecho, referencie o número da fonte no formato [#]",
+  ],
+  "constraints": {
+    "language": "pt-BR",
+    "tone": "objetivo e prestativo",
+    "format": "texto natural com citação das fontes [#]",
+  },
+  "context_rules": {
+    "use_only_provided_context": true,
+    "indicate_if_insufficient_context": true,
+  },
+}
+```
+
+Esse config é injetado em dois _templates_ com _placeholders_ (`{role}`, `{instructions}`, `{context}`, `{question}`…): `system.txt` recebe **persona e regras**, e `human.txt` recebe **o contexto recuperado e a pergunta**. O `buildChatPrompt` renderiza os dois e devolve `{ system, human }`, que viram `SystemMessage` + `HumanMessage`.
+
+**Por que isso importa mais do que um system prompt em texto:**
+
+- **Separação de responsabilidades** — persona/regras (estáveis) ficam no `SystemMessage`; contexto/pergunta (voláteis) ficam no `HumanMessage`. Manter as instruções no papel de sistema lhes dá **prioridade maior** e **mais resistência a _prompt injection_** vinda do turno do usuário ou dos próprios documentos.
+- **Validável e versionável** — o prompt tem _schema_, `metadata` (versão, autor, tags) e histórico no git. Ajustar tom, idioma ou regras é editar um campo, não reescrever um parágrafo.
+- **Consistência** — todas as respostas partem exatamente da mesma estrutura (idioma, formato de citação `[#]`, política de "não invente"), em vez de depender de como o prompt foi redigido daquela vez.
+- **Override deliberado** — o painel de chat ainda permite substituir tudo por um _system prompt_ livre para experimentação, mas o **caminho padrão é o estruturado**.
 
 ## Estudo de Caso: escolhas e trade-offs
 
