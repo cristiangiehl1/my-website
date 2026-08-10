@@ -20,25 +20,25 @@ const frontendSkills: Skill[] = [
     name: 'next',
     level: 'Avançado',
     yearsOfExperience: 2,
-    description: 'App Router, SSR, ISR, API Routes',
+    description: 'App Router, SSR/ISR, Server Actions, Route Handlers',
   },
   {
     name: 'typescript',
     level: 'Avançado',
     yearsOfExperience: 2,
-    description: 'Types, Generics, Utility Types',
+    description: 'Generics, utility types, tipagem ponta a ponta',
+  },
+  {
+    name: 'javascript',
+    level: 'Avançado',
+    yearsOfExperience: 2,
+    description: 'ES moderno, assincronismo, DOM',
   },
   {
     name: 'tailwind',
     level: 'Expert',
     yearsOfExperience: 2,
-    description: 'Design systems, responsividade',
-  },
-  {
-    name: 'react-native',
-    level: 'Intermediario',
-    yearsOfExperience: 1,
-    description: 'Apps mobile cross-platform',
+    description: 'Design systems, responsividade, tema dark',
   },
   {
     name: 'html',
@@ -50,7 +50,43 @@ const frontendSkills: Skill[] = [
     name: 'css',
     level: 'Avançado',
     yearsOfExperience: 3,
-    description: 'Semantica, acessibilidade, animações',
+    description: 'Layouts, animações, responsividade',
+  },
+  {
+    name: 'react-hook-form',
+    level: 'Avançado',
+    yearsOfExperience: 2,
+    description: 'Formularios performaticos integrados ao Zod',
+  },
+  {
+    name: 'tanstack',
+    level: 'Intermediario',
+    yearsOfExperience: 1,
+    description: 'TanStack Query: cache e sincronização de dados',
+  },
+  {
+    name: 'react-markdown',
+    level: 'Intermediario',
+    yearsOfExperience: 1,
+    description: 'Renderização de markdown com remark-gfm',
+  },
+  {
+    name: 'react-native',
+    level: 'Intermediario',
+    yearsOfExperience: 1,
+    description: 'Apps mobile cross-platform',
+  },
+  {
+    name: 'threejs',
+    level: 'Basico',
+    yearsOfExperience: 1,
+    description: 'Cenas 3D e elementos interativos',
+  },
+  {
+    name: 'gsap',
+    level: 'Basico',
+    yearsOfExperience: 1,
+    description: 'Animações e transições',
   },
 ]
 
@@ -59,13 +95,37 @@ const backendSkills: Skill[] = [
     name: 'node',
     level: 'Avançado',
     yearsOfExperience: 2,
-    description: 'Express, Fastify, APIs REST',
+    description: 'APIs REST, workers, jobs agendados',
+  },
+  {
+    name: 'express',
+    level: 'Intermediario',
+    yearsOfExperience: 2,
+    description: 'APIs minimalistas, middlewares, sessões',
+  },
+  {
+    name: 'nextauth',
+    level: 'Avançado',
+    yearsOfExperience: 2,
+    description: 'Auth v5, JWT, provider customizado (ERP/LDAP)',
+  },
+  {
+    name: 'zod',
+    level: 'Avançado',
+    yearsOfExperience: 2,
+    description: 'Validação de schemas e env em todo o stack',
+  },
+  {
+    name: 'bullmq',
+    level: 'Intermediario',
+    yearsOfExperience: 1,
+    description: 'Filas assincronas e workers com Redis',
   },
   {
     name: 'rust',
     level: 'Intermediario',
     yearsOfExperience: 2,
-    description: 'Queries, migrations, otimização',
+    description: 'APIs com Loco.rs e SeaORM',
   },
   {
     name: 'python',
@@ -75,21 +135,127 @@ const backendSkills: Skill[] = [
   },
 ]
 
-const toolsSkills: Skill[] = [
+const databaseSkills: Skill[] = [
   {
     name: 'postgresql',
+    level: 'Avançado',
+    yearsOfExperience: 2,
+    description: 'Modelagem, SQL, migrations, otimização',
+  },
+  {
+    name: 'oracle',
+    level: 'Intermediario',
+    yearsOfExperience: 1,
+    description: 'OracleDB corporativo, pool de conexões, transações',
+  },
+  {
+    name: 'redis',
+    level: 'Intermediario',
+    yearsOfExperience: 1,
+    description: 'Cache e backing das filas BullMQ',
+  },
+  {
+    name: 'supabase',
     level: 'Intermediario',
     yearsOfExperience: 2,
-    description: 'Queries, migrations, otimização',
+    description: 'Postgres gerenciado + pgvector em produção',
   },
+  {
+    name: 'prisma',
+    level: 'Intermediario',
+    yearsOfExperience: 2,
+    description: 'ORM type-safe, schema e migrations',
+  },
+  {
+    name: 'pgvector',
+    level: 'Intermediario',
+    yearsOfExperience: 1,
+    description: 'Busca vetorial (HNSW, cosseno) para RAG',
+  },
+  {
+    name: 'neondb',
+    level: 'Intermediario',
+    yearsOfExperience: 2,
+    description: 'Postgres serverless',
+  },
+]
 
+const aiSkills: Skill[] = [
+  {
+    name: 'openai',
+    level: 'Intermediario',
+    yearsOfExperience: 1,
+    description: 'Agentes, function calling, structured outputs',
+  },
+  {
+    name: 'langchain',
+    level: 'Intermediario',
+    yearsOfExperience: 1,
+    description: 'Splitters, loaders e orquestração de RAG',
+  },
+  {
+    name: 'huggingface',
+    level: 'Basico',
+    yearsOfExperience: 1,
+    description: 'Embeddings via Inference API',
+  },
+  {
+    name: 'openrouter',
+    level: 'Basico',
+    yearsOfExperience: 1,
+    description: 'LLMs de chat com streaming',
+  },
+]
+
+const toolsSkills: Skill[] = [
   {
     name: 'docker',
     level: 'Intermediario',
     yearsOfExperience: 2,
-    description: 'Containers, Docker Compose',
+    description: 'Containers, Docker Compose, multi-serviço',
+  },
+  {
+    name: 'netlify',
+    level: 'Intermediario',
+    yearsOfExperience: 2,
+    description: 'Deploy de apps e funções serverless',
+  },
+  {
+    name: 'eslint',
+    level: 'Avançado',
+    yearsOfExperience: 2,
+    description: 'Padronização e qualidade de código',
+  },
+  {
+    name: 'cloudinary',
+    level: 'Basico',
+    yearsOfExperience: 1,
+    description: 'Upload e otimização de midia',
+  },
+  {
+    name: 'telegram',
+    level: 'Basico',
+    yearsOfExperience: 1,
+    description: 'Bots como canal de mensagens',
   },
 ]
+
+const skillSections: { title: string; color: string; skills: Skill[] }[] = [
+  { title: 'Frontend', color: 'bg-primary', skills: frontendSkills },
+  { title: 'Backend & Runtime', color: 'bg-secondary', skills: backendSkills },
+  { title: 'Banco de Dados', color: 'bg-chart-1', skills: databaseSkills },
+  { title: 'IA & RAG', color: 'bg-chart-2', skills: aiSkills },
+  {
+    title: 'DevOps & Ferramentas',
+    color: 'bg-chart-3',
+    skills: toolsSkills,
+  },
+]
+
+const totalTechnologies = skillSections.reduce(
+  (total, section) => total + section.skills.length,
+  0
+)
 
 export const metadata: Metadata = {
   title: 'Skills',
@@ -122,17 +288,8 @@ export default function SkillsPage() {
 
           {/* Stats */}
           <div className='mt-2 flex flex-wrap gap-6'>
-            <StatItem
-              value={
-                (
-                  frontendSkills.length +
-                  backendSkills.length +
-                  toolsSkills.length
-                ).toString() + '+'
-              }
-              label='Tecnologias'
-            />
-            <StatItem value='1.5+' label='Anos de experiencia' />
+            <StatItem value={`${totalTechnologies}+`} label='Tecnologias' />
+            <StatItem value='2+' label='Anos de experiencia' />
             <StatItem
               value={softSkills.length.toString()}
               label='Soft Skills'
@@ -140,44 +297,22 @@ export default function SkillsPage() {
           </div>
         </header>
 
-        {/* Frontend Skills */}
-        <section className='flex flex-col gap-6'>
-          <div className='flex items-center gap-3'>
-            <div className='bg-primary h-1 w-8 rounded-full' />
-            <h2 className='text-foreground text-2xl font-bold'>Frontend</h2>
-          </div>
-          <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
-            {frontendSkills.map((skill) => (
-              <SkillCard key={skill.name} skill={skill} />
-            ))}
-          </div>
-        </section>
-
-        {/* Backend Skills */}
-        <section className='flex flex-col gap-6'>
-          <div className='flex items-center gap-3'>
-            <div className='bg-secondary h-1 w-8 rounded-full' />
-            <h2 className='text-foreground text-2xl font-bold'>Backend</h2>
-          </div>
-          <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
-            {backendSkills.map((skill) => (
-              <SkillCard key={skill.name} skill={skill} />
-            ))}
-          </div>
-        </section>
-
-        {/* Tools Skills */}
-        <section className='flex flex-col gap-6'>
-          <div className='flex items-center gap-3'>
-            <div className='bg-secondary h-1 w-8 rounded-full' />
-            <h2 className='text-foreground text-2xl font-bold'>Ferramentas</h2>
-          </div>
-          <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
-            {toolsSkills.map((skill) => (
-              <SkillCard key={skill.name} skill={skill} />
-            ))}
-          </div>
-        </section>
+        {/* Technical Skills */}
+        {skillSections.map((section) => (
+          <section key={section.title} className='flex flex-col gap-6'>
+            <div className='flex items-center gap-3'>
+              <div className={`${section.color} h-1 w-8 rounded-full`} />
+              <h2 className='text-foreground text-2xl font-bold'>
+                {section.title}
+              </h2>
+            </div>
+            <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
+              {section.skills.map((skill) => (
+                <SkillCard key={skill.name} skill={skill} />
+              ))}
+            </div>
+          </section>
+        ))}
 
         {/* Soft Skills */}
         <section className='flex flex-col gap-6'>
