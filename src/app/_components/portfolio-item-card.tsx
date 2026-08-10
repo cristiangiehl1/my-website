@@ -31,7 +31,7 @@ export function PortfolioItemCard({
   const technologiesMoreIndicator = Math.max(technologiesSize - 5, 0)
 
   return (
-    <div className='group bg-card border-border hover:border-primary hover:shadow-primary/20 relative flex flex-col justify-between overflow-hidden rounded-lg border transition-all duration-300 hover:shadow-2xl'>
+    <div className='group bg-card border-border hover:border-primary hover:shadow-primary/20 relative flex flex-col overflow-hidden rounded-lg border transition-all duration-300 hover:shadow-2xl'>
       {featured && (
         <div className='bg-primary absolute top-4 right-4 z-10 rounded-full px-3 py-1 text-xs font-bold text-white text-shadow-black text-shadow-xs'>
           Destaque
@@ -58,7 +58,7 @@ export function PortfolioItemCard({
       </Link>
 
       {/* Content */}
-      <div className='flex flex-col space-y-4 p-6'>
+      <div className='flex flex-1 flex-col space-y-4 p-6'>
         <h3 className='group-hover:text-primary text-xl font-bold text-balance transition-colors'>
           {title}
         </h3>
@@ -96,31 +96,33 @@ export function PortfolioItemCard({
         </div>
 
         {/* Actions */}
-        <div className='mt-auto flex gap-3 pt-2'>
-          {github && (
-            <Button
-              asChild
-              variant='outline'
-              size='sm'
-              className='hover:bg-primary hover:text-primary-foreground hover:border-primary flex-1 bg-transparent transition-all'>
-              <a href={github} target='_blank' rel='noopener noreferrer'>
-                <FaGithub className='mr-2' size={16} />
-                Código
-              </a>
-            </Button>
-          )}
-          {deploy && (
-            <Button
-              asChild
-              size='sm'
-              className='bg-primary text-primary-foreground hover:bg-primary/90 flex-1'>
-              <a href={deploy} target='_blank' rel='noopener noreferrer'>
-                <FaExternalLinkAlt className='mr-2' size={14} />
-                Demo
-              </a>
-            </Button>
-          )}
-        </div>
+        {(github || deploy) && (
+          <div className='mt-auto flex gap-3 pt-2'>
+            {github && (
+              <Button
+                asChild
+                variant='outline'
+                size='sm'
+                className='hover:bg-primary hover:text-primary-foreground hover:border-primary flex-1 bg-transparent transition-all'>
+                <a href={github} target='_blank' rel='noopener noreferrer'>
+                  <FaGithub className='mr-2' size={16} />
+                  Código
+                </a>
+              </Button>
+            )}
+            {deploy && (
+              <Button
+                asChild
+                size='sm'
+                className='bg-primary text-primary-foreground hover:bg-primary/90 flex-1'>
+                <a href={deploy} target='_blank' rel='noopener noreferrer'>
+                  <FaExternalLinkAlt className='mr-2' size={14} />
+                  Demo
+                </a>
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )
