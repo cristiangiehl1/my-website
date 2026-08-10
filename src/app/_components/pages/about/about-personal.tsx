@@ -30,7 +30,7 @@ export function AboutPersonal() {
         </div>
 
         <div className='border-border bg-card hover:border-primary/40 flex items-start gap-3 rounded-xl border p-5 transition-colors'>
-          <Dices className='text-secondary mt-0.5 h-5 w-5 shrink-0' />
+          <Dices className='text-primary mt-0.5 h-5 w-5 shrink-0' />
           <p className='text-muted-foreground text-sm leading-relaxed'>
             Entusiasta de{' '}
             <span className='text-foreground font-medium'>Games e RPG</span>.

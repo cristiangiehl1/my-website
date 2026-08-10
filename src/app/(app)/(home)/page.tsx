@@ -45,7 +45,7 @@ export default function HomePage() {
           <div className='space-y-4'>
             <h1 className='text-5xl leading-tight font-bold text-balance sm:text-6xl lg:text-7xl'>
               Transformo <span className='text-primary'>ideias</span> em{' '}
-              <span className='text-secondary'>experiências</span> digitais
+              <span className='text-primary'>experiências</span> digitais
             </h1>
             <p className='text-muted-foreground max-w-2xl text-xl leading-relaxed text-pretty'>
               Especialista em criar aplicações web modernas e escaláveis que

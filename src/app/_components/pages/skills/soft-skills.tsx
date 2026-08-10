@@ -60,8 +60,8 @@ export function SoftSkills() {
       {softSkills.map((skill) => (
         <div
           key={skill.name}
-          className='group bg-card border-border hover:border-secondary/40 hover:shadow-soft-stack flex items-start gap-4 rounded-xl border p-5 transition-all'>
-          <div className='bg-secondary/10 text-secondary group-hover:bg-secondary/20 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-colors'>
+          className='group bg-card border-border hover:border-primary/40 hover:shadow-soft-stack flex items-start gap-4 rounded-xl border p-5 transition-all'>
+          <div className='bg-primary/10 text-primary group-hover:bg-primary/20 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-colors'>
             {skill.icon}
           </div>
           <div className='flex flex-col gap-1'>

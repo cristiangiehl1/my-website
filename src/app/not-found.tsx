@@ -15,15 +15,13 @@ function GlitchText({ children }: { children: string }) {
       <span className='relative z-10'>{children}</span>
       <span
         className='text-primary absolute inset-0 opacity-70'
-        aria-hidden='true'
-      >
+        aria-hidden='true'>
         {children}
       </span>
       <span
-        className='text-secondary absolute inset-0 opacity-70'
+        className='text-destructive absolute inset-0 opacity-70'
         style={{ animationDelay: '0.1s' }}
-        aria-hidden='true'
-      >
+        aria-hidden='true'>
         {children}
       </span>
     </div>
@@ -109,14 +107,12 @@ function FloatingIcons() {
       </div>
       <div
         className='animate-float absolute top-40 right-20 opacity-20'
-        style={{ animationDelay: '1s' }}
-      >
-        <Code2 className='text-secondary h-12 w-12' />
+        style={{ animationDelay: '1s' }}>
+        <Code2 className='text-foreground h-12 w-12' />
       </div>
       <div
         className='animate-float absolute bottom-40 left-20 opacity-20'
-        style={{ animationDelay: '2s' }}
-      >
+        style={{ animationDelay: '2s' }}>
         <Cpu className='text-primary h-14 w-14' />
       </div>
     </>
@@ -164,8 +160,8 @@ export default function NotFound() {
         </div>
 
         {/* Code snippet decoration */}
-        <div className='text-muted-foreground/50 mt-12 font-mono text-xs'>
-          <span className='text-secondary'>{'// '}</span>
+        <div className='text-muted-foreground mt-12 font-mono text-xs'>
+          <span className='text-muted-foreground'>{'// '}</span>
           <span>
             desenvolvedor.portfolio.redirect(
             <span className='text-primary'>{'"/"'}</span>)

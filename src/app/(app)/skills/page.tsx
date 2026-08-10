@@ -242,7 +242,7 @@ const toolsSkills: Skill[] = [
 
 const skillSections: { title: string; color: string; skills: Skill[] }[] = [
   { title: 'Frontend', color: 'bg-primary', skills: frontendSkills },
-  { title: 'Backend & Runtime', color: 'bg-secondary', skills: backendSkills },
+  { title: 'Backend & Runtime', color: 'bg-foreground', skills: backendSkills },
   { title: 'Banco de Dados', color: 'bg-chart-1', skills: databaseSkills },
   { title: 'IA & RAG', color: 'bg-chart-2', skills: aiSkills },
   {
@@ -334,12 +334,12 @@ export default function SkillsPage() {
           </h3>
           <div className='flex flex-wrap gap-6'>
             <LegendItem
-              color='bg-chart-1'
+              color='bg-muted-foreground'
               label='Basico'
               description='Conhecimento fundamental'
             />
             <LegendItem
-              color='bg-secondary'
+              color='bg-foreground'
               label='Intermediario'
               description='Uso regular em projetos'
             />
@@ -349,7 +349,7 @@ export default function SkillsPage() {
               description='Dominio solido e autonomia'
             />
             <LegendItem
-              color='bg-chart-4'
+              color='bg-primary'
               label='Expert'
               description='Referencia e mentoria'
             />
