@@ -4,15 +4,15 @@ Personal portfolio website built with Next.js 16 (App Router), Tailwind CSS v4, 
 
 ## Commands
 
-| Command | Action |
-|---|---|
-| `pnpm dev` | Dev server (localhost:3000) |
-| `pnpm build` | Production build (also the typecheck — no separate `typecheck` script) |
-| `pnpm lint` | ESLint (flat config, v9) |
-| `pnpm lint:check` | Prettier check |
-| `pnpm lint:fix` | Prettier write |
-| `pnpm dev:email` | React Email dev server (`--dir src/emails`) |
-| `pnpm prepare` | Install husky hooks (run after clone) |
+| Command           | Action                                                                 |
+| ----------------- | ---------------------------------------------------------------------- |
+| `pnpm dev`        | Dev server (localhost:3000)                                            |
+| `pnpm build`      | Production build (also the typecheck — no separate `typecheck` script) |
+| `pnpm lint`       | ESLint (flat config, v9)                                               |
+| `pnpm lint:check` | Prettier check                                                         |
+| `pnpm lint:fix`   | Prettier write                                                         |
+| `pnpm dev:email`  | React Email dev server (`--dir src/emails`)                            |
+| `pnpm prepare`    | Install husky hooks (run after clone)                                  |
 
 ## Key facts
 
@@ -57,3 +57,13 @@ src/
 - Client components use `'use client'` directive.
 - Import sorting is enforced by `eslint-plugin-simple-import-sort` (error level).
 - Prettier: `semi: false`, `singleQuote: true`, `jsxSingleQuote: true`, `trailingComma: 'es5'`, `bracketSameLine: true`.
+
+## Design language — "Brutalist Mono, Dark"
+
+The theme lives entirely in `src/app/globals.css` design tokens. Keep changes coherent with it; do not reintroduce generic "AI-generated" aesthetics.
+
+- **Fonts**: Space Grotesk (`--font-sans`) + JetBrains Mono (`--font-mono`), loaded in `layout.tsx`. Never fall back to Inter/Roboto/Arial/Geist/system defaults.
+- **Palette**: near-black true-neutral background (`#0A0A0A`), off-white foreground, a **single** acid-lime accent (`#C4F000`). No violet/purple tint on neutrals, no multi-accent (green+cyan+magenta) mixes.
+- **Corners**: moderately rounded — `--radius: 0.5rem` (rounded, not pill). All `--radius-sm/md/lg/xl` derive from it; change the single token, not per-component.
+- **Contrast over glow**: prefer prominent borders and high contrast. Avoid soft glowing blurred blobs and neon shadows (legacy `animate-glow`/`animate-pulse-glow` are being phased out).
+- To change direction, add a token set and preview it, don't hardcode colors/fonts in components.

@@ -72,7 +72,7 @@ const markdownComponents: Components = {
       )
     }
     return (
-      <code className='bg-muted text-secondary rounded-md px-1.5 py-0.5 font-mono text-sm'>
+      <code className='bg-muted text-primary rounded-md px-1.5 py-0.5 font-mono text-sm'>
         {children}
       </code>
     )

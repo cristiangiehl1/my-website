@@ -9,6 +9,7 @@ import { MdBarChart, MdEditNote, MdHttp } from 'react-icons/md'
 import {
   SiAuth0,
   SiAxios,
+  SiClaude,
   SiCloudinary,
   SiCookiecutter,
   SiCryptpad,
@@ -46,6 +47,7 @@ import {
   TbBrandCypress,
   TbBrandFramerMotion,
   TbBrandReactNative,
+  TbProtocol,
   TbRouter,
   TbVector,
 } from 'react-icons/tb'
@@ -413,6 +415,22 @@ export const TECHNOLOGY_DATA = {
     style: { iconColor: 'text-indigo-400' },
     category: 'AI',
     link: 'https://openrouter.ai/',
+  },
+  claude: {
+    value: 'claude',
+    label: 'Claude',
+    icon: SiClaude,
+    style: { iconColor: 'text-orange-400' },
+    category: 'AI',
+    link: 'https://www.anthropic.com/claude',
+  },
+  mcp: {
+    value: 'mcp',
+    label: 'MCP',
+    icon: TbProtocol,
+    style: { iconColor: 'text-emerald-400' },
+    category: 'AI',
+    link: 'https://modelcontextprotocol.io/',
   },
 
   // Queue

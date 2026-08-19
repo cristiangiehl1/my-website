@@ -1,17 +1,17 @@
 import './globals.css'
 
-import { Geist, Geist_Mono } from 'next/font/google'
+import { JetBrains_Mono, Space_Grotesk } from 'next/font/google'
 
 import { websiteMetadata } from './metadata'
 import { Providers } from './providers'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const spaceGrotesk = Space_Grotesk({
+  variable: '--font-space-grotesk',
   subsets: ['latin'],
 })
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const jetbrainsMono = JetBrains_Mono({
+  variable: '--font-jetbrains-mono',
   subsets: ['latin'],
 })
 
@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen w-full flex-col antialiased`}>
+        className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} flex min-h-screen w-full flex-col antialiased`}>
         <Providers>{children}</Providers>
       </body>
     </html>
