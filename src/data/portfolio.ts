@@ -4,6 +4,18 @@ import { getAuthorBySlug } from '@/helpers/get-author'
 
 export const __PORTFOLIO__: Project[] = [
   {
+    id: 6,
+    title: 'Gestão de Projetos MCP',
+    coverUrl: generateImgUrl('gestao-de-projetos-mcp.png'),
+    description:
+      'Plugin do Claude Code que integra o assistente ao sistema corporativo de Gestão de Projetos do Grupo Koch por meio de um servidor MCP (Model Context Protocol) em TypeScript. Expõe 23 ferramentas e 4 fluxos guiados que permitem criar e acompanhar projetos, gerenciar atividades e etapas de workflow, apontar horas, registrar pendências e priorizar iniciativas via avaliação WSJF — tudo diretamente pela conversa. A autenticação usa credenciais do Active Directory, com sessão JWT em cookies httpOnly, renovação automática e respeito às permissões (RBAC) do usuário. O destaque é o fluxo log_week_hours, que lê o histórico do git local, mapeia os commits para projetos/atividades e distribui as horas da semana automaticamente. Validação com Zod e bundle ESM com esbuild. Por ser uma integração interna, não possui URL pública nem repositório disponível.',
+    technologies: ['claude', 'mcp', 'typescript', 'node', 'zod', 'eslint'],
+    category: 'backend',
+    author: getAuthorBySlug('cristian-giehl'),
+    featured: true,
+    createdAt: '08/19/2026',
+  },
+  {
     id: 3,
     title: 'AI Agent',
     coverUrl: generateImgUrl('ai-agent.png'),
