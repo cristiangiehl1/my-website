@@ -17,7 +17,7 @@ export const __PORTFOLIO__: Project[] = [
   },
   {
     id: 3,
-    title: 'AI Agent',
+    title: 'Orchestrator Agent',
     coverUrl: generateImgUrl('ai-agent.png'),
     description:
       'Plataforma corporativa de assistente com IA que centraliza interações internas via chat. Utiliza agentes orquestrados com OpenAI Responses API, busca semântica com embeddings, autenticação LDAP/Active Directory e integração com sistemas legados corporativos. Inclui automação de processos operacionais, filas assíncronas com Redis/BullMQ e integração com Telegram como canal adicional. Desenvolvido com Next.js 16 e conteinerizado com Docker.',
