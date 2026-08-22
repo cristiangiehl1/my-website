@@ -1,25 +1,25 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
 import type { NavLinkWithSubRoutes } from '@/@types/nav-links'
+import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
+import { LanguageSwitcher } from './language-switcher'
 import { NavMenuItems } from './nav-menu-items'
 
-const navLinks: Array<NavLinkWithSubRoutes> = [
-  {
-    label: 'Portfólio',
-    href: '/portfolio',
-  },
-  { label: 'Sobre', href: '/about' },
-  { label: 'Skills', href: '/skills' },
-  { label: 'Contato', href: '/contact' },
-]
-
 export function AppHeader() {
+  const t = useTranslations('common')
+  const navLinks: Array<NavLinkWithSubRoutes> = [
+    { label: t('nav.portfolio'), href: '/portfolio' },
+    { label: t('nav.about'), href: '/about' },
+    { label: t('nav.skills'), href: '/skills' },
+    { label: t('nav.contact'), href: '/contact' },
+  ]
+
   const [isOpen, setIsOpen] = useState(false)
   const menuBtnClass = 'h-0.5 w-5 origin-center bg-white duration-400'
 
@@ -33,7 +33,7 @@ export function AppHeader() {
         <Link href='/' className='flex items-center gap-2 overflow-hidden'>
           <Image
             src={'/icons/android-chrome-512x512.png'}
-            alt='Cristian Giehl website logo'
+            alt={t('brandAlt')}
             width={40}
             height={40}
           />
@@ -42,10 +42,15 @@ export function AppHeader() {
         {/* Desktop Navigation */}
         <NavMenuItems navLinks={navLinks} className='hidden md:flex' />
 
+        {/* Desktop Language Switcher */}
+        <LanguageSwitcher className='hidden md:flex' />
+
         {/* Mobile Menu Button */}
         <button
           className='space-y-2 p-2 md:hidden'
-          aria-label={`botão para ${isOpen ? 'fechar' : 'abrir'} o menu de navegação`}
+          aria-label={isOpen ? t('menu.close') : t('menu.open')}
+          aria-expanded={isOpen}
+          aria-controls='navbar'
           onClick={() => setIsOpen((prev) => !prev)}>
           <div
             className={cn(
@@ -101,6 +106,7 @@ export function AppHeader() {
             setIsOpen(false)
           }}>
           <NavMenuItems navLinks={navLinks} onClick={() => setIsOpen(false)} />
+          <LanguageSwitcher />
         </div>
       </div>
     </header>

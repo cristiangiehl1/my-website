@@ -1,5 +1,21 @@
 {
   "common": {
-    "brandAlt": "Cristian Giehl website logo"
+    "brandAlt": "Cristian Giehl website logo",
+    "nav": {
+      "portfolio": "Portfolio",
+      "about": "About",
+      "skills": "Skills",
+      "contact": "Contact"
+    },
+    "menu": {
+      "open": "Open navigation menu",
+      "close": "Close navigation menu"
+    },
+    "language": {
+      "label": "Language",
+      "pt-BR": "Português",
+      "en-US": "English"
+    },
+    "footer": { "rights": "© 2026 Cristian Giehl" }
   }
 }
