@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 
+import { ServiceWorkerRegister } from '@/app/_components/service-worker-register'
 import { routing } from '@/i18n/routing'
 
 import { buildMetadata } from '../metadata'
@@ -57,6 +58,7 @@ export default async function LocaleLayout({
       <body
         className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} flex min-h-screen w-full flex-col antialiased`}>
         <NextIntlClientProvider>
+          <ServiceWorkerRegister />
           <Providers>{children}</Providers>
         </NextIntlClientProvider>
       </body>
