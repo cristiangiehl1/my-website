@@ -147,6 +147,63 @@
       "telegram": { "description": "Bots as messaging channels" }
     }
   },
+  "contact": {
+    "eyebrow": "Available for projects",
+    "title": "Get in <hl>touch</hl>",
+    "intro": "Have a project in mind or want to talk about an idea? Fill out the form or reach me on WhatsApp.",
+    "formTitle": "Send a message",
+    "formSubtitle": "Fill in the fields below and I will get back to you as soon as possible.",
+    "info": {
+      "heading": "Let's talk?",
+      "body": "I am available for new projects, collaborations, or just to exchange ideas about technology. Feel free to get in touch!",
+      "socialsTitle": "Social media",
+      "cards": {
+        "whatsapp": {
+          "label": "WhatsApp",
+          "value": "+55 (21) 99981-5903",
+          "description": "I respond quickly"
+        },
+        "email": {
+          "label": "E-mail",
+          "value": "Send via form",
+          "description": "For proposals and projects"
+        },
+        "location": {
+          "label": "Location",
+          "value": "Itapema/SC, Brazil",
+          "description": "Available for remote work"
+        }
+      }
+    },
+    "form": {
+      "name": "Name",
+      "email": "E-mail",
+      "subject": "Subject",
+      "phone": "Phone",
+      "phoneOptional": "(optional)",
+      "message": "Message",
+      "submit": "Send message",
+      "submitting": "Sending...",
+      "toastUnexpected": "Unexpected error. Please try again.",
+      "toastUnexpectedWhatsapp": "Unexpected error. Please try again or contact me directly via WhatsApp.",
+      "placeholders": {
+        "name": "Your name",
+        "email": "your@email.com",
+        "subject": "Message subject",
+        "phone": "(00) 00000-0000",
+        "message": "Write your message here..."
+      }
+    },
+    "validation": {
+      "name": "Please enter your name",
+      "emailInvalid": "Please enter a valid email format",
+      "phoneFormat": "Please enter a phone number in the format (DD) XXXXX-XXXX",
+      "subjectRequired": "Please fill in the message subject",
+      "subjectMax": "The subject cannot exceed 256 characters",
+      "messageRequired": "Please fill in the message you want to send",
+      "scriptInjection": "Script injection detected"
+    }
+  },
   "about": {
     "hero": {
       "title": "Full Stack <hl>Developer</hl>",

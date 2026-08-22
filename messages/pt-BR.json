@@ -143,6 +143,63 @@
       "telegram": { "description": "Bots como canal de mensagens" }
     }
   },
+  "contact": {
+    "eyebrow": "Disponivel para projetos",
+    "title": "Entre em <hl>contato</hl>",
+    "intro": "Tem um projeto em mente ou quer conversar sobre uma ideia? Preencha o formulario ou me chame no WhatsApp.",
+    "formTitle": "Envie uma mensagem",
+    "formSubtitle": "Preencha os campos abaixo e retornarei o mais breve possivel.",
+    "info": {
+      "heading": "Vamos conversar?",
+      "body": "Estou disponivel para novos projetos, colaboracoes ou apenas para trocar uma ideia sobre tecnologia. Fique a vontade para entrar em contato!",
+      "socialsTitle": "Redes sociais",
+      "cards": {
+        "whatsapp": {
+          "label": "WhatsApp",
+          "value": "+55 (21) 99981-5903",
+          "description": "Respondo rapidamente"
+        },
+        "email": {
+          "label": "E-mail",
+          "value": "Envie pelo formulario",
+          "description": "Para propostas e projetos"
+        },
+        "location": {
+          "label": "Localizacao",
+          "value": "Itapema/SC, Brasil",
+          "description": "Disponivel para trabalho remoto"
+        }
+      }
+    },
+    "form": {
+      "name": "Nome",
+      "email": "E-mail",
+      "subject": "Assunto",
+      "phone": "Telefone",
+      "phoneOptional": "(opcional)",
+      "message": "Mensagem",
+      "submit": "Enviar mensagem",
+      "submitting": "Enviando...",
+      "toastUnexpected": "Erro inesperado. Tente novamente.",
+      "toastUnexpectedWhatsapp": "Erro inesperado. Tente novamente ou entre em contato diretamente pelo WhatsApp.",
+      "placeholders": {
+        "name": "Seu nome",
+        "email": "seu@email.com",
+        "subject": "Assunto da mensagem",
+        "phone": "(00) 00000-0000",
+        "message": "Escreva sua mensagem aqui..."
+      }
+    },
+    "validation": {
+      "name": "Informe seu nome",
+      "emailInvalid": "Informe um formato de e-mail válido",
+      "phoneFormat": "Informe um telefone no formato (DD) XXXXX-XXXX",
+      "subjectRequired": "Por favor, preenche o assunto da sua mensagem",
+      "subjectMax": "O assunto não pode ultrapassar 256 caracteres",
+      "messageRequired": "Por favor, preencha a mensagem que deseja enviar",
+      "scriptInjection": "Script injection detectado"
+    }
+  },
   "about": {
     "hero": {
       "title": "Desenvolvedor <hl>Full Stack</hl>",

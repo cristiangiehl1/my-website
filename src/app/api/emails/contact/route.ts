@@ -1,7 +1,9 @@
 import ContactConfirmation from '@/emails/contact-confirmation'
 import ContactReceived from '@/emails/contact-received'
-import { contactSchema } from '@/schemas/contact'
+import { makeContactSchema } from '@/schemas/contact'
 import { contactReceivedObj, initClient } from '@/services/email'
+
+const contactSchema = makeContactSchema((k) => k)
 
 export async function POST(req: Request) {
   const body = await req.json()

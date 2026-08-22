@@ -2,12 +2,13 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2, Send } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import type { HTMLAttributes } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { cn } from '@/lib/utils'
-import { type ContactFormData, contactSchema } from '@/schemas/contact'
+import { type ContactFormData, makeContactSchema } from '@/schemas/contact'
 
 import { Button } from '../../ui/button'
 import { Input } from '../../ui/input'
@@ -15,6 +16,8 @@ import { Label } from '../../ui/label'
 import { Textarea } from '../../ui/textarea'
 
 export function ContactForm() {
+  const t = useTranslations('contact')
+
   // hooks
   const {
     handleSubmit,
@@ -22,7 +25,8 @@ export function ContactForm() {
     register,
     reset,
   } = useForm<ContactFormData>({
-    resolver: zodResolver(contactSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(makeContactSchema((k) => t(k as any))),
     defaultValues: {
       name: '',
       subject: '',
@@ -44,7 +48,7 @@ export function ContactForm() {
       const body = await res.json()
 
       if (!res.ok) {
-        return toast.error(body.message ?? 'Erro inesperado. Tente novamente.')
+        return toast.error(body.message ?? t('form.toastUnexpected'))
       }
 
       toast.success(body.message)
@@ -54,9 +58,7 @@ export function ContactForm() {
         return toast.error(err.message)
       }
 
-      toast.error(
-        'Erro inesperado. Tente novamente ou entre em contato diretamente pelo WhatsApp.'
-      )
+      toast.error(t('form.toastUnexpectedWhatsapp'))
     }
   }
 
@@ -67,11 +69,11 @@ export function ContactForm() {
           <Label
             htmlFor='name'
             className='text-foreground/80 text-sm font-medium'>
-            Nome
+            {t('form.name')}
           </Label>
           <Input
             id='name'
-            placeholder='Seu nome'
+            placeholder={t('form.placeholders.name')}
             className='border-border bg-muted/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-12 rounded-lg transition-colors'
             {...register('name')}
           />
@@ -81,12 +83,12 @@ export function ContactForm() {
           <Label
             htmlFor='email'
             className='text-foreground/80 text-sm font-medium'>
-            E-mail
+            {t('form.email')}
           </Label>
           <Input
             id='email'
             type='email'
-            placeholder='seu@email.com'
+            placeholder={t('form.placeholders.email')}
             className='border-border bg-muted/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-12 rounded-lg transition-colors'
             {...register('email')}
           />
@@ -98,11 +100,11 @@ export function ContactForm() {
         <Label
           htmlFor='subject'
           className='text-foreground/80 text-sm font-medium'>
-          Assunto
+          {t('form.subject')}
         </Label>
         <Input
           id='subject'
-          placeholder='Assunto da mensagem'
+          placeholder={t('form.placeholders.subject')}
           className='border-border bg-muted/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-12 rounded-lg transition-colors'
           {...register('subject')}
         />
@@ -113,14 +115,16 @@ export function ContactForm() {
         <Label
           htmlFor='phone'
           className='text-foreground/80 text-sm font-medium'>
-          Telefone{' '}
-          <span className='text-muted-foreground font-normal'>(opcional)</span>
+          {t('form.phone')}{' '}
+          <span className='text-muted-foreground font-normal'>
+            {t('form.phoneOptional')}
+          </span>
         </Label>
         <Input
           id='phone'
           type='tel'
           inputMode='tel'
-          placeholder='(00) 00000-0000'
+          placeholder={t('form.placeholders.phone')}
           maxLength={16}
           className='border-border bg-muted/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-12 rounded-lg transition-colors'
           {...phoneField}
@@ -136,11 +140,11 @@ export function ContactForm() {
         <Label
           htmlFor='message'
           className='text-foreground/80 text-sm font-medium'>
-          Mensagem
+          {t('form.message')}
         </Label>
         <Textarea
           id='message'
-          placeholder='Escreva sua mensagem aqui...'
+          placeholder={t('form.placeholders.message')}
           rows={10}
           className='border-border bg-muted/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 resize-none rounded-lg transition-colors'
           {...register('message')}
@@ -155,12 +159,12 @@ export function ContactForm() {
         {isSubmitting ? (
           <>
             <Loader2 className='mr-2 h-5 w-5 animate-spin' />
-            Enviando...
+            {t('form.submitting')}
           </>
         ) : (
           <>
             <Send className='mr-2 h-5 w-5' />
-            Enviar mensagem
+            {t('form.submit')}
           </>
         )}
       </Button>

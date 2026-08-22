@@ -1,5 +1,6 @@
 import { Terminal } from 'lucide-react'
 import type { Metadata } from 'next'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { Container, MainContainer } from '@/app/_components/container'
 import { ContactForm } from '@/app/_components/pages/contact/contact-form'
@@ -9,7 +10,15 @@ export const metadata: Metadata = {
   title: 'Contato',
 }
 
-export default function ContactPage() {
+export default async function ContactPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
+  setRequestLocale(locale)
+  const t = await getTranslations('contact')
+
   return (
     <Container>
       <MainContainer>
@@ -22,16 +31,17 @@ export default function ContactPage() {
                   <Terminal className='text-primary h-5 w-5' />
                 </div>
                 <div className='bg-primary/20 text-primary rounded-full px-3 py-1 text-xs font-medium'>
-                  Disponivel para projetos
+                  {t('eyebrow')}
                 </div>
               </div>
 
               <h1 className='text-foreground text-4xl font-bold tracking-tight text-balance lg:text-5xl'>
-                Entre em <span className='text-primary'>contato</span>
+                {t.rich('title', {
+                  hl: (c) => <span className='text-primary'>{c}</span>,
+                })}
               </h1>
               <p className='text-muted-foreground max-w-xl text-lg leading-relaxed'>
-                Tem um projeto em mente ou quer conversar sobre uma ideia?
-                Preencha o formulario ou me chame no WhatsApp.
+                {t('intro')}
               </p>
             </div>
           </section>
@@ -47,10 +57,10 @@ export default function ContactPage() {
               className='bg-card border-border shadow-soft-stack rounded-2xl border p-6 lg:w-225 lg:p-8'>
               <div className='mb-6 flex flex-col gap-1'>
                 <h2 className='text-card-foreground text-xl font-bold'>
-                  Envie uma mensagem
+                  {t('formTitle')}
                 </h2>
                 <p className='text-muted-foreground text-sm'>
-                  Preencha os campos abaixo e retornarei o mais breve possivel.
+                  {t('formSubtitle')}
                 </p>
               </div>
               <ContactForm />

@@ -1,33 +1,10 @@
 import { ExternalLink, Mail, MapPin } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import React from 'react'
 
 import { __SOCIAL__ } from '@/constants/social'
 
 import { SocialLink } from '../../social-link'
-
-const SocialLinks = [
-  {
-    icon: __SOCIAL__.whatsapp.icon,
-    label: 'WhatsApp',
-    value: '+55 (21) 99981-5903',
-    href: __SOCIAL__.whatsapp.href,
-    description: 'Respondo rapidamente',
-  },
-  {
-    icon: Mail,
-    label: 'E-mail',
-    value: 'Envie pelo formulario',
-    href: '#contact-form',
-    description: 'Para propostas e projetos',
-  },
-  {
-    icon: MapPin,
-    label: 'Localizacao',
-    value: 'Itapema/SC, Brasil',
-    href: null,
-    description: 'Disponivel para trabalho remoto',
-  },
-]
 
 const socialLinks = [
   {
@@ -43,28 +20,52 @@ const socialLinks = [
 ]
 
 export function ContactInfo() {
+  const t = useTranslations('contact')
+
+  const contactCards = [
+    {
+      icon: __SOCIAL__.whatsapp.icon,
+      label: t('info.cards.whatsapp.label'),
+      value: t('info.cards.whatsapp.value'),
+      href: __SOCIAL__.whatsapp.href,
+      description: t('info.cards.whatsapp.description'),
+    },
+    {
+      icon: Mail,
+      label: t('info.cards.email.label'),
+      value: t('info.cards.email.value'),
+      href: '#contact-form',
+      description: t('info.cards.email.description'),
+    },
+    {
+      icon: MapPin,
+      label: t('info.cards.location.label'),
+      value: t('info.cards.location.value'),
+      href: null,
+      description: t('info.cards.location.description'),
+    },
+  ]
+
   return (
     <aside className='flex flex-col gap-4'>
       <div>
         <h2 className='text-foreground mb-2 text-2xl font-bold'>
-          Vamos conversar?
+          {t('info.heading')}
         </h2>
         <p className='text-muted-foreground leading-relaxed'>
-          Estou disponivel para novos projetos, colaboracoes ou apenas para
-          trocar uma ideia sobre tecnologia. Fique a vontade para entrar em
-          contato!
+          {t('info.body')}
         </p>
       </div>
 
       <div className='flex flex-col gap-4'>
-        {SocialLinks.map((item) => (
+        {contactCards.map((item) => (
           <ContactCard key={item.label} {...item} />
         ))}
       </div>
 
       <div>
         <h3 className='text-foreground mb-3 text-sm font-semibold tracking-wider uppercase'>
-          Redes sociais
+          {t('info.socialsTitle')}
         </h3>
         <div className='flex gap-3'>
           {socialLinks.map(({ href, icon: Icon, label }, i) => (
