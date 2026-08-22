@@ -3,6 +3,7 @@
 import { ArrowLeft, Calendar, Clock, ExternalLink, Github } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { useLocale, useTranslations } from 'next-intl'
 
 import type { Project } from '@/@types/project'
 import { TECHNOLOGY_DATA } from '@/constants/technology-data'
@@ -11,7 +12,7 @@ import { cn } from '@/lib/utils'
 import { Button } from '../../ui/button'
 
 interface PostHeaderProps {
-  project: Project & { title: string; description: string; readTime: string }
+  project: Project & { title: string; description: string; minutes: number }
 }
 
 export function PostHeader({
@@ -19,7 +20,7 @@ export function PostHeader({
     author,
     createdAt,
     description,
-    readTime,
+    minutes,
     technologies,
     title,
     coverUrl,
@@ -27,7 +28,10 @@ export function PostHeader({
     github,
   },
 }: PostHeaderProps) {
-  const formattedDate = new Intl.DateTimeFormat('pt-BR', {
+  const t = useTranslations('post')
+  const locale = useLocale()
+
+  const formattedDate = new Intl.DateTimeFormat(locale, {
     day: '2-digit',
     month: 'long',
     year: 'numeric',
@@ -41,7 +45,7 @@ export function PostHeader({
         onClick={() => back()}
         className='text-muted-foreground hover:text-primary group mb-8 inline-flex items-center gap-2 text-sm transition-colors'>
         <ArrowLeft className='h-4 w-4 transition-transform group-hover:-translate-x-1' />
-        <span>Voltar</span>
+        <span>{t('back')}</span>
       </button>
 
       {/* Cover image */}
@@ -49,7 +53,7 @@ export function PostHeader({
         <div className='border-border relative mb-8 aspect-16/8 overflow-hidden rounded-xl border'>
           <Image
             src={coverUrl || '/images/project-placeholder.jpg'}
-            alt={`Capa do post: ${title}`}
+            alt={t('coverAlt', { title })}
             fill
             className='object-cover'
             priority
@@ -95,7 +99,7 @@ export function PostHeader({
         </div>
         <div className='flex items-center gap-1.5'>
           <Clock className='text-primary h-4 w-4' />
-          <span>{readTime} de leitura</span>
+          <span>{t('readingTime', { minutes })}</span>
         </div>
       </div>
 
@@ -124,7 +128,7 @@ export function PostHeader({
               rel='noopener noreferrer'
               className='border-border bg-card text-foreground hover:border-primary/40 hover:text-primary inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors'>
               <Github className='h-4 w-4' />
-              Repositorio
+              {t('repository')}
             </a>
           )}
           {deploy && (
@@ -134,7 +138,7 @@ export function PostHeader({
               rel='noopener noreferrer'
               className='bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors'>
               <ExternalLink className='h-4 w-4' />
-              Ver demo
+              {t('viewDemo')}
             </a>
           )}
         </div>

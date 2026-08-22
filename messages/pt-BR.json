@@ -246,6 +246,17 @@
       }
     }
   },
+  "post": {
+    "back": "Voltar",
+    "backToPortfolio": "Voltar ao portfólio",
+    "related": "Posts relacionados",
+    "thanks": "Obrigado por ler!",
+    "readingTime": "{minutes} min de leitura",
+    "repository": "Repositório",
+    "viewDemo": "Ver demo",
+    "coverAlt": "Capa do post: {title}",
+    "fallbackNotice": "Este conteúdo está disponível apenas em português."
+  },
   "about": {
     "hero": {
       "title": "Desenvolvedor <hl>Full Stack</hl>",

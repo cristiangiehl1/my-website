@@ -250,6 +250,17 @@
       }
     }
   },
+  "post": {
+    "back": "Back",
+    "backToPortfolio": "Back to portfolio",
+    "related": "Related posts",
+    "thanks": "Thanks for reading!",
+    "readingTime": "{minutes} min read",
+    "repository": "Repository",
+    "viewDemo": "View demo",
+    "coverAlt": "Post cover: {title}",
+    "fallbackNotice": "This content is only available in Portuguese."
+  },
   "about": {
     "hero": {
       "title": "Full Stack <hl>Developer</hl>",
