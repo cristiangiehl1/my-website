@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 
 import { Container, MainContainer } from '@/app/_components/container'
 import { MarkdownContent } from '@/app/_components/pages/post/markdown-content'
@@ -19,10 +20,11 @@ export async function generateMetadata({
   const { slug } = await params
 
   const portfolioItem = getProjectBySlug(slug)
+  const t = await getTranslations('portfolio')
 
   return {
-    title: portfolioItem.title,
-    description: portfolioItem.description,
+    title: t(`projects.${slug}.title`),
+    description: t(`projects.${slug}.description`),
     openGraph: {
       images: portfolioItem.coverUrl || [],
     },
@@ -35,13 +37,23 @@ export default async function PostPage({ params }: PostPageParams) {
   const project = getProjectBySlug(slug)
   const content = await getMarkdown(slug)
   const { text } = generateReadingTime(content)
+  const t = await getTranslations('portfolio')
+
+  const title = t(`projects.${slug}.title`)
+  const description = t(`projects.${slug}.description`)
 
   return (
     <Container>
       <MainContainer className='relative'>
-        <PostHeader project={{ ...project, readTime: text }} />
+        <PostHeader
+          project={{ ...project, title, description, readTime: text }}
+        />
         <MarkdownContent content={content} />
-        <PostFooter nearbyProjects={getNearbyProjects(slug)} />
+        <PostFooter
+          nearbyProjects={getNearbyProjects(slug)}
+          getTitle={(s) => t(`projects.${s}.title`)}
+          getDescription={(s) => t(`projects.${s}.description`)}
+        />
       </MainContainer>
     </Container>
   )

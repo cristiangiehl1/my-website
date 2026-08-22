@@ -1,13 +1,13 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import { FaGithub } from 'react-icons/fa6'
 
 import type { Project } from '@/@types/project'
 import { TECHNOLOGY_DATA } from '@/constants/technology-data'
-import { slugify } from '@/helpers/slugify'
+import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
 import { Button } from './ui/button'
@@ -17,16 +17,12 @@ interface WorkCardProps {
 }
 
 export function PortfolioItemCard({
-  item: {
-    description,
-    featured,
-    coverUrl,
-    technologies,
-    title,
-    deploy,
-    github,
-  },
+  item: { slug, featured, coverUrl, technologies, deploy, github },
 }: WorkCardProps) {
+  const t = useTranslations('portfolio')
+  const title = t(`projects.${slug}.title`)
+  const description = t(`projects.${slug}.description`)
+
   const technologiesSize = technologies.length
   const technologiesMoreIndicator = Math.max(technologiesSize - 5, 0)
 
@@ -34,15 +30,15 @@ export function PortfolioItemCard({
     <div className='group bg-card border-border hover:border-primary hover:shadow-primary/20 relative flex flex-col overflow-hidden rounded-lg border transition-all duration-300 hover:shadow-2xl'>
       {featured && (
         <div className='bg-primary absolute top-4 right-4 z-10 rounded-full px-3 py-1 text-xs font-bold text-white text-shadow-black text-shadow-xs'>
-          Destaque
+          {t('featured')}
         </div>
       )}
 
       {/* Image */}
       <Link
-        href={`/post/${slugify(title)}`}
+        href={`/post/${slug}`}
         className='bg-muted relative h-48 overflow-hidden'
-        aria-label={`Navegue até a postagem sobre ${title}`}>
+        aria-label={t('goToPost', { title })}>
         <Image
           src={coverUrl || '/images/project-placeholder.jpg'}
           alt={title}
@@ -90,7 +86,7 @@ export function PortfolioItemCard({
 
           {technologiesMoreIndicator > 0 && (
             <p className='text-muted-foreground text-sm'>
-              {technologiesMoreIndicator} mais...
+              {t('more', { count: technologiesMoreIndicator })}
             </p>
           )}
         </div>
@@ -106,7 +102,7 @@ export function PortfolioItemCard({
                 className='hover:bg-primary hover:text-primary-foreground hover:border-primary flex-1 bg-transparent transition-all'>
                 <a href={github} target='_blank' rel='noopener noreferrer'>
                   <FaGithub className='mr-2' size={16} />
-                  Código
+                  {t('code')}
                 </a>
               </Button>
             )}
@@ -117,7 +113,7 @@ export function PortfolioItemCard({
                 className='bg-primary text-primary-foreground hover:bg-primary/90 flex-1'>
                 <a href={deploy} target='_blank' rel='noopener noreferrer'>
                   <FaExternalLinkAlt className='mr-2' size={14} />
-                  Demo
+                  {t('demo')}
                 </a>
               </Button>
             )}

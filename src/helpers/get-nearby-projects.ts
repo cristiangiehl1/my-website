@@ -1,9 +1,8 @@
 import type { Project } from '@/@types/project'
 import { __PORTFOLIO__ } from '@/data/portfolio'
-import { slugify } from '@/helpers/slugify'
 
 export function getNearbyProjects(slug: string, count: number = 4): Project[] {
-  const currentIndex = __PORTFOLIO__.findIndex((p) => slugify(p.title) === slug)
+  const currentIndex = __PORTFOLIO__.findIndex((p) => p.slug === slug)
 
   if (currentIndex === -1) return []
 

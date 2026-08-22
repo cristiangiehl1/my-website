@@ -5,8 +5,7 @@ import type { TechnologyName } from './technology'
 export type Project = {
   id: number
 
-  title: string
-  description: string
+  slug: string
   coverUrl?: string
 
   technologies: TechnologyName[]
@@ -19,3 +18,5 @@ export type Project = {
   featured: boolean
   createdAt: string
 }
+
+export type LocalizedProject = Project & { title: string; description: string }

@@ -3,13 +3,18 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import type { Project } from '@/@types/project'
-import { slugify } from '@/helpers/slugify'
 
 interface PostFooterProps {
   nearbyProjects: Project[]
+  getTitle: (slug: string) => string
+  getDescription: (slug: string) => string
 }
 
-export function PostFooter({ nearbyProjects }: PostFooterProps) {
+export function PostFooter({
+  nearbyProjects,
+  getTitle,
+  getDescription,
+}: PostFooterProps) {
   return (
     <footer className='border-border mt-12 border-t pt-8'>
       {nearbyProjects.length > 0 && (
@@ -19,17 +24,18 @@ export function PostFooter({ nearbyProjects }: PostFooterProps) {
           </h2>
           <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
             {nearbyProjects.map((project) => {
-              const slug = slugify(project.title)
+              const title = getTitle(project.slug)
+              const description = getDescription(project.slug)
               return (
                 <Link
                   key={project.id}
-                  href={`/post/${slug}`}
+                  href={`/post/${project.slug}`}
                   className='bg-card border-border hover:border-primary group flex items-center gap-4 rounded-lg border p-4 transition-colors'>
                   {project.coverUrl && (
                     <div className='relative h-16 w-16 shrink-0 overflow-hidden rounded-md'>
                       <Image
                         src={project.coverUrl}
-                        alt={project.title}
+                        alt={title}
                         fill
                         className='object-cover transition-transform duration-300 group-hover:scale-110'
                       />
@@ -37,10 +43,10 @@ export function PostFooter({ nearbyProjects }: PostFooterProps) {
                   )}
                   <div className='min-w-0'>
                     <h3 className='text-foreground group-hover:text-primary truncate text-sm font-medium transition-colors'>
-                      {project.title}
+                      {title}
                     </h3>
                     <p className='text-muted-foreground mt-1 line-clamp-2 text-xs'>
-                      {project.description}
+                      {description}
                     </p>
                   </div>
                 </Link>

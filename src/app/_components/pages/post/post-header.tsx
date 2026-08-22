@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
 import { Button } from '../../ui/button'
 
 interface PostHeaderProps {
-  project: Project & { readTime: string }
+  project: Project & { title: string; description: string; readTime: string }
 }
 
 export function PostHeader({

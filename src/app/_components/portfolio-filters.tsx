@@ -1,3 +1,6 @@
+'use client'
+
+import { useTranslations } from 'next-intl'
 import { BiCodeAlt } from 'react-icons/bi'
 
 import type { Project } from '@/@types/project'
@@ -21,18 +24,20 @@ export function PortfolioFilters({
   setIsExactMatchEnable,
   setSelectedTechs,
 }: TechnologyFilters) {
+  const t = useTranslations('portfolio')
+
   return (
     <div className='bg-card/50 border-border mb-12 rounded-lg border p-6 backdrop-blur-sm'>
       <div className='mb-4 flex items-center gap-3'>
         <BiCodeAlt size={24} className='text-primary' />
-        <h2 className='text-lg font-semibold'>Filtrar por tecnologias</h2>
+        <h2 className='text-lg font-semibold'>{t('filters.title')}</h2>
       </div>
 
       <MultiSelect
         options={getTechOptions()}
         value={selectedTechs}
         onValueChange={setSelectedTechs}
-        placeholder='Selecione as tecnologias...'
+        placeholder={t('filters.placeholder')}
         responsive={true}
         maxWidth='600px'
       />
@@ -45,9 +50,7 @@ export function PortfolioFilters({
 
       {selectedTechs.length > 0 && (
         <p className='text-muted-foreground mt-3 text-sm'>
-          {items.length} resultado
-          {items.length !== 1 ? 's' : ''} encontrado
-          {items.length !== 1 ? 's' : ''}
+          {t('filters.results', { count: items.length })}
         </p>
       )}
     </div>

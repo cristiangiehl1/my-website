@@ -5,10 +5,8 @@ import { getAuthorBySlug } from '@/helpers/get-author'
 export const __PORTFOLIO__: Project[] = [
   {
     id: 6,
-    title: 'Gestão de Projetos MCP',
+    slug: 'gestao-de-projetos-mcp',
     coverUrl: generateImgUrl('gestao-de-projetos-mcp.png'),
-    description:
-      'Plugin do Claude Code que integra o assistente ao sistema corporativo de Gestão de Projetos do Grupo Koch por meio de um servidor MCP (Model Context Protocol) em TypeScript. Expõe 23 ferramentas e 4 fluxos guiados que permitem criar e acompanhar projetos, gerenciar atividades e etapas de workflow, apontar horas, registrar pendências e priorizar iniciativas via avaliação WSJF — tudo diretamente pela conversa. A autenticação usa credenciais do Active Directory, com sessão JWT em cookies httpOnly, renovação automática e respeito às permissões (RBAC) do usuário. O destaque é o fluxo log_week_hours, que lê o histórico do git local, mapeia os commits para projetos/atividades e distribui as horas da semana automaticamente. Validação com Zod e bundle ESM com esbuild. Por ser uma integração interna, não possui URL pública nem repositório disponível.',
     technologies: ['claude', 'mcp', 'typescript', 'node', 'zod', 'eslint'],
     category: 'backend',
     author: getAuthorBySlug('cristian-giehl'),
@@ -17,10 +15,8 @@ export const __PORTFOLIO__: Project[] = [
   },
   {
     id: 3,
-    title: 'Orchestrator Agent',
+    slug: 'orchestrator-agent',
     coverUrl: generateImgUrl('ai-agent.png'),
-    description:
-      'Plataforma corporativa de assistente com IA que centraliza interações internas via chat. Utiliza agentes orquestrados com OpenAI Responses API, busca semântica com embeddings, autenticação LDAP/Active Directory e integração com sistemas legados corporativos. Inclui automação de processos operacionais, filas assíncronas com Redis/BullMQ e integração com Telegram como canal adicional. Desenvolvido com Next.js 16 e conteinerizado com Docker.',
     technologies: [
       'typescript',
       'next',
@@ -43,10 +39,8 @@ export const __PORTFOLIO__: Project[] = [
   },
   {
     id: 5,
-    title: 'Gestão de Despesas',
+    slug: 'gestao-de-despesas',
     coverUrl: generateImgUrl('gestao-de-despesas.png'),
-    description:
-      'Sistema interno de uma empresa do setor varejista para gestão de despesas de compras não revenda. É composto por um worker de ingestão que extrai notas fiscais (XML, PDF e imagens) de pastas monitoradas — via parsing direto de XML ou LLM para documentos não estruturados — valida os dados fiscais e persiste no OracleDB, e por uma aplicação web em Next.js 15 que conduz cada nota por um fluxo de aprovação por papéis (comprador, aprovador, controladoria, fiscal), com alçadas por valor, escalonamento, substituto de férias e integração automática de volta ao ERP corporativo. Jobs agendados e filas assíncronas (Redis/BullMQ) orquestram o processamento em background. Por ser um projeto interno, não possui URL pública nem repositório disponível.',
     technologies: [
       'typescript',
       'next',
@@ -68,10 +62,8 @@ export const __PORTFOLIO__: Project[] = [
   },
   {
     id: 4,
-    title: 'LangChain RAG Lab',
+    slug: 'langchain-rag-lab',
     coverUrl: generateImgUrl('rag-chat.png'),
-    description:
-      'Estudo de caso de Retrieval-Augmented Generation (RAG) construído com Next.js e LangChain, focado nos trade-offs de rodar um RAG sobre recursos gratuitos (modelos free tier, embeddings de baixa dimensionalidade e quantização). Permite carregar documentos (.txt, .md, .pdf), pré-visualizar como são divididos em chunks, gerar embeddings via HuggingFace Inference API (384d) e persistir os vetores no PostgreSQL + pgvector (índice HNSW / cosseno). O chat responde em streaming via OpenRouter, exibindo as fontes recuperadas com seus scores de similaridade e controle fino de cada parâmetro do pipeline (splitter, topK, temperature, top_p, penalties e system prompt). Camada de domínio OOP com ambiente validado por zod e deploy em Vercel + Supabase.',
     technologies: [
       'typescript',
       'next',
@@ -98,12 +90,8 @@ export const __PORTFOLIO__: Project[] = [
   },
   {
     id: 2,
-
-    title: 'Voting Lists',
-    description:
-      'Sistema de criação de listas para votação com Next.js. Cada usuário pode criar listas, adicionar participantes, cadastrar candidatos e acompanhar os resultados em tempo real. Suporte a listas públicas e privadas, convite por email, votação restrita a participantes, ranking com percentuais e temas claro/escuro.',
+    slug: 'voting-lists',
     coverUrl: generateImgUrl('voting-system.png'),
-
     technologies: [
       'typescript',
       'next',
@@ -121,22 +109,16 @@ export const __PORTFOLIO__: Project[] = [
       'gsap',
     ],
     category: 'full-stack',
-
     author: getAuthorBySlug('cristian-giehl'),
     github: 'https://github.com/cristiangiehl1/voting-system',
     deploy: 'https://voting-system-nu-gray.vercel.app/',
-
     featured: true,
     createdAt: '06/26/2026',
   },
   {
     id: 1,
-
-    title: 'Vinyl Store',
-    description:
-      'Plataforma completa de e-commerce especializada em discos de vinil. Desenvolvido com arquitetura minimalista full stack usando Express, implementa autenticação baseada em cookies HTTP e sessões persistidas no PostgreSQL. Oferece navegação intuitiva, sistema de busca, carrinho de compras e design responsivo para colecionadores e amantes de música analógica.',
+    slug: 'vinyl-store',
     coverUrl: generateImgUrl('vinyl-store.png'),
-
     technologies: [
       'express',
       'javascript',
@@ -153,11 +135,9 @@ export const __PORTFOLIO__: Project[] = [
       'validator',
     ],
     category: 'full-stack',
-
     author: getAuthorBySlug('cristian-giehl'),
     github: 'https://github.com/cristiangiehl1/vinyl-store',
     deploy: 'https://vinyl-market.netlify.app/',
-
     featured: false,
     createdAt: '03/02/2026',
   },

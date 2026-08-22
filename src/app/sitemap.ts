@@ -1,7 +1,6 @@
 import type { MetadataRoute } from 'next'
 
 import { __PORTFOLIO__ } from '@/data/portfolio'
-import { slugify } from '@/helpers/slugify'
 
 import { websiteMetadata } from './metadata'
 
@@ -40,7 +39,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   __PORTFOLIO__.forEach((project) =>
     customRoutes.push({
-      url: `${baseUrl}post/${slugify(project.title)}`,
+      url: `${baseUrl}post/${project.slug}`,
       priority: 1,
       images: [project.coverUrl ?? '/images/project-placeholder.jpg'],
     })

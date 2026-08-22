@@ -204,6 +204,52 @@
       "scriptInjection": "Script injection detected"
     }
   },
+  "portfolio": {
+    "header": {
+      "title": "My <hl>Projects</hl>",
+      "description": "Building end-to-end solutions: APIs, landing pages, games, and much more"
+    },
+    "empty": {
+      "title": "No projects found",
+      "hint": "Try selecting other technologies"
+    },
+    "featured": "Featured",
+    "more": "{count} more...",
+    "code": "Code",
+    "demo": "Demo",
+    "goToPost": "Go to the post about {title}",
+    "filters": {
+      "title": "Filter by technologies",
+      "placeholder": "Select technologies...",
+      "results": "{count, plural, one {# result found} other {# results found}}"
+    },
+    "projects": {
+      "gestao-de-projetos-mcp": {
+        "title": "Gestão de Projetos MCP",
+        "description": "A Claude Code plugin that integrates the assistant with Grupo Koch's corporate Project Management system via a TypeScript MCP (Model Context Protocol) server. It exposes 23 tools and 4 guided flows that allow creating and tracking projects, managing activities and workflow stages, logging hours, recording blockers, and prioritizing initiatives via WSJF scoring — all directly in conversation. Authentication uses Active Directory credentials with JWT sessions in httpOnly cookies, automatic renewal, and RBAC permission enforcement. The standout feature is the log_week_hours flow, which reads the local git history, maps commits to projects/activities, and distributes the week's hours automatically. Validation with Zod and ESM bundle with esbuild. As an internal integration, it has no public URL or repository."
+      },
+      "orchestrator-agent": {
+        "title": "Orchestrator Agent",
+        "description": "A corporate AI assistant platform that centralizes internal interactions via chat. It uses orchestrated agents with the OpenAI Responses API, semantic search with embeddings, LDAP/Active Directory authentication, and integration with legacy corporate systems. Includes operational process automation, async queues with Redis/BullMQ, and Telegram integration as an additional channel. Built with Next.js 16 and containerized with Docker."
+      },
+      "gestao-de-despesas": {
+        "title": "Gestão de Despesas",
+        "description": "An internal system for a retail company to manage non-resale purchase expenses. It consists of an ingestion worker that extracts invoices (XML, PDF, and images) from monitored folders — via direct XML parsing or LLM for unstructured documents — validates fiscal data, and persists it to OracleDB; and a Next.js 15 web application that routes each invoice through a role-based approval flow (buyer, approver, controller, fiscal), with value-based thresholds, escalation, vacation substitutes, and automatic back-integration with the corporate ERP. Scheduled jobs and async queues (Redis/BullMQ) orchestrate background processing. As an internal project, it has no public URL or repository."
+      },
+      "langchain-rag-lab": {
+        "title": "LangChain RAG Lab",
+        "description": "A Retrieval-Augmented Generation (RAG) case study built with Next.js and LangChain, focused on the trade-offs of running RAG on free-tier resources (free-tier models, low-dimensional embeddings, and quantization). Supports loading documents (.txt, .md, .pdf), previewing how they are split into chunks, generating embeddings via HuggingFace Inference API (384d), and persisting vectors in PostgreSQL + pgvector (HNSW / cosine index). The chat responds via streaming through OpenRouter, displaying retrieved sources with similarity scores and fine-grained control over each pipeline parameter (splitter, topK, temperature, top_p, penalties, and system prompt). OOP domain layer with environment validated by Zod, deployed on Vercel + Supabase."
+      },
+      "voting-lists": {
+        "title": "Voting Lists",
+        "description": "A voting list creation system built with Next.js. Each user can create lists, add participants, register candidates, and follow results in real time. Supports public and private lists, email invitations, voting restricted to participants, ranking with percentages, and light/dark themes."
+      },
+      "vinyl-store": {
+        "title": "Vinyl Store",
+        "description": "A complete e-commerce platform specialized in vinyl records. Built with a minimalist full-stack architecture using Express, it implements cookie-based HTTP authentication with sessions persisted in PostgreSQL. Features intuitive browsing, a search system, a shopping cart, and responsive design for collectors and analog music lovers."
+      }
+    }
+  },
   "about": {
     "hero": {
       "title": "Full Stack <hl>Developer</hl>",

@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { BiCodeAlt } from 'react-icons/bi'
 
 import type { Project } from '@/@types/project'
@@ -8,47 +9,42 @@ import { useFilteredPortfolioItems } from '@/hooks/use-filtered-works'
 import { PortfolioFilters } from '../../portfolio-filters'
 import { PortfolioItemCard } from '../../portfolio-item-card'
 
-interface PortfolioHeanderProps {
-  title: React.ReactNode
-  description: string
-}
+export function PortfolioHeader() {
+  const t = useTranslations('portfolio')
 
-export function PortfolioHeader({ title, description }: PortfolioHeanderProps) {
   return (
     <div className='mb-12 space-y-4 text-center'>
-      <h1 className='text-5xl font-bold text-balance sm:text-6xl'>{title}</h1>
+      <h1 className='text-5xl font-bold text-balance sm:text-6xl'>
+        {t.rich('header.title', {
+          hl: (chunks) => <span className='text-primary'>{chunks}</span>,
+        })}
+      </h1>
       <p className='text-muted-foreground mx-auto max-w-2xl text-xl leading-relaxed text-pretty'>
-        {description}
+        {t('header.description')}
       </p>
     </div>
   )
 }
 
-interface PortfolioEmptyDataFallbackProps {
-  title: string
-}
+export function PortfolioEmptyDataFallback() {
+  const t = useTranslations('portfolio')
 
-export function PortfolioEmptyDataFallback({
-  title,
-}: PortfolioEmptyDataFallbackProps) {
   return (
     <div className='space-y-4 py-10 text-center sm:py-12'>
       <BiCodeAlt size={64} className='text-muted-foreground mx-auto' />
-      <h3 className='text-muted-foreground text-2xl font-bold'>{title}</h3>
-      <p className='text-muted-foreground'>
-        Tente selecionar outras tecnologias
-      </p>
+      <h3 className='text-muted-foreground text-2xl font-bold'>
+        {t('empty.title')}
+      </h3>
+      <p className='text-muted-foreground'>{t('empty.hint')}</p>
     </div>
   )
 }
 
 interface PorfolioMainProps {
-  header: PortfolioHeanderProps
-  fallback: PortfolioEmptyDataFallbackProps
   items: Array<Project>
 }
 
-export function PorfolioMain({ fallback, header, items }: PorfolioMainProps) {
+export function PorfolioMain({ items }: PorfolioMainProps) {
   const {
     filteredItems,
     isExactMatchEnable,
@@ -61,10 +57,7 @@ export function PorfolioMain({ fallback, header, items }: PorfolioMainProps) {
     <main className='relative px-4 pt-32 pb-20 sm:px-6 lg:px-8'>
       <div className='container mx-auto max-w-7xl'>
         {/* Header */}
-        <PortfolioHeader
-          title={header.title}
-          description={header.description}
-        />
+        <PortfolioHeader />
 
         <PortfolioFilters
           items={filteredItems}
@@ -82,9 +75,7 @@ export function PorfolioMain({ fallback, header, items }: PorfolioMainProps) {
         </div>
 
         {/* No Results */}
-        {filteredItems.length === 0 && (
-          <PortfolioEmptyDataFallback title={fallback.title} />
-        )}
+        {filteredItems.length === 0 && <PortfolioEmptyDataFallback />}
       </div>
     </main>
   )
