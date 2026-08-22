@@ -1,5 +1,6 @@
 import '../globals.css'
 
+import type { Metadata } from 'next'
 import { JetBrains_Mono, Space_Grotesk } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
@@ -7,7 +8,7 @@ import { setRequestLocale } from 'next-intl/server'
 
 import { routing } from '@/i18n/routing'
 
-import { websiteMetadata } from '../metadata'
+import { buildMetadata } from '../metadata'
 import { Providers } from '../providers'
 
 const spaceGrotesk = Space_Grotesk({
@@ -20,7 +21,14 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
 })
 
-export const metadata = websiteMetadata
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  return buildMetadata(locale)
+}
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))

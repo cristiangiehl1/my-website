@@ -1,54 +1,64 @@
 import type { MetadataRoute } from 'next'
 
 import { __PORTFOLIO__ } from '@/data/portfolio'
+import { routing } from '@/i18n/routing'
 
-import { websiteMetadata } from './metadata'
+import { siteUrl } from './metadata'
 
-type SitemapEntryWithoutUrl = Omit<MetadataRoute.Sitemap[0], 'url'>
+type SitemapEntry = MetadataRoute.Sitemap[0]
+
+const baseRoutes = ['', 'about', 'contact', 'skills', 'portfolio']
+
+function buildUrl(locale: string, path: string): string {
+  const prefix = locale === routing.defaultLocale ? '' : `/${locale}`
+  const suffix = path ? `/${path}` : ''
+  return `${siteUrl}${prefix}${suffix}`
+}
+
+function altLanguages(locale: string, path: string): Record<string, string> {
+  const other = routing.locales.find((l) => l !== locale)!
+  return {
+    [other]: buildUrl(other, path),
+  }
+}
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = websiteMetadata.metadataBase
+  const entries: SitemapEntry[] = []
 
-  const customRoutes: MetadataRoute.Sitemap = [
-    {
-      url: `${baseUrl}`,
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}about`,
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}contact`,
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}skills`,
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}portfolio`,
-      priority: 0.5,
-    },
-  ]
-
-  const defaultSitemapEntry: SitemapEntryWithoutUrl = {
+  const defaults: Partial<SitemapEntry> = {
     changeFrequency: 'yearly',
     lastModified: '2026',
   }
 
-  __PORTFOLIO__.forEach((project) =>
-    customRoutes.push({
-      url: `${baseUrl}post/${project.slug}`,
-      priority: 1,
-      images: [project.coverUrl ?? '/images/project-placeholder.jpg'],
-    })
-  )
+  // static routes — both locales
+  for (const path of baseRoutes) {
+    for (const locale of routing.locales) {
+      entries.push({
+        ...defaults,
+        url: buildUrl(locale, path),
+        priority: path === '' ? 1 : 0.5,
+        alternates: {
+          languages: altLanguages(locale, path),
+        },
+      })
+    }
+  }
 
-  const routes = customRoutes.map((route) => ({
-    ...defaultSitemapEntry,
-    ...route,
-  }))
+  // post slugs — both locales
+  for (const project of __PORTFOLIO__) {
+    const path = `post/${project.slug}`
+    for (const locale of routing.locales) {
+      entries.push({
+        ...defaults,
+        url: buildUrl(locale, path),
+        priority: 1,
+        images: [project.coverUrl ?? '/images/project-placeholder.jpg'],
+        alternates: {
+          languages: altLanguages(locale, path),
+        },
+      })
+    }
+  }
 
-  return routes
+  return entries
 }

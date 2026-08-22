@@ -1,4 +1,14 @@
 {
+  "meta": {
+    "siteTitle": "Cristian Giehl — Full Stack Developer",
+    "description": "Portfolio of Cristian Giehl, a Full Stack developer experienced in TypeScript, Next.js, Rust and Python. Working with American startups focused on performance and scalability.",
+    "ogDescription": "Explore the projects and experience of Cristian Giehl. Modern web development with React, Next.js, Node.js and TypeScript."
+  },
+  "notFound": {
+    "heading": "not found",
+    "body": "Looks like you tried to access a route that does not exist in my system. The requested endpoint returned an error.",
+    "cta": "Back home"
+  },
   "common": {
     "brandAlt": "Cristian Giehl website logo",
     "nav": {
@@ -26,6 +36,7 @@
     "ctaContact": "Get in Touch"
   },
   "skills": {
+    "metaTitle": "Skills",
     "eyebrow": "Technical Skills",
     "title": "My <hl>Skills</hl>",
     "intro": "Technologies and tools I use day-to-day to build modern, performant, and scalable applications.",
@@ -148,6 +159,7 @@
     }
   },
   "contact": {
+    "metaTitle": "Contact",
     "eyebrow": "Available for projects",
     "title": "Get in <hl>touch</hl>",
     "intro": "Have a project in mind or want to talk about an idea? Fill out the form or reach me on WhatsApp.",
@@ -205,6 +217,7 @@
     }
   },
   "portfolio": {
+    "metaTitle": "Portfolio",
     "header": {
       "title": "My <hl>Projects</hl>",
       "description": "Building end-to-end solutions: APIs, landing pages, games, and much more"
@@ -262,6 +275,7 @@
     "fallbackNotice": "This content is only available in Portuguese."
   },
   "about": {
+    "metaTitle": "About Me",
     "hero": {
       "title": "Full Stack <hl>Developer</hl>",
       "intro": "Over 2 years building end-to-end solutions — from frontend to backend. I currently work as a mid-level developer at <b>Grupo Koch SA</b>, specializing in Artificial Intelligence and building platforms with multi-agent integration using <b>Claude Code</b>, <b>opencode</b>, and <b>OpenAI</b>, as well as RAG pipelines and corporate process automation.",

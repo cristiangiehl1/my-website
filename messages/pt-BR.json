@@ -1,4 +1,14 @@
 {
+  "meta": {
+    "siteTitle": "Cristian Giehl — Full Stack Developer",
+    "description": "Portfólio de Cristian Giehl, desenvolvedor Full Stack com experiência em TypeScript, Next.js, Rust e Python. Atuando em startups americanas com foco em performance e escalabilidade.",
+    "ogDescription": "Conheça os projetos e experiências de Cristian Giehl. Desenvolvimento web moderno com React, Next.js, Node.js e TypeScript."
+  },
+  "notFound": {
+    "heading": "não encontrada",
+    "body": "Parece que você tentou acessar uma rota que não existe no meu sistema. O endpoint solicitado retornou um erro.",
+    "cta": "Voltar ao início"
+  },
   "common": {
     "brandAlt": "Logo do site de Cristian Giehl",
     "nav": {
@@ -22,6 +32,7 @@
     "ctaContact": "Entre em Contato"
   },
   "skills": {
+    "metaTitle": "Skills",
     "eyebrow": "Habilidades Tecnicas",
     "title": "Minhas <hl>Skills</hl>",
     "intro": "Tecnologias e ferramentas que utilizo no dia a dia para construir aplicações modernas, performaticas e escalaveis.",
@@ -144,6 +155,7 @@
     }
   },
   "contact": {
+    "metaTitle": "Contato",
     "eyebrow": "Disponivel para projetos",
     "title": "Entre em <hl>contato</hl>",
     "intro": "Tem um projeto em mente ou quer conversar sobre uma ideia? Preencha o formulario ou me chame no WhatsApp.",
@@ -201,6 +213,7 @@
     }
   },
   "portfolio": {
+    "metaTitle": "Portfólio",
     "header": {
       "title": "Meus <hl>Projetos</hl>",
       "description": "Desenvolvimento de soluções completas: APIs, landing pages, games e muito mais"
@@ -258,6 +271,7 @@
     "fallbackNotice": "Este conteúdo está disponível apenas em português."
   },
   "about": {
+    "metaTitle": "Sobre Mim",
     "hero": {
       "title": "Desenvolvedor <hl>Full Stack</hl>",
       "intro": "Ha mais de 2 anos construindo solucoes completas — do frontend ao backend. Atualmente sou desenvolvedor pleno no <b>Grupo Koch SA</b> e me especializo em Inteligencia Artificial, criando plataformas com integracao de multiagentes usando <b>Claude Code</b>, <b>opencode</b> e <b>OpenAI</b>, alem de pipelines de RAG e automacao de processos corporativos.",

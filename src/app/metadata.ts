@@ -1,88 +1,104 @@
 import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 
 export const siteUrl = process.env.BASE_URL!
 
-export const websiteMetadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+// kept for backward-compat: sitemap.ts / robot.ts import this
+export const metadataBase = new URL(siteUrl)
 
-  generator: 'Next.js',
-  applicationName: 'Cristian Giehl Portfolio',
+export async function buildMetadata(locale: string): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: 'meta' })
 
-  title: {
-    default: 'Cristian Giehl — Full Stack Developer',
-    template: '%s | Cristian Giehl',
-  },
+  const ogLocale = locale === 'pt-BR' ? 'pt_BR' : 'en_US'
+  const canonicalUrl = locale === 'pt-BR' ? siteUrl : `${siteUrl}/en-US`
 
-  description:
-    'Portfólio de Cristian Giehl, desenvolvedor Full Stack com experiência em TypeScript, Next.js, Rust e Python. Atuando em startups americanas com foco em performance e escalabilidade.',
+  return {
+    metadataBase: new URL(siteUrl),
 
-  keywords: [
-    'Cristian Giehl',
-    'Full Stack Developer',
-    'Frontend Developer',
-    'Backend Developer',
-    'React',
-    'Next.js',
-    'Node.js',
-    'TypeScript',
-    'Portfolio',
-    'Web Development',
-  ],
+    generator: 'Next.js',
+    applicationName: 'Cristian Giehl Portfolio',
 
-  authors: [
-    {
-      name: 'Cristian Giehl',
-      url: siteUrl,
+    title: {
+      default: t('siteTitle'),
+      template: '%s | Cristian Giehl',
     },
-  ],
 
-  creator: 'Cristian Giehl',
-  publisher: 'Cristian Giehl',
+    description: t('description'),
 
-  referrer: 'origin-when-cross-origin',
+    keywords: [
+      'Cristian Giehl',
+      'Full Stack Developer',
+      'Frontend Developer',
+      'Backend Developer',
+      'React',
+      'Next.js',
+      'Node.js',
+      'TypeScript',
+      'Portfolio',
+      'Web Development',
+    ],
 
-  openGraph: {
-    title: 'Cristian Giehl — Full Stack Developer',
-    description:
-      'Conheça os projetos e experiências de Cristian Giehl. Desenvolvimento web moderno com React, Next.js, Node.js e TypeScript.',
-    url: siteUrl,
-    siteName: 'Cristian Giehl',
-    locale: 'pt_BR',
-    type: 'website',
-    images: [
+    authors: [
       {
-        url: '/images/og-img.png',
-        width: 1200,
-        height: 630,
-        alt: 'Portfolio de Cristian Giehl',
+        name: 'Cristian Giehl',
+        url: siteUrl,
       },
     ],
-  },
 
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Cristian Giehl — Full Stack Developer',
-    description:
-      'Portfolio com projetos reais em React, Next.js, Node.js e TypeScript.',
-    creator: '@cristiangiehl',
-    images: ['/images/og-img.png'],
-  },
+    creator: 'Cristian Giehl',
+    publisher: 'Cristian Giehl',
 
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+    referrer: 'origin-when-cross-origin',
+
+    openGraph: {
+      title: t('siteTitle'),
+      description: t('ogDescription'),
+      url: canonicalUrl,
+      siteName: 'Cristian Giehl',
+      locale: ogLocale,
+      type: 'website',
+      images: [
+        {
+          url: '/images/og-img.png',
+          width: 1200,
+          height: 630,
+          alt: 'Portfolio de Cristian Giehl',
+        },
+      ],
+    },
+
+    twitter: {
+      card: 'summary_large_image',
+      title: t('siteTitle'),
+      description: t('description'),
+      creator: '@cristiangiehl',
+      images: ['/images/og-img.png'],
+    },
+
+    robots: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
-  },
 
-  icons: {
-    icon: '/icons/favicon.ico',
-    shortcut: '/icons/favicon-16x16.png',
-    apple: '/icons/apple-touch-icon.png',
-  },
+    icons: {
+      icon: '/icons/favicon.ico',
+      shortcut: '/icons/favicon-16x16.png',
+      apple: '/icons/apple-touch-icon.png',
+    },
+
+    alternates: {
+      languages: {
+        'pt-BR': '/',
+        'en-US': '/en-US',
+      },
+      canonical: canonicalUrl,
+    },
+  }
 }

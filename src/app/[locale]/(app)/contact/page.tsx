@@ -6,8 +6,14 @@ import { Container, MainContainer } from '@/app/_components/container'
 import { ContactForm } from '@/app/_components/pages/contact/contact-form'
 import { ContactInfo } from '@/app/_components/pages/contact/contact-info'
 
-export const metadata: Metadata = {
-  title: 'Contato',
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'contact' })
+  return { title: t('metaTitle') }
 }
 
 export default async function ContactPage({

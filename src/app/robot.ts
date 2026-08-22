@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 
-import { websiteMetadata } from './metadata'
+import { siteUrl } from './metadata'
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: ['/'],
       disallow: [''],
     },
-    host: `${websiteMetadata.metadataBase}`,
-    sitemap: `${websiteMetadata.metadataBase}/sitemap.xml`,
+    host: siteUrl,
+    sitemap: `${siteUrl}/sitemap.xml`,
   }
 }

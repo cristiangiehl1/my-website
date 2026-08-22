@@ -1,13 +1,13 @@
 'use client'
 
 import { ArrowLeft, Code2, Cpu, Terminal } from 'lucide-react'
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 
-import { useIsMobile } from '@/hooks/use-is-mobile'
+import { Link } from '@/i18n/navigation'
 
-import { Button } from './_components/ui/button'
+import { Button } from '../_components/ui/button'
 
 function GlitchText({ children }: { children: string }) {
   return (
@@ -119,13 +119,13 @@ function FloatingIcons() {
   )
 }
 
-export default function NotFound() {
-  const isMobile = useIsMobile()
+export default function LocaleNotFound() {
+  const t = useTranslations('notFound')
   const pathName = usePathname()
 
   return (
     <main className='bg-background relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4'>
-      {!isMobile && <CircuitGrid />}
+      <CircuitGrid />
       <FloatingIcons />
 
       <div className='relative z-10 text-center'>
@@ -137,14 +137,12 @@ export default function NotFound() {
         {/* Subtitle */}
         <h1 className='text-foreground mt-4 text-2xl font-semibold md:text-3xl'>
           <span className='text-primary'>{'<'}</span>
-          Página &quot;{pathName.slice(1)}&quot; não encontrada / Page &quot;
-          {pathName.slice(1)}&quot; not found
+          &quot;{pathName}&quot; {t('heading')}
           <span className='text-primary'>{' />'}</span>
         </h1>
 
         <p className='text-muted-foreground mx-auto mt-4 max-w-md'>
-          Parece que você tentou acessar uma rota que não existe no meu sistema.
-          / Looks like you tried to access a route that does not exist.
+          {t('body')}
         </p>
 
         {/* Terminal Window */}
@@ -155,7 +153,7 @@ export default function NotFound() {
           <Button autoFocus={true} asChild size='lg' variant={'default'}>
             <Link href='/'>
               <ArrowLeft className='h-4 w-4 transition-transform group-hover:-translate-x-1' />
-              Voltar ao início / Back home
+              {t('cta')}
             </Link>
           </Button>
         </div>
