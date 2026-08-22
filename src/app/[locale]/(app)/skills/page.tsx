@@ -1,138 +1,89 @@
 import { Cpu } from 'lucide-react'
 import type { Metadata } from 'next'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import type { Skill } from '@/@types/skill'
 import { Container, MainContainer } from '@/app/_components/container'
 import { SkillCard } from '@/app/_components/pages/skills/skill-card'
 import {
   SoftSkills,
-  softSkills,
+  softSkillsCount,
 } from '@/app/_components/pages/skills/soft-skills'
 
 const frontendSkills: Skill[] = [
-  {
-    name: 'react',
-    level: 'Avançado',
-    yearsOfExperience: 2,
-    description: 'Hooks, Context, Server Components',
-  },
-  {
-    name: 'next',
-    level: 'Avançado',
-    yearsOfExperience: 2,
-    description: 'App Router, SSR/ISR, Server Actions, Route Handlers',
-  },
+  { name: 'react', level: 'Avançado', yearsOfExperience: 2, description: '' },
+  { name: 'next', level: 'Avançado', yearsOfExperience: 2, description: '' },
   {
     name: 'typescript',
     level: 'Avançado',
     yearsOfExperience: 2,
-    description: 'Generics, utility types, tipagem ponta a ponta',
+    description: '',
   },
   {
     name: 'javascript',
     level: 'Avançado',
     yearsOfExperience: 2,
-    description: 'ES moderno, assincronismo, DOM',
+    description: '',
   },
-  {
-    name: 'tailwind',
-    level: 'Expert',
-    yearsOfExperience: 2,
-    description: 'Design systems, responsividade, tema dark',
-  },
-  {
-    name: 'html',
-    level: 'Avançado',
-    yearsOfExperience: 3,
-    description: 'Semantica, acessibilidade, animações',
-  },
-  {
-    name: 'css',
-    level: 'Avançado',
-    yearsOfExperience: 3,
-    description: 'Layouts, animações, responsividade',
-  },
+  { name: 'tailwind', level: 'Expert', yearsOfExperience: 2, description: '' },
+  { name: 'html', level: 'Avançado', yearsOfExperience: 3, description: '' },
+  { name: 'css', level: 'Avançado', yearsOfExperience: 3, description: '' },
   {
     name: 'react-hook-form',
     level: 'Avançado',
     yearsOfExperience: 2,
-    description: 'Formularios performaticos integrados ao Zod',
+    description: '',
   },
   {
     name: 'tanstack',
     level: 'Intermediario',
     yearsOfExperience: 1,
-    description: 'TanStack Query: cache e sincronização de dados',
+    description: '',
   },
   {
     name: 'react-markdown',
     level: 'Intermediario',
     yearsOfExperience: 1,
-    description: 'Renderização de markdown com remark-gfm',
+    description: '',
   },
   {
     name: 'react-native',
     level: 'Intermediario',
     yearsOfExperience: 1,
-    description: 'Apps mobile cross-platform',
+    description: '',
   },
-  {
-    name: 'threejs',
-    level: 'Basico',
-    yearsOfExperience: 1,
-    description: 'Cenas 3D e elementos interativos',
-  },
-  {
-    name: 'gsap',
-    level: 'Basico',
-    yearsOfExperience: 1,
-    description: 'Animações e transições',
-  },
+  { name: 'threejs', level: 'Basico', yearsOfExperience: 1, description: '' },
+  { name: 'gsap', level: 'Basico', yearsOfExperience: 1, description: '' },
 ]
 
 const backendSkills: Skill[] = [
-  {
-    name: 'node',
-    level: 'Avançado',
-    yearsOfExperience: 2,
-    description: 'APIs REST, workers, jobs agendados',
-  },
+  { name: 'node', level: 'Avançado', yearsOfExperience: 2, description: '' },
   {
     name: 'express',
     level: 'Intermediario',
     yearsOfExperience: 2,
-    description: 'APIs minimalistas, middlewares, sessões',
+    description: '',
   },
   {
     name: 'nextauth',
     level: 'Avançado',
     yearsOfExperience: 2,
-    description: 'Auth v5, JWT, provider customizado (ERP/LDAP)',
+    description: '',
   },
-  {
-    name: 'zod',
-    level: 'Avançado',
-    yearsOfExperience: 2,
-    description: 'Validação de schemas e env em todo o stack',
-  },
+  { name: 'zod', level: 'Avançado', yearsOfExperience: 2, description: '' },
   {
     name: 'bullmq',
     level: 'Intermediario',
     yearsOfExperience: 1,
-    description: 'Filas assincronas e workers com Redis',
+    description: '',
   },
   {
     name: 'rust',
     level: 'Intermediario',
     yearsOfExperience: 2,
-    description: 'APIs com Loco.rs e SeaORM',
+    description: '',
   },
-  {
-    name: 'python',
-    level: 'Basico',
-    yearsOfExperience: 1,
-    description: 'Scripts, automação, data analysis',
-  },
+  { name: 'python', level: 'Basico', yearsOfExperience: 1, description: '' },
 ]
 
 const databaseSkills: Skill[] = [
@@ -140,43 +91,43 @@ const databaseSkills: Skill[] = [
     name: 'postgresql',
     level: 'Avançado',
     yearsOfExperience: 2,
-    description: 'Modelagem, SQL, migrations, otimização',
+    description: '',
   },
   {
     name: 'oracle',
     level: 'Intermediario',
     yearsOfExperience: 1,
-    description: 'OracleDB corporativo, pool de conexões, transações',
+    description: '',
   },
   {
     name: 'redis',
     level: 'Intermediario',
     yearsOfExperience: 1,
-    description: 'Cache e backing das filas BullMQ',
+    description: '',
   },
   {
     name: 'supabase',
     level: 'Intermediario',
     yearsOfExperience: 2,
-    description: 'Postgres gerenciado + pgvector em produção',
+    description: '',
   },
   {
     name: 'prisma',
     level: 'Intermediario',
     yearsOfExperience: 2,
-    description: 'ORM type-safe, schema e migrations',
+    description: '',
   },
   {
     name: 'pgvector',
     level: 'Intermediario',
     yearsOfExperience: 1,
-    description: 'Busca vetorial (HNSW, cosseno) para RAG',
+    description: '',
   },
   {
     name: 'neondb',
     level: 'Intermediario',
     yearsOfExperience: 2,
-    description: 'Postgres serverless',
+    description: '',
   },
 ]
 
@@ -185,25 +136,25 @@ const aiSkills: Skill[] = [
     name: 'openai',
     level: 'Intermediario',
     yearsOfExperience: 1,
-    description: 'Agentes, function calling, structured outputs',
+    description: '',
   },
   {
     name: 'langchain',
     level: 'Intermediario',
     yearsOfExperience: 1,
-    description: 'Splitters, loaders e orquestração de RAG',
+    description: '',
   },
   {
     name: 'huggingface',
     level: 'Basico',
     yearsOfExperience: 1,
-    description: 'Embeddings via Inference API',
+    description: '',
   },
   {
     name: 'openrouter',
     level: 'Basico',
     yearsOfExperience: 1,
-    description: 'LLMs de chat com streaming',
+    description: '',
   },
 ]
 
@@ -212,56 +163,85 @@ const toolsSkills: Skill[] = [
     name: 'docker',
     level: 'Intermediario',
     yearsOfExperience: 2,
-    description: 'Containers, Docker Compose, multi-serviço',
+    description: '',
   },
   {
     name: 'netlify',
     level: 'Intermediario',
     yearsOfExperience: 2,
-    description: 'Deploy de apps e funções serverless',
+    description: '',
   },
   {
     name: 'eslint',
     level: 'Avançado',
     yearsOfExperience: 2,
-    description: 'Padronização e qualidade de código',
+    description: '',
   },
   {
     name: 'cloudinary',
     level: 'Basico',
     yearsOfExperience: 1,
-    description: 'Upload e otimização de midia',
+    description: '',
   },
   {
     name: 'telegram',
     level: 'Basico',
     yearsOfExperience: 1,
-    description: 'Bots como canal de mensagens',
+    description: '',
   },
 ]
-
-const skillSections: { title: string; color: string; skills: Skill[] }[] = [
-  { title: 'Frontend', color: 'bg-primary', skills: frontendSkills },
-  { title: 'Backend & Runtime', color: 'bg-foreground', skills: backendSkills },
-  { title: 'Banco de Dados', color: 'bg-chart-1', skills: databaseSkills },
-  { title: 'IA & RAG', color: 'bg-chart-2', skills: aiSkills },
-  {
-    title: 'DevOps & Ferramentas',
-    color: 'bg-chart-3',
-    skills: toolsSkills,
-  },
-]
-
-const totalTechnologies = skillSections.reduce(
-  (total, section) => total + section.skills.length,
-  0
-)
 
 export const metadata: Metadata = {
   title: 'Skills',
 }
 
-export default function SkillsPage() {
+export default async function SkillsPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
+  setRequestLocale(locale)
+  const t = await getTranslations('skills')
+
+  const skillSections = [
+    {
+      key: 'frontend' as const,
+      title: t('sections.frontend'),
+      color: 'bg-primary',
+      skills: frontendSkills,
+    },
+    {
+      key: 'backend' as const,
+      title: t('sections.backend'),
+      color: 'bg-foreground',
+      skills: backendSkills,
+    },
+    {
+      key: 'database' as const,
+      title: t('sections.database'),
+      color: 'bg-chart-1',
+      skills: databaseSkills,
+    },
+    {
+      key: 'ai' as const,
+      title: t('sections.ai'),
+      color: 'bg-chart-2',
+      skills: aiSkills,
+    },
+    {
+      key: 'tools' as const,
+      title: t('sections.tools'),
+      color: 'bg-chart-3',
+      skills: toolsSkills,
+    },
+  ]
+
+  const totalTechnologies = skillSections.reduce(
+    (total, section) => total + section.skills.length,
+    0
+  )
+
   return (
     <Container>
       <MainContainer className='flex flex-col gap-10'>
@@ -273,33 +253,37 @@ export default function SkillsPage() {
                 <Cpu className='text-primary h-5 w-5' />
               </div>
               <div className='bg-primary/20 text-primary rounded-full px-3 py-1 text-xs font-medium'>
-                Habilidades Tecnicas
+                {t('eyebrow')}
               </div>
             </div>
 
             <h1 className='text-foreground text-4xl font-bold tracking-tight text-balance lg:text-5xl'>
-              Minhas <span className='text-primary'>Skills</span>
+              {t.rich('title', {
+                hl: (c) => <span className='text-primary'>{c}</span>,
+              })}
             </h1>
             <p className='text-muted-foreground max-w-2xl text-lg leading-relaxed'>
-              Tecnologias e ferramentas que utilizo no dia a dia para construir
-              aplicações modernas, performaticas e escalaveis.
+              {t('intro')}
             </p>
           </div>
 
           {/* Stats */}
           <div className='mt-2 flex flex-wrap gap-6'>
-            <StatItem value={`${totalTechnologies}+`} label='Tecnologias' />
-            <StatItem value='2+' label='Anos de experiencia' />
             <StatItem
-              value={softSkills.length.toString()}
-              label='Soft Skills'
+              value={`${totalTechnologies}+`}
+              label={t('stats.technologies')}
+            />
+            <StatItem value='2+' label={t('stats.experience')} />
+            <StatItem
+              value={softSkillsCount.toString()}
+              label={t('stats.softSkills')}
             />
           </div>
         </header>
 
         {/* Technical Skills */}
         {skillSections.map((section) => (
-          <section key={section.title} className='flex flex-col gap-6'>
+          <section key={section.key} className='flex flex-col gap-6'>
             <div className='flex items-center gap-3'>
               <div className={`${section.color} h-1 w-8 rounded-full`} />
               <h2 className='text-foreground text-2xl font-bold'>
@@ -318,11 +302,12 @@ export default function SkillsPage() {
         <section className='flex flex-col gap-6'>
           <div className='flex items-center gap-3'>
             <div className='bg-chart-4 h-1 w-8 rounded-full' />
-            <h2 className='text-foreground text-2xl font-bold'>Soft Skills</h2>
+            <h2 className='text-foreground text-2xl font-bold'>
+              {t('sections.soft')}
+            </h2>
           </div>
           <p className='text-muted-foreground max-w-xl leading-relaxed'>
-            Alem das habilidades tecnicas, acredito que competencias
-            comportamentais sao fundamentais para o sucesso de qualquer projeto.
+            {t('softIntro')}
           </p>
           <SoftSkills />
         </section>
@@ -330,28 +315,28 @@ export default function SkillsPage() {
         {/* Legend */}
         <section className='bg-card border-border rounded-xl border p-6'>
           <h3 className='text-card-foreground mb-4 text-sm font-bold tracking-wider uppercase'>
-            Legenda de niveis
+            {t('legendTitle')}
           </h3>
           <div className='flex flex-wrap gap-6'>
             <LegendItem
               color='bg-muted-foreground'
-              label='Basico'
-              description='Conhecimento fundamental'
+              label={t('levels.Basico.label')}
+              description={t('levels.Basico.description')}
             />
             <LegendItem
               color='bg-foreground'
-              label='Intermediario'
-              description='Uso regular em projetos'
+              label={t('levels.Intermediario.label')}
+              description={t('levels.Intermediario.description')}
             />
             <LegendItem
               color='bg-primary'
-              label='Avançado'
-              description='Dominio solido e autonomia'
+              label={t('levels.Avançado.label')}
+              description={t('levels.Avançado.description')}
             />
             <LegendItem
               color='bg-primary'
-              label='Expert'
-              description='Referencia e mentoria'
+              label={t('levels.Expert.label')}
+              description={t('levels.Expert.description')}
             />
           </div>
         </section>

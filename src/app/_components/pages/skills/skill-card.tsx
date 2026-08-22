@@ -1,5 +1,7 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import type { Skill, SkillLevel } from '@/@types/skill'
 import { TECHNOLOGY_DATA } from '@/constants/technology-data'
 import { cn } from '@/lib/utils'
@@ -36,9 +38,12 @@ const levelConfig: Record<
 }
 
 export function SkillCard({ skill }: { skill: Skill }) {
+  const t = useTranslations('skills')
   const config = levelConfig[skill.level]
   const label = TECHNOLOGY_DATA[skill.name].label
   const Icon = TECHNOLOGY_DATA[skill.name].icon
+  const description = t(`items.${skill.name}.description`)
+  const levelLabel = t(`levels.${skill.level}.label`)
 
   return (
     <div className='group bg-card border-border hover:border-primary/30 hover:shadow-soft-stack flex flex-col gap-4 rounded-xl border p-5 transition-all'>
@@ -52,20 +57,20 @@ export function SkillCard({ skill }: { skill: Skill }) {
             <span className='text-card-foreground text-sm font-bold'>
               {label}
             </span>
-            <span className='text-muted-foreground text-xs'>
-              {skill.description}
-            </span>
+            <span className='text-muted-foreground text-xs'>{description}</span>
           </div>
         </div>
         <Badge className={cn('shrink-0 text-[10px]', config.badgeClass)}>
-          {skill.level}
+          {levelLabel}
         </Badge>
       </div>
 
       {/* Progress */}
       <div className='flex flex-col gap-2'>
         <div className='flex items-center justify-between'>
-          <span className='text-muted-foreground text-xs'>Proficiencia</span>
+          <span className='text-muted-foreground text-xs'>
+            {t('proficiency')}
+          </span>
           <span className={cn('text-xs font-semibold', config.color)}>
             {config.progress}%
           </span>
@@ -75,13 +80,15 @@ export function SkillCard({ skill }: { skill: Skill }) {
 
       {/* Years */}
       <div className='border-border flex items-center justify-between border-t pt-3'>
-        <span className='text-muted-foreground text-xs'>Experiencia</span>
+        <span className='text-muted-foreground text-xs'>{t('experience')}</span>
         <div className='flex items-baseline gap-1'>
           <span className='text-card-foreground text-lg font-bold'>
             {skill.yearsOfExperience}
           </span>
           <span className='text-muted-foreground text-xs'>
-            {skill.yearsOfExperience === 1 ? 'ano' : 'anos'}
+            {skill.yearsOfExperience === 1
+              ? t('yearSingular')
+              : t('yearPlural')}
           </span>
         </div>
       </div>

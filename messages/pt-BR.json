@@ -21,6 +21,128 @@
     "ctaProjects": "Ver Projetos",
     "ctaContact": "Entre em Contato"
   },
+  "skills": {
+    "eyebrow": "Habilidades Tecnicas",
+    "title": "Minhas <hl>Skills</hl>",
+    "intro": "Tecnologias e ferramentas que utilizo no dia a dia para construir aplicações modernas, performaticas e escalaveis.",
+    "stats": {
+      "technologies": "Tecnologias",
+      "experience": "Anos de experiencia",
+      "softSkills": "Soft Skills"
+    },
+    "sections": {
+      "frontend": "Frontend",
+      "backend": "Backend & Runtime",
+      "database": "Banco de Dados",
+      "ai": "IA & RAG",
+      "tools": "DevOps & Ferramentas",
+      "soft": "Soft Skills"
+    },
+    "softIntro": "Alem das habilidades tecnicas, acredito que competencias comportamentais sao fundamentais para o sucesso de qualquer projeto.",
+    "legendTitle": "Legenda de niveis",
+    "levels": {
+      "Basico": {
+        "label": "Basico",
+        "description": "Conhecimento fundamental"
+      },
+      "Intermediario": {
+        "label": "Intermediario",
+        "description": "Uso regular em projetos"
+      },
+      "Avançado": {
+        "label": "Avançado",
+        "description": "Dominio solido e autonomia"
+      },
+      "Expert": {
+        "label": "Expert",
+        "description": "Referencia e mentoria"
+      }
+    },
+    "proficiency": "Proficiencia",
+    "experience": "Experiencia",
+    "yearSingular": "ano",
+    "yearPlural": "anos",
+    "softSkillNames": {
+      "Comunicação": "Comunicação",
+      "Trabalho em Equipe": "Trabalho em Equipe",
+      "Resolulçao de Problemas": "Resolulçao de Problemas",
+      "Gestao de Tempo": "Gestao de Tempo",
+      "Foco em Resultados": "Foco em Resultados",
+      "Aprendizado Continuo": "Aprendizado Continuo",
+      "Empatia": "Empatia",
+      "Adaptabilidade": "Adaptabilidade"
+    },
+    "softSkillDescriptions": {
+      "Comunicação": "Clareza na transmissao de ideias tecnicas e nao-tecnicas",
+      "Trabalho em Equipe": "Colaboracao efetiva em equipes multidisciplinares",
+      "Resolulçao de Problemas": "Pensamento critico e analitico para encontrar solucoes",
+      "Gestao de Tempo": "Organização e priorizacao de tarefas e prazos",
+      "Foco em Resultados": "Orientação a entregas de valor e metas claras",
+      "Aprendizado Continuo": "Busca constante por novas tecnologias e conhecimentos",
+      "Empatia": "Compreensao das necessidades de usuarios e colegas",
+      "Adaptabilidade": "Flexibilidade para lidar com mudancas e novos desafios"
+    },
+    "items": {
+      "react": { "description": "Hooks, Context, Server Components" },
+      "next": {
+        "description": "App Router, SSR/ISR, Server Actions, Route Handlers"
+      },
+      "typescript": {
+        "description": "Generics, utility types, tipagem ponta a ponta"
+      },
+      "javascript": { "description": "ES moderno, assincronismo, DOM" },
+      "tailwind": {
+        "description": "Design systems, responsividade, tema dark"
+      },
+      "html": { "description": "Semantica, acessibilidade, animações" },
+      "css": { "description": "Layouts, animações, responsividade" },
+      "react-hook-form": {
+        "description": "Formularios performaticos integrados ao Zod"
+      },
+      "tanstack": {
+        "description": "TanStack Query: cache e sincronização de dados"
+      },
+      "react-markdown": {
+        "description": "Renderização de markdown com remark-gfm"
+      },
+      "react-native": { "description": "Apps mobile cross-platform" },
+      "threejs": { "description": "Cenas 3D e elementos interativos" },
+      "gsap": { "description": "Animações e transições" },
+      "node": { "description": "APIs REST, workers, jobs agendados" },
+      "express": { "description": "APIs minimalistas, middlewares, sessões" },
+      "nextauth": {
+        "description": "Auth v5, JWT, provider customizado (ERP/LDAP)"
+      },
+      "zod": { "description": "Validação de schemas e env em todo o stack" },
+      "bullmq": { "description": "Filas assincronas e workers com Redis" },
+      "rust": { "description": "APIs com Loco.rs e SeaORM" },
+      "python": { "description": "Scripts, automação, data analysis" },
+      "postgresql": { "description": "Modelagem, SQL, migrations, otimização" },
+      "oracle": {
+        "description": "OracleDB corporativo, pool de conexões, transações"
+      },
+      "redis": { "description": "Cache e backing das filas BullMQ" },
+      "supabase": {
+        "description": "Postgres gerenciado + pgvector em produção"
+      },
+      "prisma": { "description": "ORM type-safe, schema e migrations" },
+      "pgvector": { "description": "Busca vetorial (HNSW, cosseno) para RAG" },
+      "neondb": { "description": "Postgres serverless" },
+      "openai": {
+        "description": "Agentes, function calling, structured outputs"
+      },
+      "langchain": {
+        "description": "Splitters, loaders e orquestração de RAG"
+      },
+      "huggingface": { "description": "Embeddings via Inference API" },
+      "openrouter": { "description": "LLMs de chat com streaming" },
+      "docker": { "description": "Containers, Docker Compose, multi-serviço" },
+      "netlify": { "description": "Deploy de apps e funções serverless" },
+      "eslint": { "description": "Padronização e qualidade de código" },
+      "cloudinary": { "description": "Upload e otimização de midia" },
+      "telegram": { "description": "Bots como canal de mensagens" }
+    }
+  },
   "about": {
     "hero": {
       "title": "Desenvolvedor <hl>Full Stack</hl>",

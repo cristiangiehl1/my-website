@@ -25,6 +25,128 @@
     "ctaProjects": "View Projects",
     "ctaContact": "Get in Touch"
   },
+  "skills": {
+    "eyebrow": "Technical Skills",
+    "title": "My <hl>Skills</hl>",
+    "intro": "Technologies and tools I use day-to-day to build modern, performant, and scalable applications.",
+    "stats": {
+      "technologies": "Technologies",
+      "experience": "Years of experience",
+      "softSkills": "Soft Skills"
+    },
+    "sections": {
+      "frontend": "Frontend",
+      "backend": "Backend & Runtime",
+      "database": "Databases",
+      "ai": "AI & RAG",
+      "tools": "DevOps & Tools",
+      "soft": "Soft Skills"
+    },
+    "softIntro": "Beyond technical skills, I believe behavioral competencies are fundamental to the success of any project.",
+    "legendTitle": "Level legend",
+    "levels": {
+      "Basico": {
+        "label": "Basic",
+        "description": "Foundational knowledge"
+      },
+      "Intermediario": {
+        "label": "Intermediate",
+        "description": "Regular use in projects"
+      },
+      "Avançado": {
+        "label": "Advanced",
+        "description": "Solid mastery and autonomy"
+      },
+      "Expert": {
+        "label": "Expert",
+        "description": "Reference and mentorship"
+      }
+    },
+    "proficiency": "Proficiency",
+    "experience": "Experience",
+    "yearSingular": "year",
+    "yearPlural": "years",
+    "softSkillNames": {
+      "Comunicação": "Communication",
+      "Trabalho em Equipe": "Teamwork",
+      "Resolulçao de Problemas": "Problem Solving",
+      "Gestao de Tempo": "Time Management",
+      "Foco em Resultados": "Results Focus",
+      "Aprendizado Continuo": "Continuous Learning",
+      "Empatia": "Empathy",
+      "Adaptabilidade": "Adaptability"
+    },
+    "softSkillDescriptions": {
+      "Comunicação": "Clarity in conveying technical and non-technical ideas",
+      "Trabalho em Equipe": "Effective collaboration in multidisciplinary teams",
+      "Resolulçao de Problemas": "Critical and analytical thinking to find solutions",
+      "Gestao de Tempo": "Organization and prioritization of tasks and deadlines",
+      "Foco em Resultados": "Oriented toward delivering value and clear goals",
+      "Aprendizado Continuo": "Constant pursuit of new technologies and knowledge",
+      "Empatia": "Understanding the needs of users and colleagues",
+      "Adaptabilidade": "Flexibility to handle changes and new challenges"
+    },
+    "items": {
+      "react": { "description": "Hooks, Context, Server Components" },
+      "next": {
+        "description": "App Router, SSR/ISR, Server Actions, Route Handlers"
+      },
+      "typescript": {
+        "description": "Generics, utility types, end-to-end typing"
+      },
+      "javascript": { "description": "Modern ES, async, DOM" },
+      "tailwind": {
+        "description": "Design systems, responsiveness, dark theme"
+      },
+      "html": { "description": "Semantics, accessibility, animations" },
+      "css": { "description": "Layouts, animations, responsiveness" },
+      "react-hook-form": {
+        "description": "Performant forms integrated with Zod"
+      },
+      "tanstack": {
+        "description": "TanStack Query: data caching and synchronization"
+      },
+      "react-markdown": { "description": "Markdown rendering with remark-gfm" },
+      "react-native": { "description": "Cross-platform mobile apps" },
+      "threejs": { "description": "3D scenes and interactive elements" },
+      "gsap": { "description": "Animations and transitions" },
+      "node": { "description": "REST APIs, workers, scheduled jobs" },
+      "express": { "description": "Minimalist APIs, middlewares, sessions" },
+      "nextauth": { "description": "Auth v5, JWT, custom provider (ERP/LDAP)" },
+      "zod": {
+        "description": "Schema and env validation across the full stack"
+      },
+      "bullmq": { "description": "Async queues and workers with Redis" },
+      "rust": { "description": "APIs with Loco.rs and SeaORM" },
+      "python": { "description": "Scripts, automation, data analysis" },
+      "postgresql": {
+        "description": "Modeling, SQL, migrations, optimization"
+      },
+      "oracle": {
+        "description": "Corporate OracleDB, connection pooling, transactions"
+      },
+      "redis": { "description": "Cache and BullMQ queue backing" },
+      "supabase": {
+        "description": "Managed Postgres + pgvector in production"
+      },
+      "prisma": { "description": "Type-safe ORM, schema and migrations" },
+      "pgvector": { "description": "Vector search (HNSW, cosine) for RAG" },
+      "neondb": { "description": "Serverless Postgres" },
+      "openai": {
+        "description": "Agents, function calling, structured outputs"
+      },
+      "langchain": {
+        "description": "Splitters, loaders, and RAG orchestration"
+      },
+      "huggingface": { "description": "Embeddings via Inference API" },
+      "openrouter": { "description": "Chat LLMs with streaming" },
+      "docker": { "description": "Containers, Docker Compose, multi-service" },
+      "netlify": { "description": "App and serverless function deployment" },
+      "eslint": { "description": "Code standardization and quality" },
+      "cloudinary": { "description": "Media upload and optimization" },
+      "telegram": { "description": "Bots as messaging channels" }
+    }
+  },
   "about": {
     "hero": {
       "title": "Full Stack <hl>Developer</hl>",
