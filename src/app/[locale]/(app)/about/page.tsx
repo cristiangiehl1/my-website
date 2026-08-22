@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { Container, MainContainer } from '@/app/_components/container'
 import { AboutExperience } from '@/app/_components/pages/about/about-experience'
@@ -16,7 +16,14 @@ export async function generateMetadata({
   return { title: t('metaTitle') }
 }
 
-export default function AboutPage() {
+export default async function AboutPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
+  setRequestLocale(locale)
+
   return (
     <Container>
       <MainContainer className='bg-background min-h-screen'>
