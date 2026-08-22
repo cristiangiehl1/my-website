@@ -1,9 +1,8 @@
 'use client'
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import type { AnchorHTMLAttributes } from 'react'
 
+import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
 interface NavLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
