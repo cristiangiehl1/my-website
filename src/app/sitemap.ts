@@ -15,11 +15,8 @@ function buildUrl(locale: string, path: string): string {
   return `${siteUrl}${prefix}${suffix}`
 }
 
-function altLanguages(locale: string, path: string): Record<string, string> {
-  const other = routing.locales.find((l) => l !== locale)!
-  return {
-    [other]: buildUrl(other, path),
-  }
+function altLanguages(path: string): Record<string, string> {
+  return Object.fromEntries(routing.locales.map((l) => [l, buildUrl(l, path)]))
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -38,7 +35,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         url: buildUrl(locale, path),
         priority: path === '' ? 1 : 0.5,
         alternates: {
-          languages: altLanguages(locale, path),
+          languages: altLanguages(path),
         },
       })
     }
@@ -54,7 +51,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 1,
         images: [project.coverUrl ?? '/images/project-placeholder.jpg'],
         alternates: {
-          languages: altLanguages(locale, path),
+          languages: altLanguages(path),
         },
       })
     }
