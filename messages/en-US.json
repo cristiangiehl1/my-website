@@ -17,5 +17,12 @@
       "en-US": "English"
     },
     "footer": { "rights": "© 2026 Cristian Giehl" }
+  },
+  "home": {
+    "badge": "Full-Stack Developer",
+    "headline": "I turn <hl>ideas</hl> into digital <hl>experiences</hl>",
+    "subhead": "Specialized in building modern, scalable web applications that connect users and drive business",
+    "ctaProjects": "View Projects",
+    "ctaContact": "Get in Touch"
   }
 }

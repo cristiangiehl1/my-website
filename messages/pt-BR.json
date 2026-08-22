@@ -13,5 +13,12 @@
     },
     "language": { "label": "Idioma", "pt-BR": "Português", "en-US": "English" },
     "footer": { "rights": "© 2026 Cristian Giehl" }
+  },
+  "home": {
+    "badge": "Desenvolvedor Full-Stack",
+    "headline": "Transformo <hl>ideias</hl> em <hl>experiências</hl> digitais",
+    "subhead": "Especialista em criar aplicações web modernas e escaláveis que conectam usuários e impulsionam negócios",
+    "ctaProjects": "Ver Projetos",
+    "ctaContact": "Entre em Contato"
   }
 }

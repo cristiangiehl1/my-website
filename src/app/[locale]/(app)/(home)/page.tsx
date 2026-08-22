@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import type { IconType } from 'react-icons'
 import { BiCodeAlt } from 'react-icons/bi'
 import { FaArrowRight } from 'react-icons/fa'
@@ -7,6 +7,7 @@ import { Container, MainContainer } from '@/app/_components/container'
 import { SocialLink } from '@/app/_components/social-link'
 import { Button } from '@/app/_components/ui/button'
 import { __SOCIAL__ } from '@/constants/social'
+import { Link } from '@/i18n/navigation'
 
 const CTA_BUTTONS: Array<{ icon: IconType; href: string; label: string }> = [
   {
@@ -26,7 +27,15 @@ const CTA_BUTTONS: Array<{ icon: IconType; href: string; label: string }> = [
   },
 ]
 
-export default function HomePage() {
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
+  setRequestLocale(locale)
+  const t = await getTranslations('home')
+
   return (
     <Container>
       {/* Main Content */}
@@ -36,20 +45,18 @@ export default function HomePage() {
           {/* Badge */}
           <div className='bg-muted/50 border-border inline-flex items-center gap-2 rounded-full border px-4 py-2 backdrop-blur-sm'>
             <BiCodeAlt size={16} className='text-primary' />
-            <span className='text-muted-foreground text-sm'>
-              Desenvolvedor Full-Stack
-            </span>
+            <span className='text-muted-foreground text-sm'>{t('badge')}</span>
           </div>
 
           {/* Headline */}
           <div className='space-y-4'>
             <h1 className='text-5xl leading-tight font-bold text-balance sm:text-6xl lg:text-7xl'>
-              Transformo <span className='text-primary'>ideias</span> em{' '}
-              <span className='text-primary'>experiências</span> digitais
+              {t.rich('headline', {
+                hl: (c) => <span className='text-primary'>{c}</span>,
+              })}
             </h1>
             <p className='text-muted-foreground max-w-2xl text-xl leading-relaxed text-pretty'>
-              Especialista em criar aplicações web modernas e escaláveis que
-              conectam usuários e impulsionam negócios
+              {t('subhead')}
             </p>
           </div>
 
@@ -60,7 +67,7 @@ export default function HomePage() {
               className='bg-primary text-primary-foreground hover:bg-primary/90 group'
               asChild>
               <Link href={'/portfolio'}>
-                Ver Projetos
+                {t('ctaProjects')}
                 <FaArrowRight
                   className='ml-2 transition-transform group-hover:translate-x-1'
                   size={20}
@@ -72,7 +79,7 @@ export default function HomePage() {
               variant='outline'
               className='border-border hover:bg-muted bg-transparent'
               asChild>
-              <Link href={'/contact'}>Entre em Contato</Link>
+              <Link href={'/contact'}>{t('ctaContact')}</Link>
             </Button>
           </div>
 
