@@ -1,6 +1,6 @@
 import '../globals.css'
 
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { JetBrains_Mono, Space_Grotesk } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
@@ -28,6 +28,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params
   return buildMetadata(locale)
+}
+
+export const viewport: Viewport = {
+  themeColor: '#0a0a0a',
+  colorScheme: 'dark',
 }
 
 export function generateStaticParams() {
