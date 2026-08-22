@@ -2,18 +2,19 @@ const VERSION = 'v1'
 const PRECACHE = `precache-${VERSION}`
 const RUNTIME = `runtime-${VERSION}`
 
-const PRECACHE_URLS = [
-  '/offline.html',
-  '/icons/android-chrome-192x192.png',
-  '/icons/android-chrome-512x512.png',
-]
-
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches
-      .open(PRECACHE)
-      .then((cache) => cache.addAll(PRECACHE_URLS))
-      .then(() => self.skipWaiting())
+    (async () => {
+      const cache = await caches.open(PRECACHE)
+      await cache.add('/offline.html')
+      await cache
+        .addAll([
+          '/icons/android-chrome-192x192.png',
+          '/icons/android-chrome-512x512.png',
+        ])
+        .catch(() => {})
+      await self.skipWaiting()
+    })()
   )
 })
 
@@ -66,7 +67,7 @@ async function staleWhileRevalidate(request) {
       if (response && response.ok) cache.put(request, response.clone())
       return response
     })
-    .catch(() => cached)
+    .catch(() => cached ?? Response.error())
   return cached || network
 }
 
