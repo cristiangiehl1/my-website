@@ -1,9 +1,12 @@
 import { Bot, Code, Server } from 'lucide-react'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 
 import { BlobBackground } from '@/app/_components/blob-background'
 
 export function AboutHero() {
+  const t = useTranslations('about')
+
   return (
     <section className='flex flex-col gap-8'>
       <div className='flex flex-col items-center gap-10 sm:flex-row sm:items-center sm:gap-12'>
@@ -21,15 +24,16 @@ export function AboutHero() {
         </BlobBackground>
         <div className='flex flex-col gap-4'>
           <h1 className='text-foreground text-4xl font-bold tracking-tight text-balance lg:text-5xl'>
-            Desenvolvedor <span className='text-primary'>Full Stack</span>
+            {t.rich('hero.title', {
+              hl: (c) => <span className='text-primary'>{c}</span>,
+            })}
           </h1>
           <p className='text-muted-foreground max-w-2xl text-lg leading-relaxed text-pretty'>
-            Ha mais de 2 anos construindo solucoes completas — do frontend ao
-            backend. Atualmente sou desenvolvedor pleno no{' '}
-            <span className='text-foreground font-medium'>Grupo Koch SA</span> e
-            me especializo em Inteligencia Artificial, criando plataformas com
-            integracao de multiagentes usando Claude Code, opencode e OpenAI,
-            alem de pipelines de RAG e automacao de processos corporativos.
+            {t.rich('hero.intro', {
+              b: (c) => (
+                <span className='text-foreground font-medium'>{c}</span>
+              ),
+            })}
           </p>
         </div>
       </div>
@@ -40,9 +44,11 @@ export function AboutHero() {
             <Code className='h-5 w-5' />
           </div>
           <div>
-            <p className='text-card-foreground font-semibold'>Frontend</p>
+            <p className='text-card-foreground font-semibold'>
+              {t('hero.cards.frontend.title')}
+            </p>
             <p className='text-muted-foreground text-sm'>
-              TypeScript & Next.js
+              {t('hero.cards.frontend.desc')}
             </p>
           </div>
         </div>
@@ -52,9 +58,11 @@ export function AboutHero() {
             <Server className='h-5 w-5' />
           </div>
           <div>
-            <p className='text-card-foreground font-semibold'>Backend</p>
+            <p className='text-card-foreground font-semibold'>
+              {t('hero.cards.backend.title')}
+            </p>
             <p className='text-muted-foreground text-sm'>
-              Node.js, Oracle & Filas
+              {t('hero.cards.backend.desc')}
             </p>
           </div>
         </div>
@@ -64,9 +72,11 @@ export function AboutHero() {
             <Bot className='h-5 w-5' />
           </div>
           <div>
-            <p className='text-card-foreground font-semibold'>IA & Agentes</p>
+            <p className='text-card-foreground font-semibold'>
+              {t('hero.cards.ai.title')}
+            </p>
             <p className='text-muted-foreground text-sm'>
-              OpenAI, RAG & Multiagentes
+              {t('hero.cards.ai.desc')}
             </p>
           </div>
         </div>

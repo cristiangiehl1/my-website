@@ -20,5 +20,37 @@
     "subhead": "Especialista em criar aplicações web modernas e escaláveis que conectam usuários e impulsionam negócios",
     "ctaProjects": "Ver Projetos",
     "ctaContact": "Entre em Contato"
+  },
+  "about": {
+    "hero": {
+      "title": "Desenvolvedor <hl>Full Stack</hl>",
+      "intro": "Ha mais de 2 anos construindo solucoes completas — do frontend ao backend. Atualmente sou desenvolvedor pleno no <b>Grupo Koch SA</b> e me especializo em Inteligencia Artificial, criando plataformas com integracao de multiagentes usando <b>Claude Code</b>, <b>opencode</b> e <b>OpenAI</b>, alem de pipelines de RAG e automacao de processos corporativos.",
+      "cards": {
+        "frontend": {
+          "title": "Frontend",
+          "desc": "TypeScript & Next.js"
+        },
+        "backend": {
+          "title": "Backend",
+          "desc": "Node.js, Oracle & Filas"
+        },
+        "ai": {
+          "title": "IA & Agentes",
+          "desc": "OpenAI, RAG & Multiagentes"
+        }
+      }
+    },
+    "experience": {
+      "title": "Experiência & Stack",
+      "p1": "Atualmente atuo como <b>desenvolvedor pleno no Grupo Koch SA</b>, onde venho me especializando em Inteligência Artificial aplicada ao desenvolvimento de plataformas corporativas com integração de multi-agentes. Utilizo ferramentas como <b>Claude Code</b>, <b>opencode</b> e <b>OpenAI</b> para orquestrar agentes inteligentes que automatizam processos e centralizam interações internas.",
+      "p2": "Ao longo de mais de 2 anos de experiência, adquiri sólida base no ecossistema frontend com <b>TanStack</b>, <b>shadcn/ui</b>, <b>Zod</b> e <b>Tailwind CSS</b>, além de boas práticas de testes com <b>Jest</b> e <b>Cypress</b>. No backend, trabalho com Node.js e Next.js (Server Actions), bancos <b>OracleDB</b> e <b>PostgreSQL / pgvector</b>, filas assíncronas com <b>Redis</b> e <b>BullMQ</b>, e integrações com ERPs e sistemas legados. Também construo pipelines de <b>RAG</b> e ingestão de documentos com LLMs usando <b>LangChain</b>, <b>OpenAI</b> e <b>HuggingFace</b>."
+    },
+    "personal": {
+      "title": "Sobre",
+      "creditAnalyst": "Ex-analista de crédito e corretor de imóveis em transição de carreira para tecnologia.",
+      "currentRole": "<b>Desenvolvedor Pleno no Grupo Koch SA</b> — especializado em IA e plataformas com multi-agentes.",
+      "games": "Entusiasta de <b>Games e RPG</b>.",
+      "gym": "<b>Gym rat</b> — foco também na saúde e bem-estar."
+    }
   }
 }
