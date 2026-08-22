@@ -37,9 +37,12 @@ export function LanguageSwitcher({ className }: { className?: string }) {
           <button
             key={loc}
             type='button'
-            aria-current={active ? 'true' : undefined}
-            disabled={isPending || active}
-            onClick={() => switchTo(loc)}
+            aria-pressed={active}
+            aria-disabled={isPending || active}
+            disabled={isPending}
+            onClick={() => {
+              if (!active) switchTo(loc)
+            }}
             className={cn(
               'rounded px-2 py-1 text-sm font-medium transition-colors',
               active
