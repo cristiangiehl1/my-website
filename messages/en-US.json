@@ -80,20 +80,20 @@
     "softSkillNames": {
       "Comunicação": "Communication",
       "Trabalho em Equipe": "Teamwork",
-      "Resolulçao de Problemas": "Problem Solving",
-      "Gestao de Tempo": "Time Management",
+      "Resolução de Problemas": "Problem Solving",
+      "Gestão de Tempo": "Time Management",
       "Foco em Resultados": "Results Focus",
-      "Aprendizado Continuo": "Continuous Learning",
+      "Aprendizado Contínuo": "Continuous Learning",
       "Empatia": "Empathy",
       "Adaptabilidade": "Adaptability"
     },
     "softSkillDescriptions": {
       "Comunicação": "Clarity in conveying technical and non-technical ideas",
       "Trabalho em Equipe": "Effective collaboration in multidisciplinary teams",
-      "Resolulçao de Problemas": "Critical and analytical thinking to find solutions",
-      "Gestao de Tempo": "Organization and prioritization of tasks and deadlines",
+      "Resolução de Problemas": "Critical and analytical thinking to find solutions",
+      "Gestão de Tempo": "Organization and prioritization of tasks and deadlines",
       "Foco em Resultados": "Oriented toward delivering value and clear goals",
-      "Aprendizado Continuo": "Constant pursuit of new technologies and knowledge",
+      "Aprendizado Contínuo": "Constant pursuit of new technologies and knowledge",
       "Empatia": "Understanding the needs of users and colleagues",
       "Adaptabilidade": "Flexibility to handle changes and new challenges"
     },

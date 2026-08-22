@@ -33,12 +33,12 @@
   },
   "skills": {
     "metaTitle": "Skills",
-    "eyebrow": "Habilidades Tecnicas",
+    "eyebrow": "Habilidades Técnicas",
     "title": "Minhas <hl>Skills</hl>",
-    "intro": "Tecnologias e ferramentas que utilizo no dia a dia para construir aplicações modernas, performaticas e escalaveis.",
+    "intro": "Tecnologias e ferramentas que utilizo no dia a dia para construir aplicações modernas, performáticas e escaláveis.",
     "stats": {
       "technologies": "Tecnologias",
-      "experience": "Anos de experiencia",
+      "experience": "Anos de experiência",
       "softSkills": "Soft Skills"
     },
     "sections": {
@@ -49,49 +49,49 @@
       "tools": "DevOps & Ferramentas",
       "soft": "Soft Skills"
     },
-    "softIntro": "Alem das habilidades tecnicas, acredito que competencias comportamentais sao fundamentais para o sucesso de qualquer projeto.",
-    "legendTitle": "Legenda de niveis",
+    "softIntro": "Além das habilidades técnicas, acredito que competências comportamentais são fundamentais para o sucesso de qualquer projeto.",
+    "legendTitle": "Legenda de níveis",
     "levels": {
       "Basico": {
-        "label": "Basico",
+        "label": "Básico",
         "description": "Conhecimento fundamental"
       },
       "Intermediario": {
-        "label": "Intermediario",
+        "label": "Intermediário",
         "description": "Uso regular em projetos"
       },
       "Avançado": {
         "label": "Avançado",
-        "description": "Dominio solido e autonomia"
+        "description": "Domínio sólido e autonomia"
       },
       "Expert": {
         "label": "Expert",
-        "description": "Referencia e mentoria"
+        "description": "Referência e mentoria"
       }
     },
-    "proficiency": "Proficiencia",
-    "experience": "Experiencia",
+    "proficiency": "Proficiência",
+    "experience": "Experiência",
     "yearSingular": "ano",
     "yearPlural": "anos",
     "softSkillNames": {
       "Comunicação": "Comunicação",
       "Trabalho em Equipe": "Trabalho em Equipe",
-      "Resolulçao de Problemas": "Resolulçao de Problemas",
-      "Gestao de Tempo": "Gestao de Tempo",
+      "Resolução de Problemas": "Resolução de Problemas",
+      "Gestão de Tempo": "Gestão de Tempo",
       "Foco em Resultados": "Foco em Resultados",
-      "Aprendizado Continuo": "Aprendizado Continuo",
+      "Aprendizado Contínuo": "Aprendizado Contínuo",
       "Empatia": "Empatia",
       "Adaptabilidade": "Adaptabilidade"
     },
     "softSkillDescriptions": {
-      "Comunicação": "Clareza na transmissao de ideias tecnicas e nao-tecnicas",
-      "Trabalho em Equipe": "Colaboracao efetiva em equipes multidisciplinares",
-      "Resolulçao de Problemas": "Pensamento critico e analitico para encontrar solucoes",
-      "Gestao de Tempo": "Organização e priorizacao de tarefas e prazos",
+      "Comunicação": "Clareza na transmissão de ideias técnicas e não-técnicas",
+      "Trabalho em Equipe": "Colaboração efetiva em equipes multidisciplinares",
+      "Resolução de Problemas": "Pensamento crítico e analítico para encontrar soluções",
+      "Gestão de Tempo": "Organização e priorização de tarefas e prazos",
       "Foco em Resultados": "Orientação a entregas de valor e metas claras",
-      "Aprendizado Continuo": "Busca constante por novas tecnologias e conhecimentos",
-      "Empatia": "Compreensao das necessidades de usuarios e colegas",
-      "Adaptabilidade": "Flexibilidade para lidar com mudancas e novos desafios"
+      "Aprendizado Contínuo": "Busca constante por novas tecnologias e conhecimentos",
+      "Empatia": "Compreensão das necessidades de usuários e colegas",
+      "Adaptabilidade": "Flexibilidade para lidar com mudanças e novos desafios"
     },
     "items": {
       "react": { "description": "Hooks, Context, Server Components" },
@@ -105,10 +105,10 @@
       "tailwind": {
         "description": "Design systems, responsividade, tema dark"
       },
-      "html": { "description": "Semantica, acessibilidade, animações" },
+      "html": { "description": "Semântica, acessibilidade, animações" },
       "css": { "description": "Layouts, animações, responsividade" },
       "react-hook-form": {
-        "description": "Formularios performaticos integrados ao Zod"
+        "description": "Formulários performáticos integrados ao Zod"
       },
       "tanstack": {
         "description": "TanStack Query: cache e sincronização de dados"
@@ -125,7 +125,7 @@
         "description": "Auth v5, JWT, provider customizado (ERP/LDAP)"
       },
       "zod": { "description": "Validação de schemas e env em todo o stack" },
-      "bullmq": { "description": "Filas assincronas e workers com Redis" },
+      "bullmq": { "description": "Filas assíncronas e workers com Redis" },
       "rust": { "description": "APIs com Loco.rs e SeaORM" },
       "python": { "description": "Scripts, automação, data analysis" },
       "postgresql": { "description": "Modelagem, SQL, migrations, otimização" },
@@ -150,20 +150,20 @@
       "docker": { "description": "Containers, Docker Compose, multi-serviço" },
       "netlify": { "description": "Deploy de apps e funções serverless" },
       "eslint": { "description": "Padronização e qualidade de código" },
-      "cloudinary": { "description": "Upload e otimização de midia" },
+      "cloudinary": { "description": "Upload e otimização de mídia" },
       "telegram": { "description": "Bots como canal de mensagens" }
     }
   },
   "contact": {
     "metaTitle": "Contato",
-    "eyebrow": "Disponivel para projetos",
+    "eyebrow": "Disponível para projetos",
     "title": "Entre em <hl>contato</hl>",
-    "intro": "Tem um projeto em mente ou quer conversar sobre uma ideia? Preencha o formulario ou me chame no WhatsApp.",
+    "intro": "Tem um projeto em mente ou quer conversar sobre uma ideia? Preencha o formulário ou me chame no WhatsApp.",
     "formTitle": "Envie uma mensagem",
-    "formSubtitle": "Preencha os campos abaixo e retornarei o mais breve possivel.",
+    "formSubtitle": "Preencha os campos abaixo e retornarei o mais breve possível.",
     "info": {
       "heading": "Vamos conversar?",
-      "body": "Estou disponivel para novos projetos, colaboracoes ou apenas para trocar uma ideia sobre tecnologia. Fique a vontade para entrar em contato!",
+      "body": "Estou disponível para novos projetos, colaborações ou apenas para trocar uma ideia sobre tecnologia. Fique a vontade para entrar em contato!",
       "socialsTitle": "Redes sociais",
       "cards": {
         "whatsapp": {
@@ -173,13 +173,13 @@
         },
         "email": {
           "label": "E-mail",
-          "value": "Envie pelo formulario",
+          "value": "Envie pelo formulário",
           "description": "Para propostas e projetos"
         },
         "location": {
-          "label": "Localizacao",
+          "label": "Localização",
           "value": "Itapema/SC, Brasil",
-          "description": "Disponivel para trabalho remoto"
+          "description": "Disponível para trabalho remoto"
         }
       }
     },
@@ -274,7 +274,7 @@
     "metaTitle": "Sobre Mim",
     "hero": {
       "title": "Desenvolvedor <hl>Full Stack</hl>",
-      "intro": "Ha mais de 2 anos construindo solucoes completas — do frontend ao backend. Atualmente sou desenvolvedor pleno no <b>Grupo Koch SA</b> e me especializo em Inteligencia Artificial, criando plataformas com integracao de multiagentes usando <b>Claude Code</b>, <b>opencode</b> e <b>OpenAI</b>, alem de pipelines de RAG e automacao de processos corporativos.",
+      "intro": "Há mais de 2 anos construindo soluções completas — do frontend ao backend. Atualmente sou desenvolvedor pleno no <b>Grupo Koch SA</b> e me especializo em Inteligência Artificial, criando plataformas com integração de multiagentes usando <b>Claude Code</b>, <b>opencode</b> e <b>OpenAI</b>, além de pipelines de RAG e automação de processos corporativos.",
       "cards": {
         "frontend": {
           "title": "Frontend",
