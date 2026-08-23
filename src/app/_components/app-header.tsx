@@ -45,7 +45,7 @@ export function AppHeader() {
             <Menu className='h-6 w-6' />
           </DialogTrigger>
           <DialogContent className='top-20 translate-y-0 gap-6'>
-            <DialogTitle className='sr-only'>{t('nav.portfolio')}</DialogTitle>
+            <DialogTitle className='sr-only'>{t('menu.title')}</DialogTitle>
             <NavMenuItems
               navLinks={navLinks}
               className='flex-col items-start'

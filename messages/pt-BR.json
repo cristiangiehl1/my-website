@@ -19,7 +19,8 @@
     },
     "menu": {
       "open": "Abrir o menu de navegação",
-      "close": "Fechar o menu de navegação"
+      "close": "Fechar o menu de navegação",
+      "title": "Menu de navegação"
     },
     "language": { "label": "Idioma", "pt-BR": "Português", "en-US": "English" },
     "footer": { "rights": "© 2026 Cristian Giehl" }
