@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowLeft, Code2, Cpu, Terminal } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
@@ -68,6 +68,11 @@ function TerminalWindow({ route }: { route: string }) {
 > SUGGESTION: return_to_home()`
 
   useEffect(() => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduce) {
+      setDisplayText(fullText)
+      return
+    }
     let index = 0
     const interval = setInterval(() => {
       if (index <= fullText.length) {
@@ -77,12 +82,11 @@ function TerminalWindow({ route }: { route: string }) {
         clearInterval(interval)
       }
     }, 30)
-
     return () => clearInterval(interval)
   }, [])
 
   return (
-    <div className='border-border bg-card/50 animate-pulse-glow mx-auto mt-8 w-full max-w-lg overflow-hidden rounded-lg border backdrop-blur-sm'>
+    <div className='border-border bg-card/50 mx-auto mt-8 w-full max-w-lg overflow-hidden rounded-lg border backdrop-blur-sm'>
       <div className='border-border bg-muted/50 flex items-center gap-2 border-b px-4 py-2'>
         <div className='bg-destructive h-3 w-3 rounded-full' />
         <div className='bg-chart-4 h-3 w-3 rounded-full' />
@@ -93,29 +97,9 @@ function TerminalWindow({ route }: { route: string }) {
       </div>
       <div className='p-4 font-mono text-sm'>
         <pre className='text-primary whitespace-pre-wrap'>{displayText}</pre>
-        <span className='bg-primary ml-1 inline-block h-4 w-2 animate-pulse' />
+        <span className='bg-primary ml-1 inline-block h-4 w-2' />
       </div>
     </div>
-  )
-}
-
-function FloatingIcons() {
-  return (
-    <>
-      <div className='animate-float absolute top-20 left-10 opacity-20'>
-        <Terminal className='text-primary h-16 w-16' />
-      </div>
-      <div
-        className='animate-float absolute top-40 right-20 opacity-20'
-        style={{ animationDelay: '1s' }}>
-        <Code2 className='text-foreground h-12 w-12' />
-      </div>
-      <div
-        className='animate-float absolute bottom-40 left-20 opacity-20'
-        style={{ animationDelay: '2s' }}>
-        <Cpu className='text-primary h-14 w-14' />
-      </div>
-    </>
   )
 }
 
@@ -126,7 +110,6 @@ export default function LocaleNotFound() {
   return (
     <main className='bg-background relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4'>
       <CircuitGrid />
-      <FloatingIcons />
 
       <div className='relative z-10 text-center'>
         {/* 404 Number with Glitch Effect */}

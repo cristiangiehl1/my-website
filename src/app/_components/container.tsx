@@ -14,13 +14,6 @@ export function Container({ children, className, ...props }: ContainerProps) {
         className
       )}
       {...props}>
-      {/* Animated Background Elements */}
-      <div className='pointer-events-none absolute inset-0 overflow-hidden'>
-        <div className='bg-primary/10 animate-glow absolute top-1/4 left-1/4 h-96 w-96 rounded-full blur-3xl' />
-        <div className='bg-secondary/10 animate-glow absolute right-1/4 bottom-1/4 h-96 w-96 rounded-full blur-3xl' />
-      </div>
-
-      {/* Main Content */}
       {children}
     </div>
   )
