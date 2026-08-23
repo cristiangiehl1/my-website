@@ -44,7 +44,9 @@ export function AppHeader() {
             className='text-foreground p-2 md:hidden'>
             <Menu className='h-6 w-6' />
           </DialogTrigger>
-          <DialogContent className='top-20 translate-y-0 gap-6'>
+          <DialogContent
+            aria-describedby={undefined}
+            className='top-20 translate-y-0 gap-6'>
             <DialogTitle className='sr-only'>{t('menu.title')}</DialogTitle>
             <NavMenuItems
               navLinks={navLinks}
