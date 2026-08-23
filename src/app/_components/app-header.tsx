@@ -3,18 +3,22 @@
 import { Menu } from 'lucide-react'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
-import { useState } from 'react'
 
 import type { NavLinkWithSubRoutes } from '@/@types/nav-links'
 import { Link } from '@/i18n/navigation'
 
 import { LanguageSwitcher } from './language-switcher'
 import { NavMenuItems } from './nav-menu-items'
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from './ui/dialog'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu'
 
 export function AppHeader() {
   const t = useTranslations('common')
-  const [open, setOpen] = useState(false)
 
   const navLinks: Array<NavLinkWithSubRoutes> = [
     { label: t('nav.portfolio'), href: '/portfolio' },
@@ -38,24 +42,26 @@ export function AppHeader() {
         <NavMenuItems navLinks={navLinks} className='hidden md:flex' />
         <LanguageSwitcher className='hidden md:flex' />
 
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger
+        <DropdownMenu>
+          <DropdownMenuTrigger
             aria-label={t('menu.open')}
-            className='text-foreground p-2 md:hidden'>
+            className='text-foreground focus-visible:ring-ring rounded-md p-2 focus-visible:ring-2 focus-visible:outline-none md:hidden'>
             <Menu className='h-6 w-6' />
-          </DialogTrigger>
-          <DialogContent
-            aria-describedby={undefined}
-            className='top-20 translate-y-0 gap-6'>
-            <DialogTitle className='sr-only'>{t('menu.title')}</DialogTitle>
-            <NavMenuItems
-              navLinks={navLinks}
-              className='flex-col items-start'
-              onClick={() => setOpen(false)}
-            />
-            <LanguageSwitcher />
-          </DialogContent>
-        </Dialog>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align='end' className='w-48'>
+            {navLinks.map((link) => (
+              <DropdownMenuItem key={link.href} asChild>
+                <Link href={link.href} className='w-full cursor-pointer'>
+                  {link.label}
+                </Link>
+              </DropdownMenuItem>
+            ))}
+            <DropdownMenuSeparator />
+            <div className='px-2 py-1.5'>
+              <LanguageSwitcher />
+            </div>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   )
