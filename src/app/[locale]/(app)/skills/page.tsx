@@ -5,10 +5,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import type { Skill } from '@/@types/skill'
 import { Container, MainContainer } from '@/app/_components/container'
 import { SkillCard } from '@/app/_components/pages/skills/skill-card'
-import {
-  SoftSkills,
-  softSkillsCount,
-} from '@/app/_components/pages/skills/soft-skills'
+import { SoftSkills } from '@/app/_components/pages/skills/soft-skills'
+import { softSkillsCount } from '@/app/_components/pages/skills/soft-skills-data'
 
 const frontendSkills: Skill[] = [
   { name: 'react', level: 'Avançado', yearsOfExperience: 2, description: '' },
