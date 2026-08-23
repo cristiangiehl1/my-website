@@ -29,7 +29,7 @@ export function PortfolioItemCard({
   return (
     <div className='group bg-card border-border hover:border-primary hover:shadow-primary/20 relative flex flex-col overflow-hidden rounded-lg border transition-all duration-300 hover:shadow-2xl'>
       {featured && (
-        <div className='bg-primary absolute top-4 right-4 z-10 rounded-full px-3 py-1 text-xs font-bold text-white text-shadow-black text-shadow-xs'>
+        <div className='bg-primary text-primary-foreground absolute top-4 right-4 z-10 rounded-full px-3 py-1 text-xs font-bold'>
           {t('featured')}
         </div>
       )}
