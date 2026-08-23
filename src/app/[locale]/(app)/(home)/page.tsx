@@ -4,6 +4,7 @@ import { BiCodeAlt } from 'react-icons/bi'
 import { FaArrowRight } from 'react-icons/fa'
 
 import { Container, MainContainer } from '@/app/_components/container'
+import { TerminalPanel } from '@/app/_components/pages/home/terminal-panel'
 import { SocialLink } from '@/app/_components/social-link'
 import { Button } from '@/app/_components/ui/button'
 import { __SOCIAL__ } from '@/constants/social'
@@ -93,51 +94,10 @@ export default async function HomePage({
 
         {/* Right Column - Visual Element */}
         <div className='hidden items-center justify-center lg:flex'>
-          <div className='relative aspect-square w-full max-w-md'>
-            {/* Floating Code Blocks */}
-            <div
-              className='bg-card border-border animate-float absolute top-0 right-0 rounded-lg border p-4 shadow-2xl'
-              style={{ animationDelay: '0s' }}>
-              <div className='mb-2 flex items-center gap-2'>
-                <div className='bg-destructive h-3 w-3 rounded-full' />
-                <div className='h-3 w-3 rounded-full bg-yellow-500' />
-                <div className='bg-primary h-3 w-3 rounded-full' />
-              </div>
-              <pre className='text-muted-foreground font-mono text-xs'>
-                <code>{`const dev = {
-  name: "Full-Stack",
-  passion: "Code"
-}`}</code>
-              </pre>
-            </div>
-
-            <div
-              className='bg-card border-border animate-float absolute bottom-0 left-0 rounded-lg border p-4 shadow-2xl'
-              style={{ animationDelay: '2s' }}>
-              <div className='mb-2 flex items-center gap-2'>
-                <div className='bg-destructive h-3 w-3 rounded-full' />
-                <div className='h-3 w-3 rounded-full bg-yellow-500' />
-                <div className='bg-primary h-3 w-3 rounded-full' />
-              </div>
-              <pre className='text-muted-foreground font-mono text-xs'>
-                <code>{`function create() {
-  return magic();
-}`}</code>
-              </pre>
-            </div>
-
-            {/* Center Glow */}
-            <div className='absolute inset-0 flex items-center justify-center'>
-              <div className='bg-primary/20 h-64 w-64 animate-pulse rounded-full blur-3xl' />
-            </div>
-
-            {/* Center Icon */}
-            <div className='absolute inset-0 flex items-center justify-center'>
-              <div className='bg-primary flex h-32 w-32 transform items-center justify-center rounded-2xl shadow-2xl transition-transform duration-300 hover:scale-110'>
-                <BiCodeAlt size={64} className='text-primary-foreground' />
-              </div>
-            </div>
-          </div>
+          <TerminalPanel
+            role={t('terminal.role')}
+            location={t('terminal.location')}
+          />
         </div>
       </MainContainer>
     </Container>

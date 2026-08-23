@@ -33,7 +33,11 @@
     "headline": "I turn <hl>ideas</hl> into digital <hl>experiences</hl>",
     "subhead": "Specialized in building modern, scalable web applications that connect users and drive business",
     "ctaProjects": "View Projects",
-    "ctaContact": "Get in Touch"
+    "ctaContact": "Get in Touch",
+    "terminal": {
+      "role": "Full-Stack Developer",
+      "location": "Itapema/SC · remote"
+    }
   },
   "skills": {
     "metaTitle": "Skills",
