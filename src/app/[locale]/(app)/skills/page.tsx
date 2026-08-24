@@ -9,81 +9,71 @@ import { SoftSkills } from '@/app/_components/pages/skills/soft-skills'
 import { softSkillsCount } from '@/app/_components/pages/skills/soft-skills-data'
 
 const frontendSkills: Skill[] = [
-  { name: 'react', level: 'Avançado', yearsOfExperience: 2, description: '' },
-  { name: 'next', level: 'Avançado', yearsOfExperience: 2, description: '' },
+  { name: 'react', level: 'Avançado', yearsOfExperience: 2 },
+  { name: 'next', level: 'Avançado', yearsOfExperience: 2 },
   {
     name: 'typescript',
     level: 'Avançado',
     yearsOfExperience: 2,
-    description: '',
   },
   {
     name: 'javascript',
     level: 'Avançado',
     yearsOfExperience: 2,
-    description: '',
   },
-  { name: 'tailwind', level: 'Expert', yearsOfExperience: 2, description: '' },
-  { name: 'html', level: 'Avançado', yearsOfExperience: 3, description: '' },
-  { name: 'css', level: 'Avançado', yearsOfExperience: 3, description: '' },
+  { name: 'tailwind', level: 'Expert', yearsOfExperience: 2 },
+  { name: 'html', level: 'Avançado', yearsOfExperience: 3 },
+  { name: 'css', level: 'Avançado', yearsOfExperience: 3 },
   {
     name: 'react-hook-form',
     level: 'Avançado',
     yearsOfExperience: 2,
-    description: '',
   },
   {
     name: 'tanstack',
     level: 'Intermediario',
     yearsOfExperience: 1,
-    description: '',
   },
   {
     name: 'react-markdown',
     level: 'Intermediario',
     yearsOfExperience: 1,
-    description: '',
   },
   {
     name: 'react-native',
     level: 'Intermediario',
     yearsOfExperience: 1,
-    description: '',
   },
-  { name: 'threejs', level: 'Basico', yearsOfExperience: 1, description: '' },
-  { name: 'gsap', level: 'Basico', yearsOfExperience: 1, description: '' },
-  { name: 'shadcn', level: 'Avançado', yearsOfExperience: 2, description: '' },
-  { name: 'radix', level: 'Avançado', yearsOfExperience: 2, description: '' },
+  { name: 'threejs', level: 'Basico', yearsOfExperience: 1 },
+  { name: 'gsap', level: 'Basico', yearsOfExperience: 1 },
+  { name: 'shadcn', level: 'Avançado', yearsOfExperience: 2 },
+  { name: 'radix', level: 'Avançado', yearsOfExperience: 2 },
 ]
 
 const backendSkills: Skill[] = [
-  { name: 'node', level: 'Avançado', yearsOfExperience: 2, description: '' },
+  { name: 'node', level: 'Avançado', yearsOfExperience: 2 },
   {
     name: 'express',
     level: 'Intermediario',
     yearsOfExperience: 2,
-    description: '',
   },
   {
     name: 'nextauth',
     level: 'Avançado',
     yearsOfExperience: 2,
-    description: '',
   },
-  { name: 'zod', level: 'Avançado', yearsOfExperience: 2, description: '' },
+  { name: 'zod', level: 'Avançado', yearsOfExperience: 2 },
   {
     name: 'bullmq',
     level: 'Intermediario',
     yearsOfExperience: 1,
-    description: '',
   },
   {
     name: 'rust',
     level: 'Intermediario',
     yearsOfExperience: 2,
-    description: '',
   },
-  { name: 'python', level: 'Basico', yearsOfExperience: 1, description: '' },
+  { name: 'python', level: 'Basico', yearsOfExperience: 1 },
 ]
 
 const databaseSkills: Skill[] = [
@@ -91,43 +81,36 @@ const databaseSkills: Skill[] = [
     name: 'postgresql',
     level: 'Avançado',
     yearsOfExperience: 2,
-    description: '',
   },
   {
     name: 'oracle',
     level: 'Intermediario',
     yearsOfExperience: 1,
-    description: '',
   },
   {
     name: 'redis',
     level: 'Intermediario',
     yearsOfExperience: 1,
-    description: '',
   },
   {
     name: 'supabase',
     level: 'Intermediario',
     yearsOfExperience: 2,
-    description: '',
   },
   {
     name: 'prisma',
     level: 'Intermediario',
     yearsOfExperience: 2,
-    description: '',
   },
   {
     name: 'pgvector',
     level: 'Intermediario',
     yearsOfExperience: 1,
-    description: '',
   },
   {
     name: 'neondb',
     level: 'Intermediario',
     yearsOfExperience: 2,
-    description: '',
   },
 ]
 
@@ -136,25 +119,21 @@ const aiSkills: Skill[] = [
     name: 'openai',
     level: 'Intermediario',
     yearsOfExperience: 1,
-    description: '',
   },
   {
     name: 'langchain',
     level: 'Intermediario',
     yearsOfExperience: 1,
-    description: '',
   },
   {
     name: 'huggingface',
     level: 'Basico',
     yearsOfExperience: 1,
-    description: '',
   },
   {
     name: 'openrouter',
     level: 'Basico',
     yearsOfExperience: 1,
-    description: '',
   },
 ]
 
@@ -163,49 +142,41 @@ const toolsSkills: Skill[] = [
     name: 'docker',
     level: 'Intermediario',
     yearsOfExperience: 2,
-    description: '',
   },
   {
     name: 'netlify',
     level: 'Intermediario',
     yearsOfExperience: 2,
-    description: '',
   },
   {
     name: 'eslint',
     level: 'Avançado',
     yearsOfExperience: 2,
-    description: '',
   },
   {
     name: 'cloudinary',
     level: 'Basico',
     yearsOfExperience: 1,
-    description: '',
   },
   {
     name: 'telegram',
     level: 'Basico',
     yearsOfExperience: 1,
-    description: '',
   },
   {
     name: 'playwright',
     level: 'Intermediario',
     yearsOfExperience: 1,
-    description: '',
   },
   {
     name: 'resend',
     level: 'Intermediario',
     yearsOfExperience: 1,
-    description: '',
   },
   {
     name: 'react-email',
     level: 'Intermediario',
     yearsOfExperience: 1,
-    description: '',
   },
 ]
 

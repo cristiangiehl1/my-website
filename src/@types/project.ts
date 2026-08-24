@@ -18,5 +18,3 @@ export type Project = {
   featured: boolean
   createdAt: string
 }
-
-export type LocalizedProject = Project & { title: string; description: string }

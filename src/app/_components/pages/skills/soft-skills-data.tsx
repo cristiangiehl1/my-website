@@ -11,7 +11,7 @@ import {
 
 import type { SoftSkill } from '@/@types/skill'
 
-export const softSkillsData: Omit<SoftSkill, 'description'>[] = [
+export const softSkillsData: SoftSkill[] = [
   { name: 'Comunicação', icon: <MessageSquare className='h-5 w-5' /> },
   { name: 'Trabalho em Equipe', icon: <Users className='h-5 w-5' /> },
   {
