@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import type { IconType } from 'react-icons'
 import { BiCodeAlt } from 'react-icons/bi'
-import { FaArrowRight } from 'react-icons/fa'
+import { FaArrowRight, FaDownload } from 'react-icons/fa'
 
 import { Container, MainContainer } from '@/app/_components/container'
 import { TerminalPanel } from '@/app/_components/pages/home/terminal-panel'
@@ -36,6 +36,7 @@ export default async function HomePage({
   const { locale } = await params
   setRequestLocale(locale)
   const t = await getTranslations('home')
+  const tc = await getTranslations('common')
 
   return (
     <Container>
@@ -81,6 +82,16 @@ export default async function HomePage({
               className='border-border hover:bg-muted bg-transparent'
               asChild>
               <Link href={'/contact'}>{t('ctaContact')}</Link>
+            </Button>
+            <Button
+              size='lg'
+              variant='outline'
+              className='border-border hover:bg-muted bg-transparent'
+              asChild>
+              <a href={`/resume/cristian-giehl-${locale}.pdf`} download>
+                <FaDownload className='mr-2' size={16} />
+                {tc('downloadResume')}
+              </a>
             </Button>
           </div>
 

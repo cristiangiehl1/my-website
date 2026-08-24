@@ -1,11 +1,14 @@
-import { Bot, Code, Server } from 'lucide-react'
+import { Bot, Code, Download, Server } from 'lucide-react'
 import Image from 'next/image'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 
 import { BlobBackground } from '@/app/_components/blob-background'
+import { Button } from '@/app/_components/ui/button'
 
 export function AboutHero() {
   const t = useTranslations('about')
+  const tc = useTranslations('common')
+  const locale = useLocale()
 
   return (
     <section className='flex flex-col gap-8'>
@@ -35,6 +38,17 @@ export function AboutHero() {
               ),
             })}
           </p>
+          <div className='pt-2'>
+            <Button
+              asChild
+              variant='outline'
+              className='border-border hover:bg-muted bg-transparent'>
+              <a href={`/resume/cristian-giehl-${locale}.pdf`} download>
+                <Download className='mr-2 h-4 w-4' />
+                {tc('downloadResume')}
+              </a>
+            </Button>
+          </div>
         </div>
       </div>
 
