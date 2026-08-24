@@ -324,7 +324,7 @@ export default async function SkillsPage({
               description={t('levels.Intermediario.description')}
             />
             <LegendItem
-              color='bg-primary'
+              color='border-2 border-primary bg-transparent'
               label={t('levels.Avançado.label')}
               description={t('levels.Avançado.description')}
             />

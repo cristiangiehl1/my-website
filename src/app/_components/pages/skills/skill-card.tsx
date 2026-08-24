@@ -13,12 +13,13 @@ const levelConfig: Record<
   SkillLevel,
   { progress: number; color: string; badgeClass: string }
 > = {
-  // Single-accent, WCAG AA: tiers differ by fill (outline vs solid lime) and
-  // progress width — never by a low-contrast text color.
+  // Single-accent, WCAG AA: four distinct tiers using only lime + neutrals —
+  // ascending emphasis (muted outline → neutral outline → lime tint+outline →
+  // solid lime), never a low-contrast text color.
   Basico: {
     progress: 25,
-    color: 'text-foreground',
-    badgeClass: 'border-border bg-transparent text-foreground',
+    color: 'text-muted-foreground',
+    badgeClass: 'border-border bg-transparent text-muted-foreground',
   },
   Intermediario: {
     progress: 50,
@@ -28,7 +29,7 @@ const levelConfig: Record<
   Avançado: {
     progress: 75,
     color: 'text-primary',
-    badgeClass: 'border-transparent bg-primary text-primary-foreground',
+    badgeClass: 'border-primary bg-primary/15 text-primary',
   },
   Expert: {
     progress: 95,
