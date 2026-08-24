@@ -18,6 +18,7 @@ import {
   SiEslint,
   SiExpress,
   SiFastify,
+  SiGreensock,
   SiHtml5,
   SiHuggingface,
   SiJavascript,
@@ -32,9 +33,12 @@ import {
   SiOracle,
   SiPrisma,
   SiPython,
+  SiRadixui,
   SiReact,
+  SiResend,
   SiRust,
   SiServerless,
+  SiShadcnui,
   SiSocketdotio,
   SiSupabase,
   SiTailwindcss,
@@ -45,8 +49,9 @@ import {
 } from 'react-icons/si'
 import {
   TbBrandCypress,
-  TbBrandFramerMotion,
   TbBrandReactNative,
+  TbMailCode,
+  TbMasksTheater,
   TbProtocol,
   TbRouter,
   TbVector,
@@ -157,7 +162,7 @@ export const TECHNOLOGY_DATA = {
   gsap: {
     value: 'gsap',
     label: 'GSAP',
-    icon: TbBrandFramerMotion,
+    icon: SiGreensock,
     style: { iconColor: 'text-green-500' },
     category: 'Animation',
     link: 'https://github.com/greensock/GSAP',
@@ -249,6 +254,14 @@ export const TECHNOLOGY_DATA = {
     style: { iconColor: 'text-teal-500' },
     category: 'Testing',
     link: 'https://github.com/cypress-io/cypress',
+  },
+  playwright: {
+    value: 'playwright',
+    label: 'Playwright',
+    icon: TbMasksTheater,
+    style: { iconColor: 'text-emerald-500' },
+    category: 'Testing',
+    link: 'https://playwright.dev/',
   },
 
   // Database / ORM
@@ -482,6 +495,22 @@ export const TECHNOLOGY_DATA = {
     category: 'Tool',
     link: 'https://telegram.org/',
   },
+  resend: {
+    value: 'resend',
+    label: 'Resend',
+    icon: SiResend,
+    style: { iconColor: 'text-foreground' },
+    category: 'Communication',
+    link: 'https://resend.com/',
+  },
+  'react-email': {
+    value: 'react-email',
+    label: 'React Email',
+    icon: TbMailCode,
+    style: { iconColor: 'text-amber-400' },
+    category: 'Communication',
+    link: 'https://react.email/',
+  },
 
   tailwind: {
     value: 'tailwind',
@@ -508,6 +537,24 @@ export const TECHNOLOGY_DATA = {
     style: { iconColor: 'text-orange-500' },
     category: 'Styling',
     link: 'https://developer.mozilla.org/en-US/docs/Web/HTML',
+  },
+
+  // UI
+  shadcn: {
+    value: 'shadcn',
+    label: 'shadcn/ui',
+    icon: SiShadcnui,
+    style: { iconColor: 'text-foreground' },
+    category: 'UI',
+    link: 'https://ui.shadcn.com/',
+  },
+  radix: {
+    value: 'radix',
+    label: 'Radix UI',
+    icon: SiRadixui,
+    style: { iconColor: 'text-foreground' },
+    category: 'UI',
+    link: 'https://www.radix-ui.com/',
   },
 
   // Linter

@@ -18,3 +18,5 @@ export type TechonologyCategory =
   | 'Dev Tool'
   | 'Security'
   | 'AI'
+  | 'UI'
+  | 'Communication'
