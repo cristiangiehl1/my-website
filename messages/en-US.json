@@ -160,7 +160,18 @@
       "netlify": { "description": "App and serverless function deployment" },
       "eslint": { "description": "Code standardization and quality" },
       "cloudinary": { "description": "Media upload and optimization" },
-      "telegram": { "description": "Bots as messaging channels" }
+      "telegram": { "description": "Bots as messaging channels" },
+      "shadcn": {
+        "description": "Accessible components on top of Radix, design system"
+      },
+      "radix": {
+        "description": "Accessible UI primitives (Dialog, Popover, etc.)"
+      },
+      "playwright": { "description": "E2E tests and browser automation" },
+      "resend": {
+        "description": "Transactional email (API, templates and webhooks)"
+      },
+      "react-email": { "description": "Email templates with React components" }
     }
   },
   "contact": {

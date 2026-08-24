@@ -52,6 +52,8 @@ const frontendSkills: Skill[] = [
   },
   { name: 'threejs', level: 'Basico', yearsOfExperience: 1, description: '' },
   { name: 'gsap', level: 'Basico', yearsOfExperience: 1, description: '' },
+  { name: 'shadcn', level: 'Avançado', yearsOfExperience: 2, description: '' },
+  { name: 'radix', level: 'Avançado', yearsOfExperience: 2, description: '' },
 ]
 
 const backendSkills: Skill[] = [
@@ -184,6 +186,24 @@ const toolsSkills: Skill[] = [
   {
     name: 'telegram',
     level: 'Basico',
+    yearsOfExperience: 1,
+    description: '',
+  },
+  {
+    name: 'playwright',
+    level: 'Intermediario',
+    yearsOfExperience: 1,
+    description: '',
+  },
+  {
+    name: 'resend',
+    level: 'Intermediario',
+    yearsOfExperience: 1,
+    description: '',
+  },
+  {
+    name: 'react-email',
+    level: 'Intermediario',
     yearsOfExperience: 1,
     description: '',
   },

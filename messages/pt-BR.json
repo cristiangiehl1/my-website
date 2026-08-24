@@ -156,7 +156,20 @@
       "netlify": { "description": "Deploy de apps e funções serverless" },
       "eslint": { "description": "Padronização e qualidade de código" },
       "cloudinary": { "description": "Upload e otimização de mídia" },
-      "telegram": { "description": "Bots como canal de mensagens" }
+      "telegram": { "description": "Bots como canal de mensagens" },
+      "shadcn": {
+        "description": "Componentes acessíveis sobre Radix, design system"
+      },
+      "radix": {
+        "description": "Primitivos de UI acessíveis (Dialog, Popover, etc.)"
+      },
+      "playwright": { "description": "Testes E2E e automação de navegador" },
+      "resend": {
+        "description": "E-mail transacional (API, templates e webhooks)"
+      },
+      "react-email": {
+        "description": "Templates de e-mail com componentes React"
+      }
     }
   },
   "contact": {
