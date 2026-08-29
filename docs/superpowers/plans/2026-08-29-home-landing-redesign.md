@@ -393,14 +393,23 @@ import { StackMarquee } from '@/app/_components/pages/home/stack-marquee'
 import { TerminalPanel } from '@/app/_components/pages/home/terminal-panel'
 ```
 
-Then render the section as a sibling right after the closing `</MainContainer>` tag, still inside `<Container>` (the file currently ends with `</MainContainer>\n    </Container>\n  )\n}` around lines 113-116):
+`MainContainer` (`src/app/_components/container.tsx:32`) renders a `<main>`
+element — the hero's `MainContainer` above is already the page's one `<main>`
+landmark, so the new sections below it must NOT be wrapped in another
+`MainContainer` (that would produce two `<main>` tags on one page, which is
+invalid HTML and breaks landmark navigation for assistive tech). Wrap them in
+a plain `<div>` with the same centering/width classes instead.
+
+Render the section as a sibling right after the closing `</MainContainer>`
+tag, still inside `<Container>` (the file currently ends with
+`</MainContainer>\n    </Container>\n  )\n}` around lines 113-116):
 
 ```tsx
       </MainContainer>
 
-      <MainContainer>
+      <div className='mx-auto h-full w-full max-w-7xl'>
         <StackMarquee title={t('stack.title')} />
-      </MainContainer>
+      </div>
     </Container>
   )
 }
@@ -599,16 +608,18 @@ import { FeaturedProjects } from '@/app/_components/pages/home/featured-projects
 import { StackMarquee } from '@/app/_components/pages/home/stack-marquee'
 ```
 
-Then render it right after `StackMarquee`, inside the same `MainContainer` added in Task 2:
+Then render it right after `StackMarquee`, inside the same wrapper `<div>`
+added in Task 2 (not a `MainContainer` — see Task 2 Step 4's note: the hero's
+`MainContainer` is already the page's one `<main>` landmark):
 
 ```tsx
-      <MainContainer>
+      <div className='mx-auto h-full w-full max-w-7xl'>
         <StackMarquee title={t('stack.title')} />
         <FeaturedProjects
           title={t('projects.title')}
           viewAll={t('projects.viewAll')}
         />
-      </MainContainer>
+      </div>
     </Container>
   )
 }
