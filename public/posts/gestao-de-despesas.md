@@ -24,42 +24,29 @@ O objetivo do sistema é **fechar esse ciclo de ponta a ponta**: capturar a nota
 
 O sistema separa claramente a **ingestão** (produção de dados a partir de documentos) da **operação** (aprovação e integração), com o OracleDB como ponto de encontro entre os dois mundos.
 
-```
-                    ┌───────────────────────────────────────────┐
-  Pastas de rede →  │  WORKER DE INGESTÃO (Node.js / TypeScript) │
-  (XML/PDF/imagem)  │                                            │
-                    │  chokidar (watch)                          │
-                    │      ↓                                     │
-                    │  hash SHA-256 → idempotência               │
-                    │      ↓                                     │
-                    │  ┌─────────────┐   ┌──────────────────┐    │
-                    │  │ XmlExtractor│   │ LlmExtractor      │    │
-                    │  │ (NF-e/NFS-e)│   │ (PDF/imagem, LLM) │    │
-                    │  └─────────────┘   └──────────────────┘    │
-                    │      ↓                                     │
-                    │  Validação fiscal → score de confiança     │
-                    └───────────────────┬───────────────────────┘
-                                        │ insert (cabeçalho + itens,
-                                        │ mesma transação)
-                                        ▼
-                    ┌───────────────────────────────────────────┐
-                    │          OracleDB  (notas + itens          │
-                    │          + auditoria + cadastros)          │
-                    └───────────────────┬───────────────────────┘
-                                        │
-                                        ▼
-                    ┌───────────────────────────────────────────┐
-  Navegador     →   │  APLICAÇÃO WEB (Next.js 15 App Router)     │
-  (comprador,       │                                            │
-   aprovador,       │  Server Actions → Repository → Database    │
-   controladoria,   │      ↓                                     │
-   fiscal, admin)   │  Máquina de estados de aprovação           │
-                    │      ↓                                     │
-                    │  node-cron (jobs)   BullMQ + Redis (filas) │
-                    └───────────────────┬───────────────────────┘
-                                        │ fila de integração
-                                        ▼
-                                 ERP corporativo (API)
+```mermaid
+flowchart TD
+    N["Pastas de rede<br/>(XML/PDF/imagem)"] --> W1
+    subgraph W["WORKER DE INGESTÃO (Node.js/TypeScript)"]
+        direction TB
+        W1["chokidar (watch) → hash SHA-256 (idempotência)"]
+        X["XmlExtractor<br/>(NF-e/NFS-e)"]
+        L["LlmExtractor<br/>(PDF/imagem, LLM)"]
+        W2["Validação fiscal → score de confiança"]
+        W1 --> X --> W2
+        W1 --> L --> W2
+    end
+    W2 -->|insert cabeçalho + itens, mesma transação| DB["OracleDB<br/>notas + itens + auditoria + cadastros"]
+    DB --> A1
+    U["Navegador<br/>(comprador, aprovador, controladoria,<br/>fiscal, admin)"] --> A1
+    subgraph APP["APLICAÇÃO WEB (Next.js 15 App Router)"]
+        direction TB
+        A1["Server Actions → Repository → Database"]
+        A2["Máquina de estados de aprovação"]
+        A3["node-cron (jobs) · BullMQ + Redis (filas)"]
+        A1 --> A2 --> A3
+    end
+    APP -->|fila de integração| ERP["ERP corporativo (API)"]
 ```
 
 ### Aplicação web

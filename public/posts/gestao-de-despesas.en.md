@@ -24,42 +24,29 @@ The system's goal is to **close this cycle end-to-end**: capture the invoice aut
 
 The system cleanly separates **ingestion** (producing structured data from documents) from **operations** (approval and integration), with OracleDB as the shared contract between both worlds.
 
-```
-                    ┌───────────────────────────────────────────┐
-  Network folders → │  INGESTION WORKER (Node.js / TypeScript)  │
-  (XML/PDF/image)   │                                            │
-                    │  chokidar (watch)                          │
-                    │      ↓                                     │
-                    │  SHA-256 hash → idempotency                │
-                    │      ↓                                     │
-                    │  ┌─────────────┐   ┌──────────────────┐    │
-                    │  │ XmlExtractor│   │ LlmExtractor      │    │
-                    │  │ (NF-e/NFS-e)│   │ (PDF/image, LLM)  │    │
-                    │  └─────────────┘   └──────────────────┘    │
-                    │      ↓                                     │
-                    │  Tax validation → confidence score         │
-                    └───────────────────┬───────────────────────┘
-                                        │ insert (header + line items,
-                                        │ same transaction)
-                                        ▼
-                    ┌───────────────────────────────────────────┐
-                    │          OracleDB  (invoices + items       │
-                    │          + audit + reference data)         │
-                    └───────────────────┬───────────────────────┘
-                                        │
-                                        ▼
-                    ┌───────────────────────────────────────────┐
-  Browser       →   │  WEB APPLICATION (Next.js 15 App Router)  │
-  (buyer,           │                                            │
-   approver,        │  Server Actions → Repository → Database    │
-   accounting,      │      ↓                                     │
-   tax, admin)      │  Approval state machine                    │
-                    │      ↓                                     │
-                    │  node-cron (jobs)   BullMQ + Redis (queues)│
-                    └───────────────────┬───────────────────────┘
-                                        │ integration queue
-                                        ▼
-                                 Corporate ERP (API)
+```mermaid
+flowchart TD
+    N["Network folders<br/>(XML/PDF/image)"] --> W1
+    subgraph W["INGESTION WORKER (Node.js/TypeScript)"]
+        direction TB
+        W1["chokidar (watch) → SHA-256 hash (idempotency)"]
+        X["XmlExtractor<br/>(NF-e/NFS-e)"]
+        L["LlmExtractor<br/>(PDF/image, LLM)"]
+        W2["Tax validation → confidence score"]
+        W1 --> X --> W2
+        W1 --> L --> W2
+    end
+    W2 -->|insert header + line items, same transaction| DB["OracleDB<br/>invoices + items + audit + reference data"]
+    DB --> A1
+    U["Browser<br/>(buyer, approver, accounting,<br/>tax, admin)"] --> A1
+    subgraph APP["WEB APPLICATION (Next.js 15 App Router)"]
+        direction TB
+        A1["Server Actions → Repository → Database"]
+        A2["Approval state machine"]
+        A3["node-cron (jobs) · BullMQ + Redis (queues)"]
+        A1 --> A2 --> A3
+    end
+    APP -->|integration queue| ERP["Corporate ERP (API)"]
 ```
 
 ### Web application
