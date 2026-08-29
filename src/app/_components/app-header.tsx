@@ -3,10 +3,12 @@
 import { Menu } from 'lucide-react'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
+import { useEffect, useState } from 'react'
 
 import type { NavLinkWithSubRoutes } from '@/@types/nav-links'
 import { Link } from '@/i18n/navigation'
 
+import { CommandPalette } from './command-palette'
 import { LanguageSwitcher } from './language-switcher'
 import { NavMenuItems } from './nav-menu-items'
 import {
@@ -19,6 +21,19 @@ import {
 
 export function AppHeader() {
   const t = useTranslations('common')
+  const [commandOpen, setCommandOpen] = useState(false)
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key.toLowerCase() === 'k' && (event.metaKey || event.ctrlKey)) {
+        event.preventDefault()
+        setCommandOpen((prev) => !prev)
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   const navLinks: Array<NavLinkWithSubRoutes> = [
     { label: t('nav.portfolio'), href: '/portfolio' },
@@ -40,7 +55,16 @@ export function AppHeader() {
         </Link>
 
         <NavMenuItems navLinks={navLinks} className='hidden md:flex' />
-        <LanguageSwitcher className='hidden md:flex' />
+
+        <div className='hidden items-center gap-3 md:flex'>
+          <button
+            type='button'
+            onClick={() => setCommandOpen(true)}
+            className='border-border text-muted-foreground hover:border-primary hover:text-foreground rounded-md border px-2 py-1 font-mono text-xs transition-colors'>
+            ⌘K
+          </button>
+          <LanguageSwitcher />
+        </div>
 
         <DropdownMenu>
           <DropdownMenuTrigger
@@ -63,6 +87,8 @@ export function AppHeader() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      <CommandPalette open={commandOpen} onOpenChange={setCommandOpen} />
     </header>
   )
 }

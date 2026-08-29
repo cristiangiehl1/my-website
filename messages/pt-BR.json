@@ -13,6 +13,7 @@
     "brandAlt": "Logo do site de Cristian Giehl",
     "downloadResume": "Baixar currículo",
     "nav": {
+      "home": "Início",
       "portfolio": "Portfólio",
       "about": "Sobre",
       "skills": "Skills",
@@ -24,6 +25,11 @@
       "title": "Menu de navegação"
     },
     "language": { "label": "Idioma", "pt-BR": "Português", "en-US": "English" },
+    "commandPalette": {
+      "placeholder": "Digite um comando ou busque...",
+      "groupNavigation": "Navegação",
+      "empty": "Nenhum resultado encontrado."
+    },
     "footer": { "rights": "© 2026 Cristian Giehl" }
   },
   "home": {

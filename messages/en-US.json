@@ -13,6 +13,7 @@
     "brandAlt": "Cristian Giehl website logo",
     "downloadResume": "Download résumé",
     "nav": {
+      "home": "Home",
       "portfolio": "Portfolio",
       "about": "About",
       "skills": "Skills",
@@ -27,6 +28,11 @@
       "label": "Language",
       "pt-BR": "Português",
       "en-US": "English"
+    },
+    "commandPalette": {
+      "placeholder": "Type a command or search...",
+      "groupNavigation": "Navigation",
+      "empty": "No results found."
     },
     "footer": { "rights": "© 2026 Cristian Giehl" }
   },
