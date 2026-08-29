@@ -7,9 +7,24 @@ import { useRef } from 'react'
 
 gsap.registerPlugin(TextPlugin)
 
-const CHAR_SECONDS = 0.055
-const LINE_PAUSE = 0.8
-const FINAL_HOLD = 1.6
+const CHAR_SECONDS = 0.11
+const CHAR_JITTER = 0.05
+const LINE_PAUSE = 0.9
+const FINAL_HOLD = 1.8
+
+function typeChars(
+  timeline: gsap.core.Timeline,
+  ref: React.RefObject<HTMLSpanElement | null>,
+  word: string
+) {
+  for (let i = 1; i <= word.length; i++) {
+    const jitter = (Math.random() - 0.5) * 2 * CHAR_JITTER
+    timeline.to(ref.current, {
+      text: word.slice(0, i),
+      duration: Math.max(CHAR_SECONDS + jitter, 0.03),
+    })
+  }
+}
 
 function Line({
   cmd,
@@ -62,7 +77,7 @@ export function TerminalPanel({
 
       if (reduceMotion) return
 
-      timelineRef.current = gsap
+      const tl = gsap
         .timeline({ repeat: -1, defaults: { ease: 'none' } })
         .set([cmd1Ref.current, cmd2Ref.current, cmd3Ref.current], {
           text: '',
@@ -70,24 +85,26 @@ export function TerminalPanel({
         .set([value1Ref.current, value2Ref.current, value3Ref.current], {
           opacity: 0,
         })
-        .to(cmd1Ref.current, {
-          text: 'whoami',
-          duration: 'whoami'.length * CHAR_SECONDS,
-        })
-        .to(value1Ref.current, { opacity: 1, duration: 0.15 })
-        .to({}, { duration: LINE_PAUSE })
-        .to(cmd2Ref.current, {
-          text: 'stack --top',
-          duration: 'stack --top'.length * CHAR_SECONDS,
-        })
-        .to(value2Ref.current, { opacity: 1, duration: 0.15 })
-        .to({}, { duration: LINE_PAUSE })
-        .to(cmd3Ref.current, {
-          text: 'location',
-          duration: 'location'.length * CHAR_SECONDS,
-        })
-        .to(value3Ref.current, { opacity: 1, duration: 0.15 })
-        .to({}, { duration: FINAL_HOLD })
+
+      typeChars(tl, cmd1Ref, 'whoami')
+      tl.to(value1Ref.current, { opacity: 1, duration: 0.15 }).to(
+        {},
+        { duration: LINE_PAUSE }
+      )
+
+      typeChars(tl, cmd2Ref, 'stack --top')
+      tl.to(value2Ref.current, { opacity: 1, duration: 0.15 }).to(
+        {},
+        { duration: LINE_PAUSE }
+      )
+
+      typeChars(tl, cmd3Ref, 'location')
+      tl.to(value3Ref.current, { opacity: 1, duration: 0.15 }).to(
+        {},
+        { duration: FINAL_HOLD }
+      )
+
+      timelineRef.current = tl
     },
     { scope: containerRef }
   )
