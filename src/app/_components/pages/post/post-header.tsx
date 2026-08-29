@@ -68,7 +68,7 @@ export function PostHeader({
       </h1>
 
       {/* Description */}
-      <p className='text-muted-foreground mb-6 text-lg leading-relaxed'>
+      <p className='text-muted-foreground mb-6 text-base leading-relaxed sm:text-lg'>
         {description}
       </p>
 
