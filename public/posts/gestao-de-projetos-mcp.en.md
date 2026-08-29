@@ -36,9 +36,9 @@ flowchart TD
     subgraph B["MCP SERVER (Node.js/TS, ESM bundle)"]
         direction LR
         T["Tools (23)<br/>reference · projects · activities<br/>hours · pendencies · evaluation (WSJF)"]
-        P["Prompts (4, guided flows)<br/>create_project · create_activity<br/>create_pendency · log_week_hours"]
+        P["Prompts (4, guided flows)<br/>create_project · create_activity<br/>create_pendency · log_week_hours<br/>Zod schemas validate input"]
     end
-    B -->|REST + httpOnly JWT cookie| C["authenticated HTTP CLIENT<br/>transparent session renewal · retry 401/403 (RBAC)"]
+    B -->|REST| C["authenticated HTTP CLIENT<br/>auth-session (JWT in httpOnly cookie)<br/>transparent session renewal · retry 401/403 (RBAC)"]
     C -->|Active Directory credentials| D["Project Management API<br/>gestaoprojetos.superkoch.com.br"]
 ```
 
