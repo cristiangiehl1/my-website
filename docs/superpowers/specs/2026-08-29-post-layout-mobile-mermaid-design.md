@@ -76,11 +76,13 @@ grep por caracteres de box-drawing): `gestao-de-despesas`,
 `gestao-de-projetos-mcp`, `langchain-rag-lab`, `orchestrator-agent`,
 `vinyl-store`, `voting-lists`.
 
-Para cada arquivo: localizar o fence ` ` ``sem language tag que contém
-os caracteres `─│┌└▼├`, e substituir por um fence``mermaid```com um`flowchart TD`equivalente, preservando os rótulos e o sentido do fluxo.
-Listas agrupadas (ex.: "Tools" / "Prompts" no diagrama do MCP) viram`subgraph`com nós filhos, para preservar a estrutura visual de lista.
-Exemplo de referência (post`gestao-de-projetos-mcp`, já validado nesta
-conversa):
+Para cada arquivo: localizar o fence de code block sem language tag que
+contém os caracteres `─│┌└▼├`, e substituir por um fence com language tag
+`mermaid` contendo um `flowchart TD` equivalente, preservando os rótulos e o
+sentido do fluxo. Listas agrupadas (ex.: "Tools" / "Prompts" no diagrama do
+MCP) viram `subgraph` com nós filhos, para preservar a estrutura visual de
+lista. Exemplo de referência (post `gestao-de-projetos-mcp`, já validado
+nesta conversa):
 
 ```mermaid
 flowchart TD
