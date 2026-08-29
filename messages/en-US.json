@@ -45,7 +45,8 @@
     "stack": { "title": "Tech Stack" },
     "projects": {
       "title": "Featured Projects",
-      "viewAll": "View all projects"
+      "viewAll": "View all projects",
+      "viewProject": "View project"
     },
     "terminal": {
       "role": "Full-Stack Developer",

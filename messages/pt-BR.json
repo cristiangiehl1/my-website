@@ -41,7 +41,8 @@
     "stack": { "title": "Stack" },
     "projects": {
       "title": "Projetos em Destaque",
-      "viewAll": "Ver todos os projetos"
+      "viewAll": "Ver todos os projetos",
+      "viewProject": "Ver projeto"
     },
     "terminal": {
       "role": "Desenvolvedor Full-Stack",
