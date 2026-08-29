@@ -113,9 +113,9 @@ export default async function HomePage({
         </div>
       </MainContainer>
 
-      <MainContainer>
+      <div className='mx-auto h-full w-full max-w-7xl'>
         <StackMarquee title={t('stack.title')} />
-      </MainContainer>
+      </div>
     </Container>
   )
 }
