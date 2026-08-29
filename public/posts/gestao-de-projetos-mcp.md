@@ -35,8 +35,8 @@ flowchart TD
     A["CLAUDE CODE (host MCP)<br/>conversa em linguagem natural"] -->|JSON-RPC via stdio| B
     subgraph B["SERVIDOR MCP (Node.js/TS, bundle ESM)"]
         direction LR
-        T["Tools (23)<br/>reference · projects · activities<br/>hours · pendencies · evaluation (WSJF)"]
-        P["Prompts (4, fluxos guiados)<br/>create_project · create_activity<br/>create_pendency · log_week_hours<br/>schemas Zod validam a entrada"]
+        T["Tools (23)<br/>reference · projects · activities<br/>hours · pendencies · evaluation (WSJF)<br/>schemas Zod validam a entrada"]
+        P["Prompts (4, fluxos guiados)<br/>create_project · create_activity<br/>create_pendency · log_week_hours"]
     end
     B -->|REST| C["HTTP CLIENT autenticado<br/>auth-session (JWT em cookie httpOnly)<br/>renovação automática · retry 401/403 (RBAC)"]
     C -->|credenciais Active Directory| D["API Gestão de Projetos<br/>gestaoprojetos.superkoch.com.br"]
