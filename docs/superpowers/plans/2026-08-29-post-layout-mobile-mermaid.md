@@ -558,7 +558,7 @@ flowchart TD
 
 ```bash
 git add public/posts/gestao-de-projetos-mcp.md public/posts/gestao-de-projetos-mcp.en.md
-git commit -m "content(web): convert gestao-de-projetos-mcp diagram to mermaid"
+git commit -m "docs(web): convert gestao-de-projetos-mcp diagram to mermaid"
 ```
 
 ---
@@ -645,7 +645,7 @@ flowchart TD
 
 ```bash
 git add public/posts/gestao-de-despesas.md public/posts/gestao-de-despesas.en.md
-git commit -m "content(web): convert gestao-de-despesas diagram to mermaid"
+git commit -m "docs(web): convert gestao-de-despesas diagram to mermaid"
 ```
 
 ---
@@ -742,7 +742,7 @@ flowchart TD
 
 ```bash
 git add public/posts/langchain-rag-lab.md public/posts/langchain-rag-lab.en.md
-git commit -m "content(web): convert langchain-rag-lab diagram to mermaid"
+git commit -m "docs(web): convert langchain-rag-lab diagram to mermaid"
 ```
 
 ---
@@ -805,7 +805,7 @@ flowchart TD
 
 ```bash
 git add public/posts/orchestrator-agent.md public/posts/orchestrator-agent.en.md
-git commit -m "content(web): convert orchestrator-agent diagram to mermaid"
+git commit -m "docs(web): convert orchestrator-agent diagram to mermaid"
 ```
 
 ---
