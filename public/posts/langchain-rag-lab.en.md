@@ -17,27 +17,34 @@ More than a finished product, the focus is on **understanding the trade-offs** o
 
 The project separates the interface (Next.js App Router), thin controllers (Route Handlers), and an object-oriented domain layer that concentrates all RAG logic.
 
-```
-Client (Next.js App Router)
-  /ingest ─┐
-  /chat  ──┤
-           ▼
-API Routes (thin controllers)
-  /api/preview   → split without persisting
-  /api/embed     → generate and store embeddings
-  /api/chat      → RAG + streaming
-           ▼
-Domain layer (src/server)
-  DocumentLoader        → load txt/md/pdf
-  DocumentProcessor     → split via LangChain
-  EmbeddingsService     → HuggingFace Inference API
-  VectorStoreRepository → PGVectorStore + stats/clear
-  ChatService           → retrieval + streaming generation
-           ▼
-Infrastructure
-  PostgreSQL + pgvector (Supabase in prod)
-  HuggingFace Inference API  → embeddings
-  OpenRouter                 → chat LLM
+```mermaid
+flowchart TD
+    subgraph CLIENT["Client (Next.js App Router)"]
+        direction LR
+        C1["/ingest"]
+        C2["/chat"]
+    end
+    subgraph API["API Routes (thin controllers)"]
+        direction TB
+        R1["/api/preview → split without persisting"]
+        R2["/api/embed → generate and store embeddings"]
+        R3["/api/chat → RAG + streaming"]
+    end
+    subgraph DOMAIN["Domain layer (src/server)"]
+        direction TB
+        D1["DocumentLoader → load txt/md/pdf"]
+        D2["DocumentProcessor → split via LangChain"]
+        D3["EmbeddingsService → HuggingFace Inference API"]
+        D4["VectorStoreRepository → PGVectorStore + stats/clear"]
+        D5["ChatService → retrieval + streaming generation"]
+    end
+    subgraph INFRA["Infrastructure"]
+        direction TB
+        I1["PostgreSQL + pgvector (Supabase in prod)"]
+        I2["HuggingFace Inference API → embeddings"]
+        I3["OpenRouter → chat LLM"]
+    end
+    CLIENT --> API --> DOMAIN --> INFRA
 ```
 
 **Summarized flow:** the document is loaded (`DocumentLoader`), split (`DocumentProcessor`), embedded by the HuggingFace Inference API (`EmbeddingsService`), and persisted (`VectorStoreRepository`). At chat time, the `ChatService` embeds the question, retrieves the most similar _chunks_, and builds the context for the LLM.

@@ -17,27 +17,34 @@ Mais do que um produto acabado, o foco é **entender os trade-offs** de um RAG c
 
 O projeto separa a interface (Next.js App Router), controllers finos (Route Handlers) e uma camada de domínio orientada a objetos que concentra toda a lógica de RAG.
 
-```
-Cliente (Next.js App Router)
-  /ingest ─┐
-  /chat  ──┤
-           ▼
-API Routes (controllers finos)
-  /api/preview   → split sem persistir
-  /api/embed     → gera e grava embeddings
-  /api/chat      → RAG + streaming
-           ▼
-Camada de domínio (src/server)
-  DocumentLoader        → carrega txt/md/pdf
-  DocumentProcessor     → split via LangChain
-  EmbeddingsService     → HuggingFace Inference API
-  VectorStoreRepository → PGVectorStore + stats/clear
-  ChatService           → retrieval + geração em streaming
-           ▼
-Infraestrutura
-  PostgreSQL + pgvector (Supabase em prod)
-  HuggingFace Inference API  → embeddings
-  OpenRouter                 → LLM de chat
+```mermaid
+flowchart TD
+    subgraph CLIENT["Cliente (Next.js App Router)"]
+        direction LR
+        C1["/ingest"]
+        C2["/chat"]
+    end
+    subgraph API["API Routes (controllers finos)"]
+        direction TB
+        R1["/api/preview → split sem persistir"]
+        R2["/api/embed → gera e grava embeddings"]
+        R3["/api/chat → RAG + streaming"]
+    end
+    subgraph DOMAIN["Camada de domínio (src/server)"]
+        direction TB
+        D1["DocumentLoader → carrega txt/md/pdf"]
+        D2["DocumentProcessor → split via LangChain"]
+        D3["EmbeddingsService → HuggingFace Inference API"]
+        D4["VectorStoreRepository → PGVectorStore + stats/clear"]
+        D5["ChatService → retrieval + geração em streaming"]
+    end
+    subgraph INFRA["Infraestrutura"]
+        direction TB
+        I1["PostgreSQL + pgvector (Supabase em prod)"]
+        I2["HuggingFace Inference API → embeddings"]
+        I3["OpenRouter → LLM de chat"]
+    end
+    CLIENT --> API --> DOMAIN --> INFRA
 ```
 
 **Fluxo resumido:** o documento é carregado (`DocumentLoader`), dividido (`DocumentProcessor`), embutido pela HuggingFace Inference API (`EmbeddingsService`) e persistido (`VectorStoreRepository`). No chat, o `ChatService` embute a pergunta, recupera os _chunks_ mais similares e monta o contexto para o LLM.
