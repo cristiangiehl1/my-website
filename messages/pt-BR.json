@@ -32,6 +32,7 @@
     "subhead": "Especialista em criar aplicações web modernas e escaláveis que conectam usuários e impulsionam negócios",
     "ctaProjects": "Ver Projetos",
     "ctaContact": "Entre em Contato",
+    "stack": { "title": "Stack" },
     "terminal": {
       "role": "Desenvolvedor Full-Stack",
       "location": "Itapema/SC · remoto"

@@ -282,3 +282,22 @@
     opacity: 0;
   }
 }
+
+/* Home — stack marquee: two identical tracks side by side, scrolled by
+   exactly one track width so the loop is seamless; paused on hover. */
+@keyframes stack-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.stack-marquee-track {
+  animation: stack-marquee 30s linear infinite;
+}
+
+.stack-marquee:hover .stack-marquee-track {
+  animation-play-state: paused;
+}

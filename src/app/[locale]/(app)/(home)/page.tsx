@@ -4,6 +4,7 @@ import { BiCodeAlt } from 'react-icons/bi'
 import { FaArrowRight, FaDownload } from 'react-icons/fa'
 
 import { Container, MainContainer } from '@/app/_components/container'
+import { StackMarquee } from '@/app/_components/pages/home/stack-marquee'
 import { TerminalPanel } from '@/app/_components/pages/home/terminal-panel'
 import { SocialLink } from '@/app/_components/social-link'
 import { Button } from '@/app/_components/ui/button'
@@ -110,6 +111,10 @@ export default async function HomePage({
             location={t('terminal.location')}
           />
         </div>
+      </MainContainer>
+
+      <MainContainer>
+        <StackMarquee title={t('stack.title')} />
       </MainContainer>
     </Container>
   )

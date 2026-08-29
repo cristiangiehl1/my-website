@@ -36,6 +36,7 @@
     "subhead": "Specialized in building modern, scalable web applications that connect users and drive business",
     "ctaProjects": "View Projects",
     "ctaContact": "Get in Touch",
+    "stack": { "title": "Tech Stack" },
     "terminal": {
       "role": "Full-Stack Developer",
       "location": "Itapema/SC · remote"
