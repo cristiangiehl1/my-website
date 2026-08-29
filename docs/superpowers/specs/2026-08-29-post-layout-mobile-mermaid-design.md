@@ -69,12 +69,16 @@ não precisa de variante de tema clara.
   as ASCII arts originais seguem (setas `▼` descendo), e é naturalmente
   mobile-first (empilha vertical em vez de crescer para os lados).
 
-### 4. Conversão dos diagramas existentes (12 arquivos)
+### 4. Conversão dos diagramas existentes (8 arquivos)
 
-6 posts × PT/EN, cada um com exatamente 1 diagrama ASCII (confirmado via
-grep por caracteres de box-drawing): `gestao-de-despesas`,
-`gestao-de-projetos-mcp`, `langchain-rag-lab`, `orchestrator-agent`,
-`vinyl-store`, `voting-lists`.
+Leitura completa de cada arquivo confirmou que **apenas 4 dos 6 posts**
+têm diagrama de arquitetura/fluxo de verdade: `gestao-de-despesas`,
+`gestao-de-projetos-mcp`, `langchain-rag-lab`, `orchestrator-agent` (× PT/EN
+= 8 arquivos). Os outros 2 posts (`vinyl-store`, `voting-lists`) têm
+caracteres de box-drawing também, mas são **árvores de diretório** (estrutura
+de pastas do projeto, ex. `├── controllers/`), um padrão diferente que já é
+naturalmente estreito e continua correto como texto monoespaçado simples —
+não fazem parte da conversão para Mermaid.
 
 Para cada arquivo: localizar o fence de code block sem language tag que
 contém os caracteres `─│┌└▼├`, e substituir por um fence com language tag
@@ -96,9 +100,11 @@ flowchart TD
     C -->|credenciais Active Directory| D["API Gestão de Projetos<br/>gestaoprojetos.superkoch.com.br"]
 ```
 
-Os outros 5 diagramas (PT+EN) seguem o mesmo tratamento na implementação,
+Os outros 3 diagramas (PT+EN) seguem o mesmo tratamento na implementação,
 lendo cada markdown e traduzindo a ASCII art existente 1:1 para
-`flowchart TD`, sem alterar o conteúdo/sentido técnico.
+`flowchart TD` (com `subgraph` para os agrupamentos por camada/etapa e nó de
+decisão `{}` onde há ramificação, ex. o passo de deduplicação do
+`orchestrator-agent`), sem alterar o conteúdo/sentido técnico.
 
 ### 5. Coluna de leitura mais estreita
 
@@ -142,17 +148,21 @@ descrição fica fixa em `text-lg` — trocar para `text-base sm:text-lg`.
   heading e code block, `max-w-3xl` no `article`, fade de scroll na tabela)
 - **Modificar:** `src/app/_components/pages/post/post-header.tsx` (descrição
   responsiva)
-- **Modificar (conteúdo):** os 12 arquivos em `public/posts/` listados no
+- **Modificar (conteúdo):** os 8 arquivos em `public/posts/` listados no
   item 4 — apenas o fence do diagrama, resto do markdown inalterado.
+  `vinyl-store` e `voting-lists` (× PT/EN) não são tocados (árvore de
+  diretório, fora de escopo — ver item 4).
 - **Modificar:** `package.json` (nova dependência `mermaid`)
 
 ## Estratégia de teste / verificação
 
 - `pnpm build` passa (novo import client-only não quebra SSR das páginas de
   post, que continuam Server Components).
-- Visitar cada um dos 6 posts (PT e EN) e confirmar visualmente: diagrama
-  renderiza como SVG, sem scroll horizontal forçado em viewport de ~375px
-  (mobile), cores batendo com a paleta do site.
+- Visitar cada um dos 4 posts com diagrama (PT e EN) e confirmar
+  visualmente: diagrama renderiza como SVG, sem scroll horizontal forçado
+  em viewport de ~375px (mobile), cores batendo com a paleta do site.
+  Visitar também `vinyl-store` e `voting-lists` e confirmar que a árvore de
+  diretório continua renderizando como texto normal (inalterada).
 - Confirmar fallback: forçar um erro de sintaxe mermaid temporariamente e
   ver que cai no `<pre>` de texto em vez de quebrar a página (teste manual,
   revertido antes de finalizar).
