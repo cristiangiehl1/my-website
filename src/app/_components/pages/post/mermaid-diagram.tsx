@@ -41,6 +41,7 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
     let cancelled = false
 
     async function renderDiagram() {
+      setFailed(false)
       try {
         const { default: mermaid } = await import('mermaid')
 

@@ -107,7 +107,7 @@ const markdownComponents: Components = {
       <div className='overflow-x-auto'>
         <table className='w-full border-collapse text-sm'>{children}</table>
       </div>
-      <div className='from-background pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l to-transparent' />
+      <div className='from-background pointer-events-none absolute inset-y-0 right-0 w-8 bg-linear-to-l to-transparent' />
     </div>
   ),
   thead: ({ children }) => (

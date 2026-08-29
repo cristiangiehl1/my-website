@@ -25,20 +25,20 @@ do post (largura de coluna, escala tipográfica) para telas pequenas.
 
 Novo arquivo `src/app/_components/pages/post/mermaid-diagram.tsx`:
 
-- `'use client'`, carregado a partir de `markdown-content.tsx` via
-  `next/dynamic(() => import('./mermaid-diagram'), { ssr: false })` — o
-  bundle do `mermaid` só baixa nas páginas que de fato renderizam um
-  diagrama (code-split por instância).
+- `'use client'`, importado normalmente em `markdown-content.tsx` (componente
+  Server Component que aceita `children` com renderização condicional do
+  componente client-only dentro do JSX) — o bundle do `mermaid` só baixa nas
+  páginas que de fato renderizam um diagrama, via code-split dinâmico do
+  `import('mermaid')` no cliente.
 - Recebe `chart: string` (o conteúdo do fence `mermaid`).
 - Usa `mermaid.initialize` (uma vez) + `mermaid.render(id, chart)` num
-  `useEffect`, injeta o SVG resultante via `dangerouslySetInnerHTML`. `id`
+  `useEffect`, injeta o SVG resultante via `containerRef.current.innerHTML`. `id`
   único por instância (ex.: `useId()`).
 - **Fallback de erro:** se `mermaid.render` rejeitar (sintaxe inválida),
   renderizar o `chart` cru num `<pre>` monoespaçado igual ao code block
   atual — nunca deixar a página quebrar por causa de um diagrama malformado.
-- Wrapper do SVG: `overflow-x-auto` + `flex justify-center` (SVGs muito
-  largos ainda podem precisar de scroll em telas muito estreitas, mas deixam
-  de ser o caso comum).
+- Wrapper do SVG: `overflow-x-auto` (SVGs muito largos ainda podem precisar
+  de scroll em telas muito estreitas, mas deixam de ser o caso comum).
 
 ### 2. Tema do Mermaid (paleta "Brutalist Mono")
 
