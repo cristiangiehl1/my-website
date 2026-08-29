@@ -4,6 +4,7 @@ import { BiCodeAlt } from 'react-icons/bi'
 import { FaArrowRight, FaDownload } from 'react-icons/fa'
 
 import { Container, MainContainer } from '@/app/_components/container'
+import { FeaturedProjects } from '@/app/_components/pages/home/featured-projects'
 import { StackMarquee } from '@/app/_components/pages/home/stack-marquee'
 import { TerminalPanel } from '@/app/_components/pages/home/terminal-panel'
 import { SocialLink } from '@/app/_components/social-link'
@@ -115,6 +116,10 @@ export default async function HomePage({
 
       <div className='mx-auto h-full w-full max-w-7xl'>
         <StackMarquee title={t('stack.title')} />
+        <FeaturedProjects
+          title={t('projects.title')}
+          viewAll={t('projects.viewAll')}
+        />
       </div>
     </Container>
   )

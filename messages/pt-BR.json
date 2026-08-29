@@ -33,6 +33,10 @@
     "ctaProjects": "Ver Projetos",
     "ctaContact": "Entre em Contato",
     "stack": { "title": "Stack" },
+    "projects": {
+      "title": "Projetos em Destaque",
+      "viewAll": "Ver todos os projetos"
+    },
     "terminal": {
       "role": "Desenvolvedor Full-Stack",
       "location": "Itapema/SC · remoto"
