@@ -41,20 +41,20 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
     let cancelled = false
 
     async function renderDiagram() {
-      const { default: mermaid } = await import('mermaid')
-
-      if (!mermaidInitialized) {
-        mermaid.initialize({
-          startOnLoad: false,
-          theme: 'base',
-          themeVariables: MERMAID_THEME_VARIABLES,
-          securityLevel: 'strict',
-          flowchart: { curve: 'basis' },
-        })
-        mermaidInitialized = true
-      }
-
       try {
+        const { default: mermaid } = await import('mermaid')
+
+        if (!mermaidInitialized) {
+          mermaid.initialize({
+            startOnLoad: false,
+            theme: 'base',
+            themeVariables: MERMAID_THEME_VARIABLES,
+            securityLevel: 'strict',
+            flowchart: { curve: 'basis' },
+          })
+          mermaidInitialized = true
+        }
+
         const { svg } = await mermaid.render(diagramId, chart)
         if (!cancelled && containerRef.current) {
           containerRef.current.innerHTML = svg
