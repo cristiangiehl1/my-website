@@ -182,97 +182,11 @@
   }
 }
 
-/* Home hero — terminal typing loop (CSS-only, 5s cycle, repeats forever) */
-@keyframes terminal-type-whoami {
-  0% {
-    width: 0;
-    animation-timing-function: steps(6, jump-end);
-  }
-  7% {
-    width: 6ch;
-  }
-  100% {
-    width: 6ch;
-  }
-}
-
-@keyframes terminal-reveal-value-1 {
-  0% {
-    opacity: 0;
-  }
-  8% {
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes terminal-type-stack {
-  0% {
-    width: 0;
-  }
-  26% {
-    width: 0;
-    animation-timing-function: steps(11, jump-end);
-  }
-  38% {
-    width: 11ch;
-  }
-  100% {
-    width: 11ch;
-  }
-}
-
-@keyframes terminal-reveal-value-2 {
-  0% {
-    opacity: 0;
-  }
-  39% {
-    opacity: 0;
-  }
-  41% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes terminal-type-location {
-  0% {
-    width: 0;
-  }
-  57% {
-    width: 0;
-    animation-timing-function: steps(8, jump-end);
-  }
-  66% {
-    width: 8ch;
-  }
-  100% {
-    width: 8ch;
-  }
-}
-
-@keyframes terminal-reveal-value-3 {
-  0% {
-    opacity: 0;
-  }
-  67% {
-    opacity: 0;
-  }
-  69% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
+/* Home hero — terminal cursor blink. The typing animation itself is
+   GSAP-driven (TextPlugin) in terminal-panel.tsx, not CSS — GSAP gives a
+   real per-character typewriter effect instead of a fixed-step width
+   reveal. Pausing on hover/focus (WCAG 2.2.2) is handled in JS there too,
+   including pausing this cursor blink via inline style. */
 @keyframes terminal-cursor-blink {
   0%,
   100% {
@@ -301,13 +215,4 @@
 .stack-marquee:hover .stack-marquee-track,
 .stack-marquee:focus-within .stack-marquee-track {
   animation-play-state: paused;
-}
-
-/* !important is required here: each .terminal-anim element sets its
-   `animation` shorthand via inline style (per-line timing/keyframe name),
-   which otherwise always wins over any external stylesheet rule regardless
-   of selector specificity. */
-.terminal-panel:hover .terminal-anim,
-.terminal-panel:focus-within .terminal-anim {
-  animation-play-state: paused !important;
 }
