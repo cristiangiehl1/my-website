@@ -181,3 +181,104 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Home hero — terminal typing loop (CSS-only, 5s cycle, repeats forever) */
+@keyframes terminal-type-whoami {
+  0% {
+    width: 0;
+    animation-timing-function: steps(6, jump-end);
+  }
+  7% {
+    width: 6ch;
+  }
+  100% {
+    width: 6ch;
+  }
+}
+
+@keyframes terminal-reveal-value-1 {
+  0% {
+    opacity: 0;
+  }
+  8% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes terminal-type-stack {
+  0% {
+    width: 0;
+  }
+  26% {
+    width: 0;
+    animation-timing-function: steps(11, jump-end);
+  }
+  38% {
+    width: 11ch;
+  }
+  100% {
+    width: 11ch;
+  }
+}
+
+@keyframes terminal-reveal-value-2 {
+  0% {
+    opacity: 0;
+  }
+  39% {
+    opacity: 0;
+  }
+  41% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes terminal-type-location {
+  0% {
+    width: 0;
+  }
+  57% {
+    width: 0;
+    animation-timing-function: steps(8, jump-end);
+  }
+  66% {
+    width: 8ch;
+  }
+  100% {
+    width: 8ch;
+  }
+}
+
+@keyframes terminal-reveal-value-3 {
+  0% {
+    opacity: 0;
+  }
+  67% {
+    opacity: 0;
+  }
+  69% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes terminal-cursor-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
