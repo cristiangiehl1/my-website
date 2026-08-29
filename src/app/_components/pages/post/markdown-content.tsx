@@ -84,8 +84,8 @@ const markdownComponents: Components = {
     )
   },
   pre: ({ children }) => {
-    const child = children as ReactElement
-    if (child?.type === MermaidDiagram) {
+    const child = children as ReactElement<{ className?: string }>
+    if (child?.props?.className === 'language-mermaid') {
       return <>{children}</>
     }
     return <pre className={CODE_BLOCK_PRE_CLASSES}>{children}</pre>
