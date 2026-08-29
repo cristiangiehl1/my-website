@@ -16,12 +16,12 @@ interface MarkdownContentProps {
 
 const markdownComponents: Components = {
   h1: ({ children }) => (
-    <h1 className='text-foreground border-border mt-10 mb-6 border-b pb-3 text-3xl font-bold tracking-tight'>
+    <h1 className='text-foreground border-border mt-10 mb-6 border-b pb-3 text-2xl font-bold tracking-tight sm:text-3xl'>
       {children}
     </h1>
   ),
   h2: ({ children }) => (
-    <h2 className='text-foreground border-border/50 mt-10 mb-4 border-b pb-2 text-2xl font-semibold tracking-tight'>
+    <h2 className='text-foreground border-border/50 mt-10 mb-4 border-b pb-2 text-xl font-semibold tracking-tight sm:text-2xl'>
       {children}
     </h2>
   ),
@@ -103,8 +103,11 @@ const markdownComponents: Components = {
     />
   ),
   table: ({ children }) => (
-    <div className='mb-5 overflow-x-auto'>
-      <table className='w-full border-collapse text-sm'>{children}</table>
+    <div className='relative mb-5'>
+      <div className='overflow-x-auto'>
+        <table className='w-full border-collapse text-sm'>{children}</table>
+      </div>
+      <div className='from-background pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l to-transparent' />
     </div>
   ),
   thead: ({ children }) => (
@@ -140,7 +143,7 @@ const markdownComponents: Components = {
 
 export function MarkdownContent({ content }: MarkdownContentProps) {
   return (
-    <article className='prose-blog max-w-none'>
+    <article className='mx-auto max-w-3xl'>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={markdownComponents}>
