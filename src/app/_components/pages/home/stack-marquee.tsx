@@ -1,4 +1,9 @@
 import type { TechnologyName } from '@/@types/technology'
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '@/app/_components/ui/hover-card'
 import { TECHNOLOGY_DATA } from '@/constants/technology-data'
 import { cn } from '@/lib/utils'
 
@@ -25,12 +30,22 @@ function StackTrack({ ariaHidden }: { ariaHidden?: boolean }) {
       className='flex shrink-0 items-center gap-10 pr-10'
       aria-hidden={ariaHidden}>
       {FEATURED_STACK.map((key) => {
-        const { icon: Icon, style } = TECHNOLOGY_DATA[key]
+        const { icon: Icon, label, style } = TECHNOLOGY_DATA[key]
         return (
-          <Icon
-            key={key}
-            className={cn('text-muted-foreground size-10', style?.iconColor)}
-          />
+          <HoverCard key={key} openDelay={100} closeDelay={0}>
+            <HoverCardTrigger asChild>
+              <Icon
+                tabIndex={ariaHidden ? -1 : 0}
+                className={cn(
+                  'text-muted-foreground size-10',
+                  style?.iconColor
+                )}
+              />
+            </HoverCardTrigger>
+            <HoverCardContent className='w-auto px-3 py-1.5 text-sm'>
+              {label}
+            </HoverCardContent>
+          </HoverCard>
         )
       })}
     </div>
