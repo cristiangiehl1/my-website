@@ -1,7 +1,14 @@
 import Image from 'next/image'
+import type { ReactElement } from 'react'
 import type { Components } from 'react-markdown'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+
+import {
+  CODE_BLOCK_CODE_CLASSES,
+  CODE_BLOCK_PRE_CLASSES,
+} from './code-block-classes'
+import { MermaidDiagram } from './mermaid-diagram'
 
 interface MarkdownContentProps {
   content: string
@@ -63,13 +70,12 @@ const markdownComponents: Components = {
     </blockquote>
   ),
   code: ({ className, children }) => {
+    if (className === 'language-mermaid') {
+      return <MermaidDiagram chart={String(children).replace(/\n$/, '')} />
+    }
     const isBlock = className?.includes('language-')
     if (isBlock) {
-      return (
-        <code className='text-foreground/90 block font-mono text-sm leading-6'>
-          {children}
-        </code>
-      )
+      return <code className={CODE_BLOCK_CODE_CLASSES}>{children}</code>
     }
     return (
       <code className='bg-muted text-primary rounded-md px-1.5 py-0.5 font-mono text-sm'>
@@ -77,11 +83,13 @@ const markdownComponents: Components = {
       </code>
     )
   },
-  pre: ({ children }) => (
-    <pre className='bg-muted/80 border-border mb-5 overflow-x-auto rounded-lg border p-4'>
-      {children}
-    </pre>
-  ),
+  pre: ({ children }) => {
+    const child = children as ReactElement
+    if (child?.type === MermaidDiagram) {
+      return <>{children}</>
+    }
+    return <pre className={CODE_BLOCK_PRE_CLASSES}>{children}</pre>
+  },
   hr: () => <hr className='border-border my-8' />,
   img: ({ src, alt }) => (
     <Image
