@@ -30,33 +30,16 @@ In this project the server speaks **MCP over stdio** (the process's stdin/stdout
 
 The plugin cleanly separates **the protocol** (the MCP tools the model sees) from **the transport** (the authenticated HTTP client that talks to the corporate API).
 
-```
-   ┌──────────────────────────────────────────────────────────┐
-   │  CLAUDE CODE (MCP host)                                   │
-   │     │  conversation in natural language                  │
-   └─────┼────────────────────────────────────────────────────┘
-         │  JSON-RPC over stdio
-         ▼
-   ┌──────────────────────────────────────────────────────────┐
-   │  MCP SERVER  (Node.js / TypeScript, ESM bundle)          │
-   │                                                          │
-   │  Tools (23)                Prompts (4, guided flows)     │
-   │   ├─ reference             ├─ create_project            │
-   │   ├─ projects              ├─ create_activity           │
-   │   ├─ activities            ├─ create_pendency           │
-   │   ├─ hours                 └─ log_week_hours            │
-   │   ├─ pendencies                                          │
-   │   └─ evaluation (WSJF)     Zod schemas validate input   │
-   │        │                                                 │
-   │        ▼                                                 │
-   │  authenticated HTTP CLIENT                               │
-   │   ├─ auth-session (JWT in httpOnly cookie)               │
-   │   ├─ transparent session renewal on expiry              │
-   │   └─ retry + 401/403 handling (RBAC-aware)              │
-   └─────┼────────────────────────────────────────────────────┘
-         │  REST + Active Directory credentials
-         ▼
-   Project Management API (gestaoprojetos.superkoch.com.br)
+```mermaid
+flowchart TD
+    A["CLAUDE CODE (MCP host)<br/>conversation in natural language"] -->|JSON-RPC over stdio| B
+    subgraph B["MCP SERVER (Node.js/TS, ESM bundle)"]
+        direction LR
+        T["Tools (23)<br/>reference · projects · activities<br/>hours · pendencies · evaluation (WSJF)"]
+        P["Prompts (4, guided flows)<br/>create_project · create_activity<br/>create_pendency · log_week_hours"]
+    end
+    B -->|REST + httpOnly JWT cookie| C["authenticated HTTP CLIENT<br/>transparent session renewal · retry 401/403 (RBAC)"]
+    C -->|Active Directory credentials| D["Project Management API<br/>gestaoprojetos.superkoch.com.br"]
 ```
 
 ### Tool layer
