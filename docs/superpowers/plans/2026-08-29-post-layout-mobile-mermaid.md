@@ -58,19 +58,37 @@ git commit -m "chore(web): add mermaid dependency for architecture diagrams"
 
 **Files:**
 
+- Create: `src/app/_components/pages/post/code-block-classes.ts`
 - Create: `src/app/_components/pages/post/mermaid-diagram.tsx`
 
 **Interfaces:**
 
 - Consumes: `mermaid` package (Task 1).
-- Produces: `export function MermaidDiagram({ chart }: { chart: string }): JSX.Element` — a client component that Task 3 imports and renders from `markdown-content.tsx`'s `code` renderer.
+- Produces: `export function MermaidDiagram({ chart }: { chart: string }): JSX.Element` — a client component that Task 3 imports and renders from `markdown-content.tsx`'s `code` renderer. Also produces `export const CODE_BLOCK_PRE_CLASSES: string` and `export const CODE_BLOCK_CODE_CLASSES: string` from `code-block-classes.ts` — the single source of truth for "plain code block" styling, consumed by both this component's error fallback and, in Task 3, `markdown-content.tsx`'s own `pre`/`code` renderers (avoids duplicating the same Tailwind class strings in two files).
 
-- [ ] **Step 1: Write the component**
+- [ ] **Step 1: Write the shared class constants**
+
+```ts
+export const CODE_BLOCK_PRE_CLASSES =
+  'bg-muted/80 border-border mb-5 overflow-x-auto rounded-lg border p-4'
+
+export const CODE_BLOCK_CODE_CLASSES =
+  'text-foreground/90 block font-mono text-xs leading-6 sm:text-sm'
+```
+
+Save as `src/app/_components/pages/post/code-block-classes.ts`.
+
+- [ ] **Step 2: Write the component**
 
 ```tsx
 'use client'
 
 import { useEffect, useId, useRef, useState } from 'react'
+
+import {
+  CODE_BLOCK_CODE_CLASSES,
+  CODE_BLOCK_PRE_CLASSES,
+} from './code-block-classes'
 
 interface MermaidDiagramProps {
   chart: string
@@ -124,8 +142,11 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
         if (!cancelled && containerRef.current) {
           containerRef.current.innerHTML = svg
         }
-      } catch {
-        if (!cancelled) setFailed(true)
+      } catch (error) {
+        if (!cancelled) {
+          console.error('Mermaid diagram failed to render:', error)
+          setFailed(true)
+        }
       }
     }
 
@@ -138,10 +159,8 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
 
   if (failed) {
     return (
-      <pre className='bg-muted/80 border-border mb-5 overflow-x-auto rounded-lg border p-4'>
-        <code className='text-foreground/90 block font-mono text-xs leading-6 sm:text-sm'>
-          {chart}
-        </code>
+      <pre className={CODE_BLOCK_PRE_CLASSES}>
+        <code className={CODE_BLOCK_CODE_CLASSES}>{chart}</code>
       </pre>
     )
   }
@@ -155,15 +174,15 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
 }
 ```
 
-- [ ] **Step 2: Typecheck/build**
+- [ ] **Step 3: Typecheck/build**
 
 Run: `pnpm build`
-Expected: build succeeds with no TypeScript errors referencing `mermaid-diagram.tsx` (the component isn't wired up yet, so it won't affect any page output, but this confirms the file compiles and the `mermaid` types resolve).
+Expected: build succeeds with no TypeScript errors referencing `mermaid-diagram.tsx` or `code-block-classes.ts` (the component isn't wired up yet, so it won't affect any page output, but this confirms both files compile and the `mermaid` types resolve).
 
-- [ ] **Step 3: Commit**
+- [ ] **Step 4: Commit**
 
 ```bash
-git add src/app/_components/pages/post/mermaid-diagram.tsx
+git add src/app/_components/pages/post/mermaid-diagram.tsx src/app/_components/pages/post/code-block-classes.ts
 git commit -m "feat(web): add MermaidDiagram client component with brutalist-mono theme"
 ```
 
@@ -177,16 +196,20 @@ git commit -m "feat(web): add MermaidDiagram client component with brutalist-mon
 
 **Interfaces:**
 
-- Consumes: `MermaidDiagram` from `./mermaid-diagram` (Task 2).
+- Consumes: `MermaidDiagram` from `./mermaid-diagram`, and `CODE_BLOCK_PRE_CLASSES`/`CODE_BLOCK_CODE_CLASSES` from `./code-block-classes` (both Task 2).
 - Produces: any post markdown with a ` ```mermaid ` fence renders as an SVG diagram instead of a text code block; all other code blocks (with or without a language tag) render exactly as before.
 
-- [ ] **Step 1: Add the import**
+- [ ] **Step 1: Add the imports**
 
 In `src/app/_components/pages/post/markdown-content.tsx`, add near the top (after the existing imports):
 
 ```tsx
 import type { ReactElement } from 'react'
 
+import {
+  CODE_BLOCK_CODE_CLASSES,
+  CODE_BLOCK_PRE_CLASSES,
+} from './code-block-classes'
 import { MermaidDiagram } from './mermaid-diagram'
 ```
 
@@ -221,11 +244,7 @@ with:
     }
     const isBlock = className?.includes('language-')
     if (isBlock) {
-      return (
-        <code className='text-foreground/90 block font-mono text-xs leading-6 sm:text-sm'>
-          {children}
-        </code>
-      )
+      return <code className={CODE_BLOCK_CODE_CLASSES}>{children}</code>
     }
     return (
       <code className='bg-muted text-primary rounded-md px-1.5 py-0.5 font-mono text-sm'>
@@ -235,7 +254,7 @@ with:
   },
 ```
 
-(Note: this step also folds in the Task 4 code-block font-size tweak — `text-sm` → `text-xs sm:text-sm` — since it's the same line; Task 4 will not touch this line again.)
+(Note: this step also folds in the Task 4 code-block font-size tweak — `text-sm` → `text-xs sm:text-sm`, carried by `CODE_BLOCK_CODE_CLASSES` — since it's the same line; Task 4 will not touch this line again.)
 
 - [ ] **Step 3: Update the `pre` renderer**
 
@@ -257,11 +276,7 @@ with:
     if (child?.type === MermaidDiagram) {
       return <>{children}</>
     }
-    return (
-      <pre className='bg-muted/80 border-border mb-5 overflow-x-auto rounded-lg border p-4'>
-        {children}
-      </pre>
-    )
+    return <pre className={CODE_BLOCK_PRE_CLASSES}>{children}</pre>
   },
 ```
 
