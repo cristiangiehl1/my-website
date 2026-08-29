@@ -143,32 +143,17 @@ The polling service runs as an **independent process in a separate Docker contai
 
 The full message flow:
 
-```
-User sends a message on Telegram
-        │
-        ▼
-Grammy Bot receives update via long-polling
-        │
-        ├─ Deduplication: Redis GET telegram:update:{id}
-        │   If already processed → discard silently
-        │
-        ▼
-Enqueue in BullMQ: queue.add('update', { update })
-        │
-        ▼
-Worker (concurrency = 10) consumes the job
-        │
-        ▼
-POST /api/v1/telegram/webhook (internal HTTP, secret token)
-        │
-        ▼
-Webhook validates token → processes message → invokes OrchestratorAgent
-        │
-        ▼
-Response formatted for Telegram (HTML with restricted tags)
-        │
-        ▼
-TelegramService.sendOutput() → Bot sends response to user
+```mermaid
+flowchart TD
+    A["User sends a message on Telegram"] --> B["Grammy Bot receives update via long-polling"]
+    B --> C{"Deduplication:<br/>Redis GET telegram:update:{id}"}
+    C -->|"already processed"| C1["Discard silently"]
+    C -->|"new update"| D["Enqueue in BullMQ<br/>queue.add('update', { update })"]
+    D --> E["Worker (concurrency = 10) consumes the job"]
+    E --> F["POST /api/v1/telegram/webhook<br/>(internal HTTP, secret token)"]
+    F --> G["Webhook validates token → processes message<br/>→ invokes OrchestratorAgent"]
+    G --> H["Response formatted for Telegram<br/>(HTML with restricted tags)"]
+    H --> I["TelegramService.sendOutput()<br/>Bot sends response to user"]
 ```
 
 ### Queue System with BullMQ + Redis

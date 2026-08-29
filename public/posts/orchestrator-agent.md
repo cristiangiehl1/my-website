@@ -143,32 +143,17 @@ O serviço de polling é executado como um **processo independente em container 
 
 O fluxo completo de uma mensagem:
 
-```
-Usuário envia mensagem no Telegram
-        │
-        ▼
-Grammy Bot recebe update via long-polling
-        │
-        ├─ Deduplicação: Redis GET telegram:update:{id}
-        │   Se já processado → descarta silenciosamente
-        │
-        ▼
-Enfileira no BullMQ: queue.add('update', { update })
-        │
-        ▼
-Worker (concurrency = 10) consome o job
-        │
-        ▼
-POST /api/v1/telegram/webhook (HTTP interno, token secreto)
-        │
-        ▼
-Webhook valida token → processa mensagem → invoca OrchestratorAgent
-        │
-        ▼
-Resposta formatada para Telegram (HTML com tags restritas)
-        │
-        ▼
-TelegramService.sendOutput() → Bot envia resposta ao usuário
+```mermaid
+flowchart TD
+    A["Usuário envia mensagem no Telegram"] --> B["Grammy Bot recebe update via long-polling"]
+    B --> C{"Deduplicação:<br/>Redis GET telegram:update:{id}"}
+    C -->|"já processado"| C1["Descarta silenciosamente"]
+    C -->|"novo update"| D["Enfileira no BullMQ<br/>queue.add('update', { update })"]
+    D --> E["Worker (concurrency = 10) consome o job"]
+    E --> F["POST /api/v1/telegram/webhook<br/>(HTTP interno, token secreto)"]
+    F --> G["Webhook valida token → processa mensagem<br/>→ invoca OrchestratorAgent"]
+    G --> H["Resposta formatada para Telegram<br/>(HTML com tags restritas)"]
+    H --> I["TelegramService.sendOutput()<br/>Bot envia resposta ao usuário"]
 ```
 
 ### Sistema de Filas com BullMQ + Redis
