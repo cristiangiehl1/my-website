@@ -13,6 +13,7 @@
 - Site is dark-only (no light/dark toggle exists) — theme colors are fixed values from `src/app/globals.css`, no `dark:`/media-query variants needed anywhere in this plan.
 - No `@tailwindcss/typography` plugin is installed — all post typography is hand-rolled in `markdownComponents` (`src/app/_components/pages/post/markdown-content.tsx`); do not add the typography plugin as part of this work.
 - No unit/component test runner exists in this repo (no jest/vitest/RTL configured — confirmed via `package.json`). Verification for this plan is: `pnpm build` (typecheck + build correctness) and manual/browser-driven visual checks (dev server + Playwright MCP browser tools), not automated unit tests. Do not invent a test framework as part of this work.
+- **Playwright MCP browser tools were used for Tasks 1-6 and part of Task 7, then the user asked mid-plan to stop using Playwright.** From that point on (rest of Task 7 onward), verification is `pnpm build` plus manual review of the committed Mermaid syntax (balanced brackets/subgraphs, node references) — no browser automation. Tasks 8-10 below are already written this way. Do not dispatch Playwright-based verification unless the user explicitly asks for it again.
 - Package manager is `pnpm` (`pnpm-lock.yaml` present) — always use `pnpm`, not `npm`/`yarn`.
 - Every markdown content edit must preserve the technical meaning of the original diagram 1:1 (labels, arrows/order, branches) — this is portfolio content describing real systems Cristian built; don't paraphrase or drop details.
 - Keep commits scoped per task, in Portuguese commit style consistent with repo history (see `git log`), and never add `Co-Authored-By: Claude` or the `🤖 Generated with Claude Code` footer (user's global instruction).
@@ -734,9 +735,9 @@ flowchart TD
 ```
 ````
 
-- [ ] **Step 3: Visual verification**
+- [ ] **Step 3: Syntax verification (no browser automation — see Global Constraints)**
 
-`pnpm dev` + Playwright MCP: navigate to the `langchain-rag-lab` post (PT and EN), resize to `375x812`, screenshot. Confirm: the 4 layers (Client, API Routes, Domain, Infrastructure) stack top-to-bottom and each is readable without horizontal scrolling.
+`pnpm build` (already run in Step 2) plus a manual read of the committed Mermaid text in both files: confirm every `subgraph ID["label"] ... end` pair is balanced, every node has matching `["..."]` brackets, and the structure follows the same pattern already proven to render correctly in Task 6 (`flowchart TD` with `subgraph`s and `-->` edges). Confirm the 4 layers (Client, API Routes, Domain, Infrastructure) appear in that top-to-bottom order via `CLIENT --> API --> DOMAIN --> INFRA`.
 
 - [ ] **Step 4: Commit**
 
@@ -797,9 +798,9 @@ flowchart TD
 ```
 ````
 
-- [ ] **Step 3: Visual verification**
+- [ ] **Step 3: Syntax verification (no browser automation — see Global Constraints)**
 
-`pnpm dev` + Playwright MCP: navigate to the `orchestrator-agent` post (PT and EN), resize to `375x812`, screenshot. Confirm: the linear pipeline renders top-to-bottom with the dedup decision diamond branching to "discard silently" on one side and continuing the main flow on the other.
+`pnpm build` (already run in Step 2) plus a manual read of the committed Mermaid text in both files: confirm the decision node `C{"..."}` (curly braces, not square brackets) has exactly two labeled outgoing edges (`-->|"já processado"|`/`-->|"already processed"|` and `-->|"novo update"|`/`-->|"new update"|`), and the rest of the chain (`A --> B --> C`, then `D --> E --> F --> G --> H --> I`) has no broken links.
 
 - [ ] **Step 4: Commit**
 
@@ -826,16 +827,20 @@ Expected: succeeds with no TypeScript/ESLint errors.
 Run: `pnpm lint`
 Expected: no errors.
 
-- [ ] **Step 3: Browser sweep — all 4 converted posts, mobile + desktop**
+- [ ] **Step 3: Syntax sweep — all 4 converted posts (no browser automation — see Global Constraints)**
 
-`pnpm dev`, then for each of `gestao-de-despesas`, `gestao-de-projetos-mcp`, `langchain-rag-lab`, `orchestrator-agent` (PT and EN, 8 page loads total): use Playwright MCP to navigate, resize to `375x812`, screenshot; then resize to `1440x900`, screenshot. For each mobile screenshot, use `mcp__playwright__browser_evaluate` to confirm `document.documentElement.scrollWidth <= document.documentElement.clientWidth` (no forced horizontal scroll from the diagram or anything else on the page).
+For each of `gestao-de-despesas`, `gestao-de-projetos-mcp`, `langchain-rag-lab`, `orchestrator-agent` (PT and EN, 8 files total): re-read the committed `mermaid` fence and confirm every `subgraph`/`end` pair is balanced, every node's `["..."]`/`{"..."}` brackets are closed, and no node id is referenced before it's either defined or used consistently as a subgraph id. This mirrors the manual checks already done in Tasks 6-9 — this step is a final cross-check across all 8 files together, not a re-derivation.
 
-Expected: no horizontal overflow on any of the 8 pages at 375px; diagrams and reading column both look correct at 1440px.
+Expected: no unbalanced brackets/subgraphs in any of the 8 files.
 
-- [ ] **Step 4: Browser sweep — unaffected posts**
+- [ ] **Step 4: Confirm unaffected posts untouched**
 
-Navigate to `vinyl-store` and `voting-lists` (PT and EN) at `375x812`. Confirm the directory-tree code blocks still render as plain monospace text (unchanged), and headings/description reflect the Task 4/5 responsive scale.
+`grep -n 'mermaid' public/posts/vinyl-store.md public/posts/vinyl-store.en.md public/posts/voting-lists.md public/posts/voting-lists.en.md` — expect zero matches (these two posts' directory-tree code blocks were never touched by this plan and must still be plain, unlabeled fences).
 
-- [ ] **Step 5: Commit (if any fixes were needed)**
+- [ ] **Step 5: Hand off for a real-browser check**
+
+Browser-based verification (does each diagram actually render as SVG with no visual overflow on a real mobile viewport, do the reading-column/heading/table changes look right) was descoped from this pass at the user's request — mid-plan, the user asked to stop using Playwright MCP. Report to the user which pages still need a human visual pass: all 8 converted-diagram pages (`gestao-de-despesas`, `gestao-de-projetos-mcp`, `langchain-rag-lab`, `orchestrator-agent` × PT/EN) plus one general post for the typography changes. Suggest they run `pnpm dev` and check those pages themselves, or explicitly ask you to resume Playwright-based verification for this step if they change their mind.
+
+- [ ] **Step 6: Commit (if any fixes were needed)**
 
 If steps 1-4 required any code fixes, commit them now with a message describing the fix. If everything passed as-is, no commit is needed for this task.
