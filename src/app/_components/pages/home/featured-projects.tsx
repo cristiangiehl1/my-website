@@ -7,14 +7,16 @@ import { __PORTFOLIO__ } from '@/data/portfolio'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
+const FEATURED_SLUGS = [
+  'orchestrator-agent',
+  'gestao-de-despesas',
+  'langchain-rag-lab',
+] as const
+
 function getFeaturedProjects(): Project[] {
-  return [...__PORTFOLIO__]
-    .filter((project) => project.featured)
-    .sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    )
-    .slice(0, 3)
+  return FEATURED_SLUGS.map(
+    (slug) => __PORTFOLIO__.find((project) => project.slug === slug)!
+  )
 }
 
 async function ProjectCard({
@@ -89,7 +91,7 @@ export async function FeaturedProjects({
   const [main, ...rest] = getFeaturedProjects()
 
   return (
-    <section className='border-border border-t py-12'>
+    <section className='py-12'>
       <div className='mb-8 flex items-center justify-between'>
         <h2 className='text-2xl font-bold'>{title}</h2>
         <Link
