@@ -298,6 +298,16 @@
   animation: stack-marquee 30s linear infinite;
 }
 
-.stack-marquee:hover .stack-marquee-track {
+.stack-marquee:hover .stack-marquee-track,
+.stack-marquee:focus-within .stack-marquee-track {
   animation-play-state: paused;
+}
+
+/* !important is required here: each .terminal-anim element sets its
+   `animation` shorthand via inline style (per-line timing/keyframe name),
+   which otherwise always wins over any external stylesheet rule regardless
+   of selector specificity. */
+.terminal-panel:hover .terminal-anim,
+.terminal-panel:focus-within .terminal-anim {
+  animation-play-state: paused !important;
 }

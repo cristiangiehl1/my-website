@@ -925,6 +925,6 @@ git commit -m "feat(web): add Cmd+K command palette for site navigation"
 
 ## Self-Review Notes
 
-- **Spec coverage:** all 6 sections of the design spec map to a task — §2 Terminal → Task 1, §3 Stack marquee → Task 2, §4 Featured projects → Task 3, §5 Command palette → Task 4, §6 i18n → split across Tasks 2-4 (each task adds its own keys), §1 (section order: Hero → Stack → Featured Projects → footer) → enforced by Task 2 Step 4 and Task 3 Step 3 both rendering inside the same `MainContainer`, in that order.
+- **Spec coverage:** all 6 sections of the design spec map to a task — §2 Terminal → Task 1, §3 Stack marquee → Task 2, §4 Featured projects → Task 3, §5 Command palette → Task 4, §6 i18n → split across Tasks 2-4 (each task adds its own keys), §1 (section order: Hero → Stack → Featured Projects → footer) → enforced by both sections rendering as siblings inside the single home-page `MainContainer`, in that order.
 - **Type consistency check:** `StackMarquee({ title })` (Task 2) and `FeaturedProjects({ title, viewAll })` (Task 3) prop names match exactly how `page.tsx` calls them in Task 3 Step 3. `CommandPalette({ open, onOpenChange })` (Task 4) matches exactly how `app-header.tsx` renders it. No mismatches found.
 - **No placeholders:** every step has complete, copy-pasteable code; no "TBD"/"handle edge cases" left in.

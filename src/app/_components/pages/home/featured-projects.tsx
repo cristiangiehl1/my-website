@@ -46,7 +46,7 @@ async function ProjectCard({
         )}>
         <Image
           src={project.coverUrl || '/images/project-placeholder.jpg'}
-          alt={title}
+          alt=''
           fill
           sizes='(min-width: 768px) 50vw, 100vw'
           className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-105'
@@ -63,13 +63,13 @@ async function ProjectCard({
         )}
         <div className='mt-auto flex flex-wrap gap-2 pt-2'>
           {project.technologies.slice(0, maxTech).map((tech) => {
-            const { icon: Icon, style } = TECHNOLOGY_DATA[tech]
+            const { icon: Icon, label, style } = TECHNOLOGY_DATA[tech]
             return (
               <span
                 key={tech}
                 className='border-border bg-muted/50 inline-flex items-center gap-1 rounded-full border px-2 py-1 text-xs'>
                 <Icon className={cn('size-3.5', style?.iconColor)} />
-                {tech}
+                {label}
               </span>
             )
           })}

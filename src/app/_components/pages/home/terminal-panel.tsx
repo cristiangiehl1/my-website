@@ -14,13 +14,13 @@ function Line({
       <p className='text-foreground'>
         <span className='text-primary'>$</span>{' '}
         <span
-          className='inline-block overflow-hidden align-bottom whitespace-nowrap'
+          className='terminal-anim inline-block overflow-hidden align-bottom whitespace-nowrap'
           style={{ animation: `${cmdAnimation} 5s linear infinite` }}>
           {cmd}
         </span>
       </p>
       <p
-        className='text-muted-foreground'
+        className='terminal-anim text-muted-foreground'
         style={{ animation: `${valueAnimation} 5s linear infinite` }}>
         <span className='text-primary'>&gt;</span> {value}
       </p>
@@ -36,7 +36,10 @@ export function TerminalPanel({
   location: string
 }) {
   return (
-    <div className='border-border bg-card shadow-soft-stack w-full max-w-md rounded-lg border font-mono text-sm'>
+    <div
+      className='terminal-panel border-border bg-card shadow-soft-stack w-full max-w-md rounded-lg border font-mono text-sm'
+      tabIndex={0}
+      aria-label='Terminal'>
       <div className='border-border flex items-center gap-2 border-b px-4 py-3'>
         <span className='bg-destructive h-3 w-3 rounded-full' />
         <span className='bg-muted-foreground h-3 w-3 rounded-full' />
@@ -65,7 +68,7 @@ export function TerminalPanel({
         <p className='text-primary'>
           ${' '}
           <span
-            className='bg-primary inline-block h-4 w-2 align-middle'
+            className='terminal-anim bg-primary inline-block h-4 w-2 align-middle'
             style={{
               animation: 'terminal-cursor-blink 1s steps(1, jump-end) infinite',
             }}

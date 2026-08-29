@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from 'next-intl'
 
 import { BlobBackground } from '@/app/_components/blob-background'
 import { Button } from '@/app/_components/ui/button'
+import { getResumeHref } from '@/helpers/get-resume-href'
 
 export function AboutHero() {
   const t = useTranslations('about')
@@ -43,7 +44,7 @@ export function AboutHero() {
               asChild
               variant='outline'
               className='border-border hover:bg-muted bg-transparent'>
-              <a href={`/resume/cristian-giehl-${locale}.pdf`} download>
+              <a href={getResumeHref(locale)} download>
                 <Download className='mr-2 h-4 w-4' />
                 {tc('downloadResume')}
               </a>

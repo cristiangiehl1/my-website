@@ -19,6 +19,7 @@ import {
   CommandItem,
   CommandList,
 } from '@/app/_components/ui/command'
+import { getResumeHref } from '@/helpers/get-resume-href'
 import { useRouter } from '@/i18n/navigation'
 
 export function CommandPalette({
@@ -48,9 +49,11 @@ export function CommandPalette({
   function downloadResume() {
     onOpenChange(false)
     const link = document.createElement('a')
-    link.href = `/resume/cristian-giehl-${locale}.pdf`
+    link.href = getResumeHref(locale)
     link.download = ''
+    document.body.appendChild(link)
     link.click()
+    link.remove()
   }
 
   return (

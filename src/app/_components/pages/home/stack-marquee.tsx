@@ -45,7 +45,10 @@ export function StackMarquee({ title }: { title: string }) {
       <h2 className='text-muted-foreground mb-6 text-center text-sm font-semibold tracking-widest uppercase'>
         {title}
       </h2>
-      <div className='stack-marquee overflow-hidden'>
+      <div
+        className='stack-marquee overflow-hidden'
+        tabIndex={0}
+        aria-label={title}>
         <div className='stack-marquee-track flex w-max'>
           <StackTrack />
           <StackTrack ariaHidden />
