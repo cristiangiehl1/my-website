@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import { FaGithub } from 'react-icons/fa6'
 
@@ -10,116 +11,275 @@ import { TECHNOLOGY_DATA } from '@/constants/technology-data'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
-import { Button } from './ui/button'
+const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/_-<>#*'
+// Budget: the whole intro lands under a second, because comparing projects
+// means clicking several rows in a row and nobody waits twice for the same
+// flourish. Title decodes in ~450ms, the summary types in ~550ms after it.
+const DECODE_STEP_MS = 26
+const TYPE_STEP_MS = 12
+const TYPE_CHARS_PER_STEP = 4
+const SUMMARY_MAX = 180
+const FLAGS_SHOWN = 6
+
+/** Trims to a word boundary so the typewriter never runs for seconds. */
+function summarize(text: string) {
+  if (text.length <= SUMMARY_MAX) return text
+  const cut = text.slice(0, SUMMARY_MAX)
+  return `${cut.slice(0, cut.lastIndexOf(' '))}…`
+}
+
+const randomChar = () =>
+  SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]
+
+/**
+ * The scramble has to overwrite the title in the same commit React wrote it,
+ * or the finished name flashes for a frame before dissolving. useLayoutEffect
+ * runs before paint; on the server it is not available, and there is nothing
+ * to animate there anyway.
+ */
+const useBeforePaintEffect =
+  typeof window === 'undefined' ? useEffect : useLayoutEffect
+
+/**
+ * Decodes the title character by character, then types the summary out.
+ * Runs on every project change but not on the first render: arriving at the
+ * page should not make you wait to read, and animating a server-rendered
+ * string would flash the finished text before blanking it.
+ */
+function useTerminalIntro(slug: string, title: string, summary: string) {
+  const titleRef = useRef<HTMLSpanElement>(null)
+  const summaryRef = useRef<HTMLSpanElement>(null)
+  const isFirstRender = useRef(true)
+
+  useBeforePaintEffect(() => {
+    const titleEl = titleRef.current
+    const summaryEl = summaryRef.current
+    if (!titleEl || !summaryEl) return
+
+    const settle = () => {
+      titleEl.textContent = title
+      summaryEl.textContent = summary
+      summaryEl.classList.remove('terminal-typing')
+    }
+
+    if (
+      isFirstRender.current ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      isFirstRender.current = false
+      settle()
+      return
+    }
+
+    const drawDecode = (settled: number) => {
+      titleEl.textContent =
+        title.slice(0, settled) +
+        title.slice(settled).replace(/\S/g, randomChar)
+    }
+
+    let typeTimer = 0
+    let frame = 0
+    summaryEl.textContent = ''
+    summaryEl.classList.add('terminal-typing')
+    drawDecode(0)
+
+    const decodeTimer = window.setInterval(() => {
+      frame += 1
+
+      if (frame < title.length) {
+        drawDecode(frame)
+        return
+      }
+
+      window.clearInterval(decodeTimer)
+      titleEl.textContent = title
+
+      let typed = 0
+      typeTimer = window.setInterval(() => {
+        typed += TYPE_CHARS_PER_STEP
+        summaryEl.textContent = summary.slice(0, typed)
+        if (typed < summary.length) return
+        window.clearInterval(typeTimer)
+        settle()
+      }, TYPE_STEP_MS)
+    }, DECODE_STEP_MS)
+
+    return () => {
+      window.clearInterval(decodeTimer)
+      window.clearInterval(typeTimer)
+    }
+  }, [slug, title, summary])
+
+  return { titleRef, summaryRef }
+}
 
 interface WorkCardProps {
   item: Project
 }
 
 export function PortfolioItemCard({
-  item: { slug, featured, coverUrl, technologies, deploy, github },
+  item: {
+    slug,
+    featured,
+    coverUrl,
+    technologies,
+    deploy,
+    github,
+    category,
+    createdAt,
+  },
 }: WorkCardProps) {
   const t = useTranslations('portfolio')
   const title = t(`projects.${slug}.title`)
-  const description = t(`projects.${slug}.description`)
+  const summary = summarize(t(`projects.${slug}.description`))
+  const { titleRef, summaryRef } = useTerminalIntro(slug, title, summary)
 
-  const technologiesSize = technologies.length
-  const technologiesMoreIndicator = Math.max(technologiesSize - 5, 0)
+  // createdAt is MM/DD/YYYY; rebuilt by hand so no timezone can shift the day.
+  const [month, day, year] = createdAt.split('/')
+  const flags = technologies.slice(0, FLAGS_SHOWN)
+  const hiddenFlags = technologies.length - flags.length
 
   return (
-    <div className='group bg-card border-border hover:border-primary hover:shadow-primary/20 relative flex flex-col overflow-hidden rounded-lg border transition-all duration-300 hover:shadow-2xl'>
-      {featured && (
-        <div className='bg-primary text-primary-foreground absolute top-4 right-4 z-10 rounded-full px-3 py-1 text-xs font-bold'>
-          {t('featured')}
-        </div>
-      )}
+    <article className='border-border bg-card overflow-hidden rounded-lg border font-mono'>
+      <div className='border-border text-muted-foreground flex items-center gap-2 border-b px-3 py-2 text-[10px]'>
+        <span aria-hidden className='bg-primary size-2 shrink-0 rounded-full' />
+        <span aria-hidden className='bg-border size-2 shrink-0 rounded-full' />
+        <span aria-hidden className='bg-border size-2 shrink-0 rounded-full' />
+        <span className='truncate'>{slug}.project</span>
+        {featured && (
+          <span className='text-primary ml-auto shrink-0'>
+            ★ {t('featured')}
+          </span>
+        )}
+      </div>
 
-      {/* Image */}
       <Link
         href={`/post/${slug}`}
-        className='bg-muted relative h-48 overflow-hidden'
-        aria-label={t('goToPost', { title })}>
+        aria-label={t('goToPost', { title })}
+        className='bg-muted border-border relative block aspect-16/9 overflow-hidden border-b'>
         <Image
+          key={slug}
           src={coverUrl || '/images/project-placeholder.jpg'}
-          alt={title}
+          alt=''
           fill
-          sizes='
-                        (min-width: 1280px) 33vw,
-                        (min-width: 768px) 50vw,
-                        100vw
-                      '
-          className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-110'
+          sizes='(min-width: 1024px) 360px, 100vw'
+          className='animate-in fade-in object-cover opacity-80 duration-300'
         />
-        <div className='from-card absolute inset-0 bg-linear-to-t to-transparent opacity-60' />
+        <span
+          aria-hidden
+          className='pointer-events-none absolute inset-0 opacity-60 [background:repeating-linear-gradient(to_bottom,rgba(0,0,0,0.28)_0_1px,transparent_1px_3px)]'
+        />
       </Link>
 
-      {/* Content */}
-      <div className='flex flex-1 flex-col space-y-4 p-6'>
-        <h3 className='group-hover:text-primary text-xl font-bold text-balance transition-colors'>
-          {title}
+      <div className='space-y-3 p-3.5'>
+        <p className='text-muted-foreground text-[10px]'>
+          <span className='text-primary'>$</span> cat {slug}.json
+        </p>
+
+        <h3 className='text-primary text-[15px] leading-tight font-bold'>
+          <span className='sr-only'>{title}</span>
+          <span ref={titleRef} aria-hidden>
+            {title}
+          </span>
         </h3>
 
-        <div>
-          <p
-            className={cn(
-              'text-muted-foreground line-clamp-3 text-sm leading-relaxed text-pretty'
-            )}>
-            {description}
-          </p>
-        </div>
+        <dl className='text-muted-foreground grid grid-cols-[72px_minmax(0,1fr)] gap-x-3 gap-y-1 text-[10.5px]'>
+          <dt>{t('panel.category')}</dt>
+          <dd className='text-foreground'>{category}</dd>
+          <dt>{t('panel.created')}</dt>
+          <dd className='text-foreground'>{`${day}.${month}.${year}`}</dd>
+          <dt>{t('panel.stack')}</dt>
+          <dd className='text-foreground'>
+            {t('panel.stackCount', { count: technologies.length })}
+          </dd>
+        </dl>
 
-        <div className='flex flex-wrap items-center gap-x-4 gap-y-2'>
-          {technologies
-            .sort()
-            .slice(0, Math.min(technologiesSize, 5))
-            .map((tech, idx) => {
-              const { icon: Icon, style, link } = TECHNOLOGY_DATA[tech]
-              return (
-                <Button key={idx} variant={'outline'} asChild>
-                  <a href={link} target='_blank'>
-                    <Icon className={style?.iconColor} />
-                    {tech}
-                  </a>
-                </Button>
-              )
-            })}
+        <p className='border-border text-muted-foreground min-h-[4.5rem] border-t pt-3 text-[11px] leading-relaxed'>
+          <span className='sr-only'>{summary}</span>
+          <span ref={summaryRef} aria-hidden>
+            {summary}
+          </span>
+        </p>
 
-          {technologiesMoreIndicator > 0 && (
-            <p className='text-muted-foreground text-sm'>
-              {t('more', { count: technologiesMoreIndicator })}
-            </p>
+        <div className='flex flex-wrap gap-1.5'>
+          {flags.map((tech) => {
+            const { label, link } = TECHNOLOGY_DATA[tech]
+            return (
+              <a
+                key={tech}
+                href={link}
+                target='_blank'
+                rel='noopener noreferrer'
+                title={label}
+                className='border-border text-muted-foreground hover:border-primary hover:text-primary rounded border border-dashed px-1.5 py-0.5 text-[9.5px] transition-colors'>
+                --{tech}
+              </a>
+            )
+          })}
+          {hiddenFlags > 0 && (
+            <span className='text-muted-foreground/60 px-1 py-0.5 text-[9.5px]'>
+              {t('more', { count: hiddenFlags })}
+            </span>
           )}
         </div>
 
-        {/* Actions */}
-        {(github || deploy) && (
-          <div className='mt-auto flex gap-3 pt-2'>
-            {github && (
-              <Button
-                asChild
-                variant='outline'
-                size='sm'
-                className='hover:bg-primary hover:text-primary-foreground hover:border-primary flex-1 bg-transparent transition-all'>
-                <a href={github} target='_blank' rel='noopener noreferrer'>
-                  <FaGithub className='mr-2' size={16} />
-                  {t('code')}
-                </a>
-              </Button>
-            )}
-            {deploy && (
-              <Button
-                asChild
-                size='sm'
-                className='bg-primary text-primary-foreground hover:bg-primary/90 flex-1'>
-                <a href={deploy} target='_blank' rel='noopener noreferrer'>
-                  <FaExternalLinkAlt className='mr-2' size={14} />
-                  {t('demo')}
-                </a>
-              </Button>
-            )}
-          </div>
-        )}
+        <div className='border-border flex gap-2 border-t pt-3'>
+          <TerminalAction href={github} icon={FaGithub} label={t('code')} />
+          <TerminalAction
+            href={deploy}
+            icon={FaExternalLinkAlt}
+            label={t('demo')}
+            highlighted
+          />
+        </div>
       </div>
-    </div>
+    </article>
+  )
+}
+
+/** A link when the project has one, a spent slot when it does not. */
+function TerminalAction({
+  href,
+  icon: Icon,
+  label,
+  highlighted,
+}: {
+  href?: string
+  icon: typeof FaGithub
+  label: string
+  highlighted?: boolean
+}) {
+  const t = useTranslations('portfolio')
+
+  const shared =
+    'flex flex-1 items-center justify-center gap-2 rounded-md border px-2 py-2 text-[10.5px] transition-colors'
+
+  if (!href) {
+    return (
+      <span
+        className={cn(
+          shared,
+          'border-border/60 text-muted-foreground/50 border-dashed'
+        )}>
+        <Icon aria-hidden className='size-3' />
+        {t('panel.unavailable')}
+      </span>
+    )
+  }
+
+  return (
+    <a
+      href={href}
+      target='_blank'
+      rel='noopener noreferrer'
+      className={cn(
+        shared,
+        highlighted
+          ? 'border-primary text-primary hover:bg-primary hover:text-primary-foreground'
+          : 'border-border text-muted-foreground hover:border-primary hover:text-primary'
+      )}>
+      <Icon aria-hidden className='size-3' />
+      {label}
+    </a>
   )
 }

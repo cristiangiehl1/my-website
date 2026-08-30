@@ -259,6 +259,27 @@
     "code": "Código",
     "demo": "Demo",
     "goToPost": "Navegue até a postagem sobre {title}",
+    "panel": {
+      "category": "categoria",
+      "created": "criado",
+      "stack": "stack",
+      "stackCount": "{count, plural, one {# tecnologia} other {# tecnologias}}",
+      "unavailable": "indisponível"
+    },
+    "matrix": {
+      "title": "Tecnologias por projeto",
+      "caption": "Matriz de tecnologias por projeto",
+      "projectColumn": "Projeto",
+      "shared": "{count, plural, =0 {nenhuma tecnologia em comum} one {# tecnologia usada por mais de um projeto} other {# tecnologias usadas por mais de um projeto}}",
+      "showing": "{count, plural, one {# tecnologia em exibição} other {# tecnologias em exibição}}",
+      "hint": "Toque em uma tecnologia para destacar quais projetos a usam. Selecione um projeto para abrir os detalhes.",
+      "usedBy": "{count, plural, one {usada em # projeto} other {usada em # projetos}}",
+      "clear": "limpar",
+      "noneLocked": "nenhuma tecnologia destacada",
+      "selectProject": "Ver detalhes de {title}",
+      "uses": "usa",
+      "notUses": "não usa"
+    },
     "filters": {
       "title": "Filtrar por tecnologias",
       "placeholder": "Selecione as tecnologias...",

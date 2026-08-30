@@ -7,7 +7,7 @@ import type { Project } from '@/@types/project'
 import { useFilteredPortfolioItems } from '@/hooks/use-filtered-works'
 
 import { PortfolioFilters } from '../../portfolio-filters'
-import { PortfolioItemCard } from '../../portfolio-item-card'
+import { PortfolioMatrix } from './portfolio-matrix'
 
 export function PortfolioHeader() {
   const t = useTranslations('portfolio')
@@ -67,15 +67,12 @@ export function PorfolioMain({ items }: PorfolioMainProps) {
           setSelectedTechs={setSelectedTechs}
         />
 
-        {/* Portfolio Items Grid */}
-        <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-3'>
-          {filteredItems.map((item) => (
-            <PortfolioItemCard key={item.id} item={item} />
-          ))}
-        </div>
-
-        {/* No Results */}
-        {filteredItems.length === 0 && <PortfolioEmptyDataFallback />}
+        {/* Technology × project matrix, with the selected project alongside */}
+        {filteredItems.length > 0 ? (
+          <PortfolioMatrix items={filteredItems} />
+        ) : (
+          <PortfolioEmptyDataFallback />
+        )}
       </div>
     </main>
   )

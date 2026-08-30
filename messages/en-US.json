@@ -261,6 +261,27 @@
     "code": "Code",
     "demo": "Demo",
     "goToPost": "Go to the post about {title}",
+    "panel": {
+      "category": "category",
+      "created": "created",
+      "stack": "stack",
+      "stackCount": "{count, plural, one {# technology} other {# technologies}}",
+      "unavailable": "unavailable"
+    },
+    "matrix": {
+      "title": "Technologies per project",
+      "caption": "Technology by project matrix",
+      "projectColumn": "Project",
+      "shared": "{count, plural, =0 {no shared technologies} one {# technology used by more than one project} other {# technologies used by more than one project}}",
+      "showing": "{count, plural, one {# technology shown} other {# technologies shown}}",
+      "hint": "Tap a technology to highlight which projects use it. Select a project to open its details.",
+      "usedBy": "{count, plural, one {used in # project} other {used in # projects}}",
+      "clear": "clear",
+      "noneLocked": "no technology highlighted",
+      "selectProject": "View details for {title}",
+      "uses": "uses",
+      "notUses": "does not use"
+    },
     "filters": {
       "title": "Filter by technologies",
       "placeholder": "Select technologies...",

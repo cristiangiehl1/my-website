@@ -197,6 +197,36 @@
   }
 }
 
+/* Portfolio — project panel: caret trailing the typewriter while the summary
+   is being written out. Toggled by class from the component rather than by a
+   React state flag, so typing never re-renders the card. */
+.terminal-typing::after {
+  content: '▍';
+  color: var(--primary);
+  animation: terminal-cursor-blink 1s steps(1) infinite;
+}
+
+/* Portfolio — technology matrix: each cell pops in once, staggered by an
+   inline --cascade delay set per row/column. This is an animation rather than
+   a transition on purpose: as transition-delay the same stagger also applied
+   to the column-highlight colors, so lighting a column rippled across the
+   grid over half a second instead of answering immediately. */
+@keyframes matrix-cell-in {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@theme inline {
+  --animate-matrix-cell-in: matrix-cell-in 300ms cubic-bezier(0.2, 0.7, 0.3, 1)
+    both;
+}
+
 /* Home — stack marquee: two identical tracks side by side, scrolled by
    exactly one track width so the loop is seamless; paused on hover. */
 @keyframes stack-marquee {
