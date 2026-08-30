@@ -1,22 +1,26 @@
 'use client'
 
 import Image from 'next/image'
-import { useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { FaArrowRight } from 'react-icons/fa'
 
-import type { TechnologyName } from '@/@types/technology'
-import { TECHNOLOGY_DATA } from '@/constants/technology-data'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
 export interface FeaturedProjectItem {
   slug: string
   title: string
-  description: string
   coverUrl?: string
-  technologies: TechnologyName[]
+  meta: string
 }
 
+const FALLBACK_COVER = '/images/project-placeholder.jpg'
+
+/**
+ * Editorial index: one typographic row per project. On pointer devices the
+ * unhovered rows dim and a preview thumbnail trails the cursor with a bit of
+ * lag; on touch each row carries its own inline thumbnail instead.
+ */
 export function FeaturedProjectsShowcase({
   items,
   viewProject,
@@ -24,89 +28,162 @@ export function FeaturedProjectsShowcase({
   items: FeaturedProjectItem[]
   viewProject: string
 }) {
-  const [activeIndex, setActiveIndex] = useState(0)
-  const active = items[activeIndex]
+  const [activeIndex, setActiveIndex] = useState<number | null>(null)
+  const listRef = useRef<HTMLUListElement>(null)
+  const floatRef = useRef<HTMLDivElement>(null)
+  const target = useRef({ x: 0, y: 0 })
+  const current = useRef({ x: 0, y: 0 })
+
+  const isActive = activeIndex !== null
+
+  /* Lerp the preview toward the pointer. Only runs while a row is active. */
+  useEffect(() => {
+    if (!isActive) return
+
+    const reduceMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches
+
+    let frame = 0
+    const tick = () => {
+      const el = floatRef.current
+      if (el) {
+        const ease = reduceMotion ? 1 : 0.16
+        current.current.x += (target.current.x - current.current.x) * ease
+        current.current.y += (target.current.y - current.current.y) * ease
+
+        // Tilt proportional to how far the preview still trails the pointer.
+        const lag = target.current.x - current.current.x
+        const tilt = reduceMotion ? 0 : Math.max(-8, Math.min(8, lag * 0.35))
+
+        el.style.transform = `translate3d(${current.current.x}px, ${current.current.y}px, 0) translate(-50%, -50%) rotate(${tilt}deg)`
+      }
+      frame = requestAnimationFrame(tick)
+    }
+
+    frame = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(frame)
+  }, [isActive])
+
+  const handlePointerMove = useCallback((event: React.PointerEvent) => {
+    const list = listRef.current
+    if (!list) return
+    const rect = list.getBoundingClientRect()
+    target.current = {
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top,
+    }
+  }, [])
+
+  /* Keyboard focus has no cursor to follow — park the preview beside the row. */
+  const handleFocus = useCallback(
+    (index: number) => (event: React.FocusEvent<HTMLAnchorElement>) => {
+      const list = listRef.current
+      if (list) {
+        const listRect = list.getBoundingClientRect()
+        const rowRect = event.currentTarget.getBoundingClientRect()
+        target.current = {
+          x: listRect.width - 140,
+          y: rowRect.top - listRect.top + rowRect.height / 2,
+        }
+        current.current = { ...target.current }
+      }
+      setActiveIndex(index)
+    },
+    []
+  )
+
+  const clear = useCallback(() => setActiveIndex(null), [])
+
+  const activeItem = activeIndex === null ? null : items[activeIndex]
 
   return (
-    <div className='border-border bg-card grid overflow-hidden rounded-lg border font-mono md:grid-cols-5'>
-      {/* Preview pane */}
-      <div className='relative order-2 flex flex-col md:order-2 md:col-span-3'>
-        <div className='bg-muted relative h-64 overflow-hidden md:h-full md:min-h-96'>
-          <Image
-            key={active.slug}
-            src={active.coverUrl || '/images/project-placeholder.jpg'}
-            alt=''
-            fill
-            sizes='(min-width: 768px) 60vw, 100vw'
-            className='object-cover'
-          />
-          <div className='from-card absolute inset-0 bg-linear-to-t to-transparent opacity-80' />
-          <div className='absolute inset-x-0 bottom-0 flex flex-col gap-3 p-6'>
-            <h3 className='text-xl font-bold text-balance'>{active.title}</h3>
-            <p className='text-muted-foreground line-clamp-2 text-sm leading-relaxed text-pretty'>
-              {active.description}
-            </p>
-            <div className='flex flex-wrap gap-1.5'>
-              {active.technologies.slice(0, 5).map((tech) => {
-                const { icon: Icon, label, style } = TECHNOLOGY_DATA[tech]
-                return (
-                  <span
-                    key={tech}
-                    className='border-border bg-card/80 text-muted-foreground inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs backdrop-blur-sm'>
-                    <Icon className={cn('size-3.5', style?.iconColor)} />
-                    {label}
-                  </span>
-                )
-              })}
-            </div>
-            <Link
-              href={`/post/${active.slug}`}
-              className='text-primary group inline-flex w-fit items-center gap-2 text-sm font-medium hover:underline'>
-              {viewProject}
-              <FaArrowRight className='size-3.5 transition-transform group-hover:translate-x-1' />
-            </Link>
-          </div>
-        </div>
-      </div>
+    <div className='relative'>
+      <ul
+        ref={listRef}
+        className='border-border relative border-t'
+        onPointerMove={handlePointerMove}
+        onPointerLeave={clear}
+        onBlur={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) clear()
+        }}>
+        {items.map((item, i) => {
+          const isCurrent = activeIndex === i
+          return (
+            <li key={item.slug}>
+              <Link
+                href={`/post/${item.slug}`}
+                aria-label={`${viewProject}: ${item.title}`}
+                onPointerEnter={() => setActiveIndex(i)}
+                onFocus={handleFocus(i)}
+                className={cn(
+                  'border-border group flex items-center gap-4 border-b py-5 transition-[opacity,padding] duration-300 motion-reduce:transition-none md:gap-6 md:py-6',
+                  isActive && !isCurrent && 'opacity-30',
+                  isCurrent && 'md:pl-4'
+                )}>
+                <span className='text-muted-foreground w-6 shrink-0 font-mono text-xs'>
+                  {String(i + 1).padStart(2, '0')}
+                </span>
 
-      {/* Terminal-style file listing */}
-      <div className='border-border order-1 md:order-1 md:col-span-2 md:border-r'>
-        <div className='border-border text-muted-foreground border-b px-4 py-3 text-xs'>
-          <span className='text-primary'>$</span> ls -la featured_projects/
-        </div>
-        <ul>
-          {items.map((item, i) => {
-            const isActive = i === activeIndex
-            return (
-              <li key={item.slug}>
-                <button
-                  type='button'
-                  onClick={() => setActiveIndex(i)}
-                  onFocus={() => setActiveIndex(i)}
-                  aria-current={isActive ? 'true' : undefined}
-                  className={cn(
-                    'border-border flex w-full items-center gap-3 border-b px-4 py-4 text-left text-sm transition-colors last:border-b-0',
-                    isActive
-                      ? 'bg-primary/10 text-foreground'
-                      : 'text-muted-foreground hover:bg-muted/40'
-                  )}>
+                {/* Touch devices never see the trailing preview. */}
+                <span className='border-border relative block aspect-16/10 w-20 shrink-0 overflow-hidden rounded-md border md:hidden'>
+                  <Image
+                    src={item.coverUrl || FALLBACK_COVER}
+                    alt=''
+                    fill
+                    sizes='80px'
+                    className='object-cover'
+                  />
+                </span>
+
+                <span className='min-w-0 flex-1'>
                   <span
                     className={cn(
-                      'w-3 text-xs',
-                      isActive ? 'text-primary' : 'text-transparent'
+                      'block text-xl leading-tight font-bold tracking-tight text-balance transition-colors duration-300 motion-reduce:transition-none md:text-3xl',
+                      isCurrent && 'text-primary'
                     )}>
-                    ▸
+                    {item.title}
                   </span>
-                  <span className='flex-1 truncate'>
-                    {String(i + 1).padStart(2, '0')}_{item.slug}
-                    <span className='text-muted-foreground/60'>.project</span>
+                  <span className='text-muted-foreground mt-1 block font-mono text-xs md:hidden'>
+                    {item.meta}
                   </span>
-                </button>
-              </li>
-            )
-          })}
-        </ul>
-      </div>
+                </span>
+
+                <span className='text-muted-foreground hidden shrink-0 font-mono text-xs md:block'>
+                  {item.meta}
+                </span>
+
+                <FaArrowRight
+                  aria-hidden
+                  className={cn(
+                    'text-primary hidden size-4 shrink-0 transition-opacity duration-300 motion-reduce:transition-none md:block',
+                    isCurrent ? 'opacity-100' : 'opacity-0'
+                  )}
+                />
+              </Link>
+            </li>
+          )
+        })}
+
+        <div
+          ref={floatRef}
+          aria-hidden
+          className={cn(
+            'border-border pointer-events-none absolute top-0 left-0 z-10 hidden aspect-16/10 w-64 overflow-hidden rounded-md border shadow-2xl transition-opacity duration-200 motion-reduce:transition-none md:block',
+            activeItem ? 'opacity-100' : 'opacity-0'
+          )}>
+          {activeItem && (
+            <Image
+              key={activeItem.slug}
+              src={activeItem.coverUrl || FALLBACK_COVER}
+              alt=''
+              fill
+              sizes='256px'
+              className='object-cover'
+            />
+          )}
+        </div>
+      </ul>
     </div>
   )
 }

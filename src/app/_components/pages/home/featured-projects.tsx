@@ -23,12 +23,14 @@ export async function FeaturedProjects({
 
   const items = FEATURED_SLUGS.map((slug) => {
     const project = __PORTFOLIO__.find((p) => p.slug === slug)!
+    // createdAt is MM/DD/YYYY — take the year without going through Date().
+    const year = project.createdAt.split('/')[2]
+
     return {
       slug: project.slug,
       title: t(`projects.${slug}.title`),
-      description: t(`projects.${slug}.description`),
       coverUrl: project.coverUrl,
-      technologies: project.technologies,
+      meta: `${tHome('projects.techCount', { count: project.technologies.length })} · ${year}`,
     }
   })
 

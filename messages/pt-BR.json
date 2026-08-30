@@ -42,7 +42,8 @@
     "projects": {
       "title": "Projetos em Destaque",
       "viewAll": "Ver todos os projetos",
-      "viewProject": "Ver projeto"
+      "viewProject": "Ver projeto",
+      "techCount": "{count, plural, one {# tecnologia} other {# tecnologias}}"
     },
     "terminal": {
       "role": "Desenvolvedor Full-Stack",
