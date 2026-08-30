@@ -209,7 +209,15 @@
 }
 
 .stack-marquee-track {
-  animation: stack-marquee 30s linear infinite;
+  /* Duration is tied to the track's length so the scrolling speed stays
+     constant: the full stack is split across two rows, so each row travels
+     roughly half the distance of a single combined row would. */
+  animation: stack-marquee 55s linear infinite;
+}
+
+/* Same keyframes played backwards — the row scrolls left-to-right. */
+.stack-marquee-track-reverse {
+  animation-direction: reverse;
 }
 
 .stack-marquee:hover .stack-marquee-track,
