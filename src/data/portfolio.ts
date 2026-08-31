@@ -11,7 +11,7 @@ export const __PORTFOLIO__: Project[] = [
     category: 'backend',
     author: getAuthorBySlug('cristian-giehl'),
     github: 'https://github.com/cristiangiehl1/giehl-dev-toolkit',
-    featured: false,
+    featured: true,
     createdAt: '08/29/2026',
   },
   {
@@ -123,7 +123,7 @@ export const __PORTFOLIO__: Project[] = [
     author: getAuthorBySlug('cristian-giehl'),
     github: 'https://github.com/cristiangiehl1/voting-system',
     deploy: 'https://voting-system-nu-gray.vercel.app/',
-    featured: true,
+    featured: false,
     createdAt: '06/26/2026',
   },
   {
