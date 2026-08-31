@@ -288,6 +288,10 @@
       "results": "{count, plural, one {# result found} other {# results found}}"
     },
     "projects": {
+      "giehl-dev-toolkit": {
+        "title": "Giehl Dev Toolkit",
+        "description": "A personal Claude Code plugin marketplace, bringing together skills, MCP servers, and other automations (commands, subagents, hooks) with patterns and best practices used day-to-day in development. The catalog is a marketplace.json at the repository root, with each plugin in its own directory under plugins/, containing its manifest (SKILL.md with frontmatter, or plugin.json) and implementation. Installing on any machine takes a single command (claude plugin marketplace add + /plugin install), eliminating manual file copying between projects. First published plugin: structured-prompt-engineering, a skill documenting the pattern of writing getSystemPrompt/getUserPromptTemplate as serialized objects via JSON.stringify (role, rules, extraction_instructions, examples), with complete few-shot examples and a list of do's and don'ts derived from real production prompts."
+      },
       "gestao-de-projetos-mcp": {
         "title": "Gestão de Projetos MCP",
         "description": "A Claude Code plugin that integrates the assistant with Grupo Koch's corporate Project Management system via a TypeScript MCP (Model Context Protocol) server. It exposes 23 tools and 4 guided flows that allow creating and tracking projects, managing activities and workflow stages, logging hours, recording blockers, and prioritizing initiatives via WSJF scoring — all directly in conversation. Authentication uses Active Directory credentials with JWT sessions in httpOnly cookies, automatic renewal, and RBAC permission enforcement. The standout feature is the log_week_hours flow, which reads the local git history, maps commits to projects/activities, and distributes the week's hours automatically. Validation with Zod and ESM bundle with esbuild. As an internal integration, it has no public URL or repository."

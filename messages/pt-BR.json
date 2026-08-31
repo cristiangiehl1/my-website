@@ -286,6 +286,10 @@
       "results": "{count, plural, one {# resultado encontrado} other {# resultados encontrados}}"
     },
     "projects": {
+      "giehl-dev-toolkit": {
+        "title": "Giehl Dev Toolkit",
+        "description": "Marketplace pessoal de plugins para o Claude Code, reunindo skills, servidores MCP e outras automações (commands, subagents, hooks) com padrões e boas práticas usados no dia a dia de desenvolvimento. O catálogo é um marketplace.json na raiz do repositório, com cada plugin em seu próprio diretório dentro de plugins/, contendo o manifesto (SKILL.md com frontmatter, ou plugin.json) e a implementação. A instalação em qualquer máquina é feita com um único comando (claude plugin marketplace add + /plugin install), eliminando a cópia manual de arquivos entre projetos. Primeiro plugin publicado: structured-prompt-engineering, uma skill que documenta o padrão de escrever getSystemPrompt/getUserPromptTemplate como objetos serializados via JSON.stringify (role, regras, extraction_instructions, examples), com exemplos completos de few-shot e uma lista de do's and don'ts derivada de prompts reais em produção."
+      },
       "gestao-de-projetos-mcp": {
         "title": "Gestão de Projetos MCP",
         "description": "Plugin do Claude Code que integra o assistente ao sistema corporativo de Gestão de Projetos do Grupo Koch por meio de um servidor MCP (Model Context Protocol) em TypeScript. Expõe 23 ferramentas e 4 fluxos guiados que permitem criar e acompanhar projetos, gerenciar atividades e etapas de workflow, apontar horas, registrar pendências e priorizar iniciativas via avaliação WSJF — tudo diretamente pela conversa. A autenticação usa credenciais do Active Directory, com sessão JWT em cookies httpOnly, renovação automática e respeito às permissões (RBAC) do usuário. O destaque é o fluxo log_week_hours, que lê o histórico do git local, mapeia os commits para projetos/atividades e distribui as horas da semana automaticamente. Validação com Zod e bundle ESM com esbuild. Por ser uma integração interna, não possui URL pública nem repositório disponível."

@@ -4,6 +4,17 @@ import { getAuthorBySlug } from '@/helpers/get-author'
 
 export const __PORTFOLIO__: Project[] = [
   {
+    id: 7,
+    slug: 'giehl-dev-toolkit',
+    coverUrl: generateImgUrl('giehl-dev-toolkit.png'),
+    technologies: ['claude'],
+    category: 'backend',
+    author: getAuthorBySlug('cristian-giehl'),
+    github: 'https://github.com/cristiangiehl1/giehl-dev-toolkit',
+    featured: false,
+    createdAt: '08/29/2026',
+  },
+  {
     id: 6,
     slug: 'gestao-de-projetos-mcp',
     coverUrl: generateImgUrl('gestao-de-projetos-mcp.png'),
