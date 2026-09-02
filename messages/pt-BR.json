@@ -286,6 +286,10 @@
       "results": "{count, plural, one {# resultado encontrado} other {# resultados encontrados}}"
     },
     "projects": {
+      "resumo-diario-de-frota": {
+        "title": "Resumo Diário de Frota",
+        "description": "Serviço interno do Grupo Koch que coleta via IMAP os alertas de rastreamento veicular do dia anterior enviados pela Link Monitoramento, gera um resumo estruturado com OpenAI (Structured Outputs) — contagem e categorização de eventos, ranking de veículos por risco, padrões de horário e excesso de velocidade — e o distribui por e-mail através do microsserviço interno de e-mail, com renderização em markdown/HTML feita de forma determinística em código. Roda como processo persistente com agendamento diário via node-cron, timezone calculado explicitamente para evitar deslocamento da janela de coleta. Por ser um projeto interno, não possui URL pública nem repositório disponível."
+      },
       "giehl-dev-toolkit": {
         "title": "Giehl Dev Toolkit",
         "description": "Marketplace pessoal de plugins para o Claude Code, reunindo skills, servidores MCP e outras automações (commands, subagents, hooks) com padrões e boas práticas usados no dia a dia de desenvolvimento. O catálogo é um marketplace.json na raiz do repositório, com cada plugin em seu próprio diretório dentro de plugins/, contendo o manifesto (SKILL.md com frontmatter, ou plugin.json) e a implementação. A instalação em qualquer máquina é feita com um único comando (claude plugin marketplace add + /plugin install), eliminando a cópia manual de arquivos entre projetos. Primeiro plugin publicado: structured-prompt-engineering, uma skill que documenta o padrão de escrever getSystemPrompt/getUserPromptTemplate como objetos serializados via JSON.stringify (role, regras, extraction_instructions, examples), com exemplos completos de few-shot e uma lista de do's and don'ts derivada de prompts reais em produção."

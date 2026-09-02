@@ -50,7 +50,9 @@ import {
 import {
   TbBrandCypress,
   TbBrandReactNative,
+  TbClock,
   TbMailCode,
+  TbMailSearch,
   TbMasksTheater,
   TbProtocol,
   TbRouter,
@@ -474,6 +476,26 @@ export const TECHNOLOGY_DATA = {
     style: { iconColor: 'text-pink-500' },
     category: 'Tool',
     link: 'https://react-hook-form.com/',
+  },
+
+  // Scheduling
+  cron: {
+    value: 'cron',
+    label: 'Cron',
+    icon: TbClock,
+    style: { iconColor: 'text-amber-500' },
+    category: 'Tool',
+    link: 'https://github.com/node-cron/node-cron',
+  },
+
+  // Email protocol
+  imap: {
+    value: 'imap',
+    label: 'IMAP',
+    icon: TbMailSearch,
+    style: { iconColor: 'text-sky-400' },
+    category: 'Tool',
+    link: 'https://github.com/postalsys/imapflow',
   },
 
   // Markdown

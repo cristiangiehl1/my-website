@@ -4,6 +4,24 @@ import { getAuthorBySlug } from '@/helpers/get-author'
 
 export const __PORTFOLIO__: Project[] = [
   {
+    id: 8,
+    slug: 'resumo-diario-de-frota',
+    coverUrl: generateImgUrl('resumo-diario-de-frota.png'),
+    technologies: [
+      'typescript',
+      'node',
+      'openai',
+      'zod',
+      'cron',
+      'imap',
+      'docker',
+    ],
+    category: 'backend',
+    author: getAuthorBySlug('cristian-giehl'),
+    featured: true,
+    createdAt: '09/02/2026',
+  },
+  {
     id: 7,
     slug: 'giehl-dev-toolkit',
     coverUrl: generateImgUrl('giehl-dev-toolkit.png'),
