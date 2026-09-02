@@ -298,7 +298,7 @@
       },
       "gestao-de-projetos-mcp": {
         "title": "Gestão de Projetos MCP",
-        "description": "A Claude Code plugin that integrates the assistant with Grupo Koch's corporate Project Management system via a TypeScript MCP (Model Context Protocol) server. It exposes 23 tools and 4 guided flows that allow creating and tracking projects, managing activities and workflow stages, logging hours, recording blockers, and prioritizing initiatives via WSJF scoring — all directly in conversation. Authentication uses Active Directory credentials with JWT sessions in httpOnly cookies, automatic renewal, and RBAC permission enforcement. The standout feature is the log_week_hours flow, which reads the local git history, maps commits to projects/activities, and distributes the week's hours automatically. Validation with Zod and ESM bundle with esbuild. As an internal integration, it has no public URL or repository."
+        "description": "A Claude Code plugin that integrates the assistant with an internal corporate Project Management system via a TypeScript MCP (Model Context Protocol) server. It exposes 39 tools and 4 guided flows that allow creating and tracking projects, managing activities and workflow stages, logging hours, recording blockers, and prioritizing initiatives via WSJF scoring — all directly in conversation. Authentication uses Active Directory credentials, with access tokens and automatic refresh in httpOnly cookies, and RBAC permission enforcement. The standout feature is the log_week_hours flow, which reads the local git history, maps commits to projects/activities, and distributes the week's hours automatically. Validation with Zod and ESM bundle with esbuild. As an internal integration, it has no public URL or repository."
       },
       "orchestrator-agent": {
         "title": "Orchestrator Agent",
@@ -306,7 +306,11 @@
       },
       "gestao-de-despesas": {
         "title": "Gestão de Despesas",
-        "description": "An internal system for a retail company to manage non-resale purchase expenses. It consists of an ingestion worker that extracts invoices (XML, PDF, and images) from monitored folders — via direct XML parsing or LLM for unstructured documents — validates fiscal data, and persists it to OracleDB; and a Next.js 15 web application that routes each invoice through a role-based approval flow (buyer, approver, controller, fiscal), with value-based thresholds, escalation, vacation substitutes, and automatic back-integration with the corporate ERP. Scheduled jobs and async queues (Redis/BullMQ) orchestrate background processing. As an internal project, it has no public URL or repository."
+        "description": "An internal web application (Next.js 15 + React 19) for a retail company to manage non-resale purchase expenses. It receives invoices already extracted by a dedicated ingestion worker and routes each one through an eight-role approval flow (buyer, approver, controller, fiscal, finance, admin, manager, regional manager), with value-based thresholds, escalation, vacation substitutes, DIFAL tax calculation, urgent-payment emails, and automatic back-integration with the corporate ERP. Scheduled jobs and async queues (Redis/BullMQ) orchestrate background processing. As an internal project, it has no public URL or repository."
+      },
+      "gestao-despesas-ingestor": {
+        "title": "Gestão de Despesas — Ingestor",
+        "description": "A fiscal-document ingestion worker (Node.js/TypeScript, hexagonal architecture) that feeds the Gestão de Despesas system. It watches network folders in real time, extracts invoices from XML (direct parsing) or PDF/image (LLM with structured output), validates the data with a fiscal rules engine (CNPJ, NF-e access key, values), and persists header and line items to OracleDB in a single transaction, routing each document to human review when the confidence score is low. Includes value/due-date normalization, a second extractor for outsourced-service descriptions, and a daily SFTP export job for already-integrated invoices. As an internal project, it has no public URL or repository."
       },
       "langchain-rag-lab": {
         "title": "LangChain RAG Lab",

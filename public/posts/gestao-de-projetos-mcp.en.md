@@ -6,7 +6,7 @@
 
 The plugin packages three things into a single installable artifact:
 
-- An **MCP server** (Node.js/TypeScript) that exposes **23 tools** and **4 guided flows**.
+- An **MCP server** (Node.js/TypeScript) that exposes **39 tools** and **4 guided flows**.
 - An **authenticated HTTP client** for the Project Management REST API, with session management and automatic renewal.
 - A **skill** in Portuguese containing business rules, lifecycle definitions, and usage best practices.
 
@@ -35,27 +35,27 @@ flowchart TD
     A["CLAUDE CODE (MCP host)<br/>conversation in natural language"] -->|JSON-RPC over stdio| B
     subgraph B["MCP SERVER (Node.js/TS, ESM bundle)"]
         direction LR
-        T["Tools (23)<br/>reference · projects · activities<br/>hours · pendencies · evaluation (WSJF)<br/>Zod schemas validate input"]
+        T["Tools (39)<br/>reference · projects · activities<br/>hours · pendencies · evaluation (WSJF)<br/>Zod schemas validate input"]
         P["Prompts (4, guided flows)<br/>create_project · create_activity<br/>create_pendency · log_week_hours"]
     end
-    B -->|REST| C["authenticated HTTP CLIENT<br/>auth-session (JWT in httpOnly cookie)<br/>transparent session renewal · retry 401/403 (RBAC)"]
+    B -->|REST| C["authenticated HTTP CLIENT<br/>auth-session (access+refresh token in httpOnly cookie)<br/>401 → refresh() → login() · 403 surfaced (RBAC, no retry)"]
     C -->|Active Directory credentials| D["Project Management API<br/>gestaoprojetos.superkoch.com.br"]
 ```
 
 ### Tool layer
 
-The 23 tools are organized by domain, one "family" per file:
+The 39 tools are organized by domain, one "family" per file:
 
-- **reference** — support queries: current user and permissions (`auth_me`), people search in AD (`directory_search`), current accounting week (`config_current_week`), areas (`area_list`), strategic objectives (`objective_list`), and workflow templates (`workflow_template_list`/`get`).
-- **projects** — project lifecycle: `project_create`, `project_list`, `project_get`, status transitions (`project_status_set`, `project_status_history`), members (`project_members_add`/`list`), sponsors (`project_sponsors_add`), and workflow (`project_workflow_get`, `project_workflow_stage_complete`).
-- **activities** — project activities: create, list, get, **start**, **complete**, and **reopen** (`project_activities_*`).
-- **hours** — time tracking: log hours (`project_hours_register`), query by project (`project_hours_list`, `project_hours_actual`), and the **weekly summary** per user (`hours_weekly_summary`).
-- **pendencies** — issues/blockers: create, list, update, and transition (`project_pendencies_start`/`resolve`/`cancel`).
-- **evaluation** — **WSJF** (Weighted Shortest Job First) prioritization: set and query project scoring (`project_evaluation_set`/`get`) and list available models (`evaluation_model_list`).
+- **reference** _(7)_ — support queries: current user and permissions (`auth_me`), people search in AD (`directory_search`), current accounting week (`config_current_week`), areas (`area_list`), strategic objectives (`objective_list`), and workflow templates (`workflow_template_list`/`get`).
+- **projects** _(10)_ — project lifecycle: `project_create`, `project_list`, `project_get`, status transitions (`project_status_set`, `project_status_history`), members (`project_members_add`/`list`), sponsors (`project_sponsors_add`), and workflow (`project_workflow_get`, `project_workflow_stage_complete`).
+- **activities** _(6)_ — project activities: create, list, get, **start**, **complete**, and **reopen** (`project_activities_*`).
+- **hours** _(5)_ — time tracking: log hours (`project_hours_register`), query by project (`project_hours_list`, `project_hours_actual`), the **weekly summary** per user (`hours_weekly_summary`), and a **cross-project** listing (`hours_list`) for anyone who needs visibility beyond a single project.
+- **pendencies** _(8)_ — issues/blockers: create, list, get, update, and transition (`project_pendencies_start`/`resolve`/`cancel`), plus the **cross-project** counterpart `pendencies_list`.
+- **evaluation** _(3)_ — **WSJF** (Weighted Shortest Job First) prioritization: set and query project scoring (`project_evaluation_set`/`get`) and list available models (`evaluation_model_list`).
 
 ### HTTP layer
 
-The `api-client` is an authenticated REST client that abstracts the API session. The `auth-session` logs in with **Active Directory** credentials, stores the **JWT in an httpOnly cookie**, and when a call returns an expired session, **transparently renews it** and retries the request. Permission errors (`403`) are surfaced as clear messages — the server **respects the user's RBAC** and never tries to work around a denied authorization.
+The `api-client` is an authenticated REST client that abstracts the API session. The API only hands out tokens via `Set-Cookie` (`access_token` + `refresh_token`), so `auth-session` reads them and resends them manually as a `Cookie` header on every request — the plugin runtime's HTTP client doesn't persist cookies on its own. When a call returns **401**, the client first tries `refresh()` (rotating the tokens with the current `refresh_token`); if there's no valid refresh, it **logs in again** with the Active Directory credentials — either way, the original request is retried once. Permission errors (`403`) **never enter that retry path**: they're surfaced as clear messages — the server **respects the user's RBAC** and never tries to work around a denied authorization.
 
 ## Guided Flows (Prompts)
 
@@ -102,8 +102,8 @@ These variables are injected into the MCP server process via `.mcp.json`, which 
 
 ## Key Challenges
 
-- **Designing tools at the right granularity.** Each tool needs to be specific enough for the model to choose confidently, but general enough not to explode into dozens of variations. Splitting by domain (project, activity, hour, blocker) and by verb (create, start, complete, reopen) was the right balance — 23 tools that cover the lifecycle without ambiguity.
-- **Transparent session renewal.** The API uses sessions with expiry. Letting the model deal with "your session expired" would be a terrible experience; automatic renewal in `auth-session` hides this entirely — the tool simply works, even after an idle period.
+- **Designing tools at the right granularity.** Each tool needs to be specific enough for the model to choose confidently, but general enough not to explode into dozens of variations. Splitting by domain (project, activity, hour, blocker) and by verb (create, start, complete, reopen) was the right balance — 39 tools that cover the lifecycle without ambiguity, including cross-project variants (`hours_list`, `pendencies_list`) for anyone who needs visibility beyond a single project.
+- **Transparent session renewal.** The API only hands out tokens via cookie, with no ready-made session SDK; letting the model deal with "your session expired" would be a terrible experience. `auth-session` stores the cookies manually and, on a 401, tries `refresh()` before falling back to a fresh login — the tool simply works, even after an idle period, with the model never noticing the token swap underneath.
 - **Respecting RBAC without frustrating the user.** Not every user can do everything. Rather than attempting actions that will fail, the server surfaces the `403` as a clear message and the assistant **informs** the user that this action requires a permission they don't have — it never insists or tries to work around it.
 - **Orchestrating `log_week_hours` with confirmation.** Automating time tracking is useful, but logging wrong hours is worse than not logging at all. The flow always **shows the plan** (commit mapping, hour distribution, projects/activities to create) and **waits for confirmation** before any write.
 - **Strong validation at the boundary.** Every argument entering a tool passes through a **Zod schema**, which turns ambiguous model inputs into explicit, early errors rather than malformed requests to the API.

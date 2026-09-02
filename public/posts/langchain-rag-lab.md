@@ -49,16 +49,26 @@ flowchart TD
 
 **Fluxo resumido:** o documento é carregado (`DocumentLoader`), dividido (`DocumentProcessor`), embutido pela HuggingFace Inference API (`EmbeddingsService`) e persistido (`VectorStoreRepository`). No chat, o `ChatService` embute a pergunta, recupera os _chunks_ mais similares e monta o contexto para o LLM.
 
+`EmbeddingsService` e `VectorStoreRepository` são **singletons preguiçosos** (`getInstance()`): o cliente HuggingFace e o pool de conexão do `PGVectorStore` são criados uma única vez e reaproveitados entre requisições — evita reabrir conexão a cada chamada em um ambiente serverless, ao custo de um "cold start" logado explicitamente na primeira criação.
+
 ## Pipeline de Ingestão
 
 ![Página de ingestão do LangChain RAG Lab](/images/rag-ingestao.png)
 
 A página `/ingest` expõe cada etapa da preparação dos documentos:
 
-1. **Documento** — cole o texto ou anexe `.txt` / `.md` / `.pdf` (PDF via `PDFLoader` do LangChain).
+1. **Documento** — cole o texto ou anexe `.txt` / `.md` / `.pdf` (PDF via `PDFLoader` do LangChain, com `splitPages: false` — todas as páginas são combinadas em um único texto antes do split; arquivo de tipo não suportado lança erro explícito).
 2. **Configuração do split** — usando o `RecursiveCharacterTextSplitter`, ajuste `chunkSize`, `chunkOverlap` e separadores opcionais.
 3. **Pré-visualizar chunks** — mostra todos os chunks numerados e com tamanho. **Nada é enviado ao modelo nem ao banco nesta etapa.**
-4. **Confirmar e gerar embeddings** — cada chunk é embutido via HuggingFace Inference API e gravado no pgvector com metadados (`source`, `chunkIndex`, etc.). Alterar o texto ou a configuração invalida o preview e exige pré-visualizar novamente.
+4. **Confirmar e gerar embeddings** — cada chunk é embutido via HuggingFace Inference API e gravado no pgvector com metadados (`source`, `chunkIndex`, `totalChunks`, `chunkSize`, `chunkOverlap`, `splitter`, `ingestedAt`). Alterar o texto ou a configuração invalida o preview e exige pré-visualizar novamente.
+
+### Inspetor do banco vetorial
+
+A mesma página `/ingest` expõe um painel de **estatísticas do pgvector**, reforçando a filosofia de "nada fica opaco" além do preview de chunks:
+
+- **Total de vetores** armazenados e uma badge por documento (`fonte · quantidade de chunks`).
+- **Listagem paginada** (20 por página, com "carregar mais") de cada vetor individual, filtrável por documento, mostrando: os **8 primeiros valores brutos do embedding** (`vector_dims` + fatia `vector::real[][1:8]`), o texto completo do chunk armazenado e o `metadata` jsonb inteiro.
+- Um botão de **limpar tudo** (`DELETE FROM embeddings`, com confirmação) para zerar o banco vetorial e recomeçar um experimento do zero.
 
 ## Chat com RAG
 
@@ -68,8 +78,8 @@ Na página `/chat`, o app embute a pergunta, busca os `topK` chunks mais similar
 
 - Cada resposta exibe as **fontes recuperadas** com o **score de similaridade** (cosseno), o modelo usado e os **parâmetros aplicados**.
 - O **painel lateral** é totalmente configurável e persistido em `localStorage`:
-  - **Recuperação:** `topK` e limiar mínimo de score.
-  - **Geração:** `temperature`, `top_p`, `top_k` (sampling — distinto do `topK` de recuperação), `max_tokens`, `frequency_penalty`, `presence_penalty` e `system prompt`.
+  - **Recuperação:** `topK` e limiar mínimo de score — o `minScore` é aplicado **em código, depois da busca** (filtra os resultados já retornados pelo pgvector), não como parte da query SQL.
+  - **Geração:** `temperature`, `top_p`, `top_k` (sampling — distinto do `topK` de recuperação), `max_tokens`, `frequency_penalty`, `presence_penalty` e `system prompt`. Como `top_k` não é um parâmetro nativo da API da OpenAI, ele é enviado via `modelKwargs` e repassado cru pela OpenRouter ao provedor do modelo.
 - O **prompt é estruturado** (`promptConfig` + templates) e montado em `SystemMessage` (persona/regras) + `HumanMessage` (contexto/pergunta), com _override_ opcional por system prompt livre.
 
 ## Prompt Estruturado
@@ -194,6 +204,7 @@ O modelo fica menor **principalmente por causa dos pesos em 4 bits**, enquanto m
 
 - **Similaridade exibida** = `1 - distância_cosseno` do pgvector (0..1, maior = mais similar).
 - `serverExternalPackages` no `next.config.mjs` evita empacotar `pdf-parse` e `pg` no bundle do servidor; `outputFileTracingIncludes` garante que os arquivos de prompt (lidos via `fs`) sigam junto na função da Vercel.
-- O endpoint de chat envia primeiro um bloco JSON com as fontes, um delimitador, e então faz o streaming dos tokens da resposta (protocolo em `src/lib/stream.ts`).
 - A dimensão do vetor (`384`) é acoplada ao modelo de embeddings; trocar o modelo requer re-ingerir os documentos.
 - Toda variável de ambiente é validada com zod no boot (`src/lib/env.ts`) — se algo estiver faltando ou inválido, a aplicação falha na inicialização com uma mensagem clara.
+- **Índices do pgvector.** A tabela `embeddings` mantém um índice `hnsw (vector vector_cosine_ops)` para a busca por similaridade e um índice separado sobre `metadata->>'source'`, usado quando o chat ou o inspetor filtram por um documento específico.
+- **Protocolo do streaming.** O corpo da resposta de `/api/chat` é `<JSON de metadados><delimitador>__ANSWER__<tokens da resposta...>`; se a geração falhar no meio do stream, um segundo delimitador (`__ERROR__`) é anexado com a mensagem de erro — o cliente sempre consegue distinguir metadados, texto de resposta e falha tardia no mesmo corpo de resposta.

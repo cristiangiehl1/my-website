@@ -6,7 +6,7 @@
 
 O plugin empacota três coisas em um único artefato instalável:
 
-- Um **servidor MCP** (Node.js/TypeScript) que expõe **23 ferramentas** e **4 fluxos guiados**.
+- Um **servidor MCP** (Node.js/TypeScript) que expõe **39 ferramentas** e **4 fluxos guiados**.
 - Um **cliente HTTP autenticado** para a API REST do Gestão de Projetos, com sessão e renovação automática.
 - Uma **skill** em português com as regras de negócio, ciclos de vida e boas práticas de uso.
 
@@ -35,27 +35,27 @@ flowchart TD
     A["CLAUDE CODE (host MCP)<br/>conversa em linguagem natural"] -->|JSON-RPC via stdio| B
     subgraph B["SERVIDOR MCP (Node.js/TS, bundle ESM)"]
         direction LR
-        T["Tools (23)<br/>reference · projects · activities<br/>hours · pendencies · evaluation (WSJF)<br/>schemas Zod validam a entrada"]
+        T["Tools (39)<br/>reference · projects · activities<br/>hours · pendencies · evaluation (WSJF)<br/>schemas Zod validam a entrada"]
         P["Prompts (4, fluxos guiados)<br/>create_project · create_activity<br/>create_pendency · log_week_hours"]
     end
-    B -->|REST| C["HTTP CLIENT autenticado<br/>auth-session (JWT em cookie httpOnly)<br/>renovação automática · retry 401/403 (RBAC)"]
+    B -->|REST| C["HTTP CLIENT autenticado<br/>auth-session (access+refresh token em cookie httpOnly)<br/>401 → refresh() → login() · 403 propagado (RBAC, sem retry)"]
     C -->|credenciais Active Directory| D["API Gestão de Projetos<br/>gestaoprojetos.superkoch.com.br"]
 ```
 
 ### Camada de ferramentas
 
-As 23 ferramentas são organizadas por domínio, uma "família" por arquivo:
+As 39 ferramentas são organizadas por domínio, uma "família" por arquivo:
 
-- **reference** — consultas de apoio: usuário atual e permissões (`auth_me`), busca de pessoas no AD (`directory_search`), semana contábil corrente (`config_current_week`), áreas (`area_list`), objetivos estratégicos (`objective_list`) e templates de workflow (`workflow_template_list`/`get`).
-- **projects** — ciclo de vida do projeto: `project_create`, `project_list`, `project_get`, transições de status (`project_status_set`, `project_status_history`), membros (`project_members_add`/`list`), patrocinadores (`project_sponsors_add`) e workflow (`project_workflow_get`, `project_workflow_stage_complete`).
-- **activities** — atividades do projeto: criar, listar, obter, **iniciar**, **concluir** e **reabrir** (`project_activities_*`).
-- **hours** — apontamento: registrar horas (`project_hours_register`), consultar por projeto (`project_hours_list`, `project_hours_actual`) e o **resumo semanal** por usuário (`hours_weekly_summary`).
-- **pendencies** — issues/blockers: criar, listar, atualizar e transicionar (`project_pendencies_start`/`resolve`/`cancel`).
-- **evaluation** — priorização **WSJF** (Weighted Shortest Job First): definir e consultar o scoring do projeto (`project_evaluation_set`/`get`) e listar os modelos disponíveis (`evaluation_model_list`).
+- **reference** _(7)_ — consultas de apoio: usuário atual e permissões (`auth_me`), busca de pessoas no AD (`directory_search`), semana contábil corrente (`config_current_week`), áreas (`area_list`), objetivos estratégicos (`objective_list`) e templates de workflow (`workflow_template_list`/`get`).
+- **projects** _(10)_ — ciclo de vida do projeto: `project_create`, `project_list`, `project_get`, transições de status (`project_status_set`, `project_status_history`), membros (`project_members_add`/`list`), patrocinadores (`project_sponsors_add`) e workflow (`project_workflow_get`, `project_workflow_stage_complete`).
+- **activities** _(6)_ — atividades do projeto: criar, listar, obter, **iniciar**, **concluir** e **reabrir** (`project_activities_*`).
+- **hours** _(5)_ — apontamento: registrar horas (`project_hours_register`), consultar por projeto (`project_hours_list`, `project_hours_actual`), o **resumo semanal** por usuário (`hours_weekly_summary`) e uma listagem **cross-project** (`hours_list`) para quem precisa enxergar apontamentos além de um único projeto.
+- **pendencies** _(8)_ — issues/blockers: criar, listar, obter, atualizar e transicionar (`project_pendencies_start`/`resolve`/`cancel`), mais a contraparte **cross-project** `pendencies_list`.
+- **evaluation** _(3)_ — priorização **WSJF** (Weighted Shortest Job First): definir e consultar o scoring do projeto (`project_evaluation_set`/`get`) e listar os modelos disponíveis (`evaluation_model_list`).
 
 ### Camada HTTP
 
-O `api-client` é um cliente REST autenticado que abstrai a sessão da API. O `auth-session` faz login com as credenciais do **Active Directory**, guarda o **JWT em cookie httpOnly** e, quando uma chamada retorna sessão expirada, **renova de forma transparente** e repete a requisição. Erros de permissão (`403`) são propagados como mensagens claras — o servidor **respeita o RBAC** do usuário e nunca tenta contornar uma autorização negada.
+O `api-client` é um cliente REST autenticado que abstrai a sessão da API. A API entrega os tokens só via `Set-Cookie` (`access_token` + `refresh_token`), então o `auth-session` os lê e os reenvia manualmente como `Cookie` em cada request — o cliente HTTP do runtime do plugin não persiste cookies sozinho. Quando uma chamada retorna **401**, o cliente tenta primeiro `refresh()` (rotaciona os tokens usando o `refresh_token` atual); se não houver refresh válido, faz **login novamente** com as credenciais de Active Directory — em ambos os casos, a requisição original é repetida uma única vez. Erros de permissão (`403`) **não entram nesse caminho de retry**: são propagados como mensagens claras — o servidor **respeita o RBAC** do usuário e nunca tenta contornar uma autorização negada.
 
 ## Fluxos Guiados (Prompts)
 
@@ -102,8 +102,8 @@ Essas variáveis são injetadas no processo do servidor MCP via `.mcp.json`, que
 
 ## Principais Dificuldades
 
-- **Desenhar ferramentas na granularidade certa.** Cada tool precisa ser específica o bastante para o modelo escolher com segurança, mas genérica o bastante para não explodir em dezenas de variações. A divisão por domínio (projeto, atividade, hora, pendência) e por verbo (criar, iniciar, concluir, reabrir) foi o equilíbrio encontrado — 23 tools que cobrem o ciclo de vida sem ambiguidade.
-- **Sessão e renovação transparentes.** A API usa sessão com expiração. Deixar o modelo lidar com "sua sessão expirou" seria péssimo; a renovação automática no `auth-session` esconde isso por completo — a ferramenta simplesmente funciona, mesmo após um período ocioso.
+- **Desenhar ferramentas na granularidade certa.** Cada tool precisa ser específica o bastante para o modelo escolher com segurança, mas genérica o bastante para não explodir em dezenas de variações. A divisão por domínio (projeto, atividade, hora, pendência) e por verbo (criar, iniciar, concluir, reabrir) foi o equilíbrio encontrado — 39 tools que cobrem o ciclo de vida sem ambiguidade, incluindo variantes cross-project (`hours_list`, `pendencies_list`) para quem precisa de visão além de um único projeto.
+- **Sessão e renovação transparentes.** A API entrega os tokens só via cookie, sem SDK de sessão pronto; deixar o modelo lidar com "sua sessão expirou" seria péssimo. O `auth-session` guarda os cookies manualmente e, num 401, tenta `refresh()` antes de recorrer a um novo login — a ferramenta simplesmente funciona, mesmo após um período ocioso, sem o modelo nunca perceber a troca de token por trás.
 - **Respeitar o RBAC sem frustrar.** Nem todo usuário pode tudo. Em vez de tentar ações que vão falhar, o servidor propaga o `403` como mensagem clara e o assistente **avisa** que aquilo exige uma permissão que o usuário não tem — nunca insiste nem tenta contornar.
 - **Orquestrar `log_week_hours` com confirmação.** Automatizar o apontamento é útil, mas gravar horas erradas é pior do que não gravar. O fluxo sempre **mostra o plano** (mapeamento de commits, distribuição de horas, projetos/atividades a criar) e **espera confirmação** antes de qualquer escrita.
 - **Validação forte na fronteira.** Todo argumento que entra em uma tool passa por um **schema Zod**, o que transforma entradas ambíguas do modelo em erros explícitos e cedo, em vez de requisições malformadas para a API.

@@ -61,7 +61,9 @@ Como salvaguarda para uma falha ocasional do Structured Outputs (a mesma placa a
 
 ## Envio e agendamento
 
-O e-mail final é entregue via `EmailApiService`, um cliente HTTP fino sobre o microsserviço interno de e-mail do Grupo Koch — um `POST` por destinatário configurado em `CONFIG.reportRecipients`. Falhas de envio são logadas mas não derrubam o processo, já que o job roda uma vez por dia e uma falha isolada não deve interromper o agendador.
+O e-mail final é entregue via `EmailApiService`, um cliente HTTP fino (`ky`, timeout de 30s, **sem retry automático**) sobre o microsserviço interno de e-mail do Grupo Koch — um `POST` por destinatário configurado em `CONFIG.reportRecipients`. O serviço distingue dois tipos de falha por classes de erro próprias: `InvalidEmailDataError` (HTTP 400 — payload inválido) e `EmailServiceUnavailableError` (qualquer outra falha, incluindo timeout). Falhas de envio são logadas mas não derrubam o processo, já que o job roda uma vez por dia e uma falha isolada não deve interromper o agendador.
+
+Quando não há e-mails no dia, o serviço nem chega a chamar o modelo: `OpenAiSummaryService.summarizeDay` detecta a lista vazia antes de montar o prompt e devolve diretamente um resumo canônico ("Nenhum e-mail foi recebido neste dia"), evitando uma chamada de IA sem propósito.
 
 Em produção, `src/index.ts` sobe dois componentes lado a lado:
 

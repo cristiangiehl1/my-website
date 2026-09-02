@@ -1,112 +1,80 @@
 ## Sobre o Projeto
 
-**Gestão de Despesas** é um sistema **interno** de uma empresa do setor varejista, criado para controlar as **despesas de compras não revenda** — tudo o que a empresa compra para operar (serviços, materiais, manutenção, marketing, TI…) e que **não** vai para a prateleira. Cada nota fiscal percorre um fluxo de aprovação por papéis e, ao final, é integrada de volta ao **ERP corporativo**.
+**Gestão de Despesas** é a aplicação web interna de uma empresa do setor varejista para controlar as **despesas de compras não revenda** — tudo o que a empresa compra para operar (serviços, materiais, manutenção, marketing, TI…) e que **não** vai para a prateleira. Construída em **Next.js 15 (App Router)** com **React 19**, ela recebe as notas fiscais já extraídas e persistidas por um worker de ingestão dedicado (ver post [Gestão de Despesas — Ingestor](/post/gestao-despesas-ingestor)), conduz cada uma por um **fluxo de aprovação com oito papéis**, aplica as regras fiscais e de alçada, e integra o resultado de volta ao **ERP corporativo**.
 
-> ⚠️ **Projeto interno, sem link público.** Por se tratar de um sistema corporativo que lida com dados fiscais e financeiros reais da empresa, **não há URL pública nem repositório no GitHub disponível**. Este post descreve a **arquitetura, as regras de negócio, as integrações e as principais dificuldades** do projeto de forma anonimizada — sem expor dados sensíveis, endereços internos, nomes de sistemas proprietários ou credenciais.
-
-O sistema é, na prática, **dois componentes** que formam um pipeline único:
-
-- Um **worker de ingestão** (Node.js/TypeScript) que observa pastas de rede, extrai os dados das notas fiscais e as insere na base.
-- Uma **aplicação web** (Next.js 15) onde as notas são validadas, aprovadas por múltiplos níveis e integradas ao ERP.
+> ⚠️ **Projeto interno, sem link público.** Por se tratar de um sistema corporativo que lida com dados fiscais e financeiros reais da empresa, **não há URL pública nem repositório no GitHub disponível**. Este post descreve a **arquitetura, as regras de negócio e as principais dificuldades** da aplicação web de forma anonimizada — sem expor dados sensíveis, endereços internos, nomes de sistemas proprietários ou credenciais.
 
 ## O Problema
 
-Antes do sistema, as despesas de compras não revenda chegavam de forma **dispersa** — notas fiscais em XML, PDF ou até imagens, enviadas por e-mail ou depositadas em pastas compartilhadas por cada área de custo (controladoria, marketing, RH, TI, manutenção, suprimentos). A partir daí, o processo era manual e frágil:
+Antes do sistema, as despesas de compras não revenda chegavam de forma **dispersa** — notas fiscais enviadas por e-mail ou depositadas em pastas compartilhadas por cada área de custo (controladoria, marketing, RH, TI, manutenção, suprimentos). A partir daí, o processo de aprovação era manual e frágil:
 
 - **Sem rastreabilidade:** não havia registro de quem aprovou o quê, quando e por qual valor.
 - **Sem alçada consistente:** aprovações fora do limite de responsabilidade de cada gestor passavam despercebidas.
 - **Digitação manual no ERP:** alguém relia a nota e redigitava os dados no ERP — lento e sujeito a erro.
 - **Complexidade fiscal:** cálculos como o **DIFAL** (diferencial de alíquota de ICMS em compras interestaduais) dependiam de consulta manual e cálculo à parte.
 
-O objetivo do sistema é **fechar esse ciclo de ponta a ponta**: capturar a nota automaticamente, extrair e validar seus dados, conduzi-la por um fluxo de aprovação auditável com alçadas, e **integrá-la ao ERP sem redigitação**.
+O objetivo da aplicação é fechar a metade do ciclo que começa **depois** da nota já estar na base: conduzi-la por um fluxo de aprovação auditável com alçadas, aplicar as regras fiscais que dependem de julgamento humano, e **integrá-la ao ERP sem redigitação**.
 
 ## Arquitetura
 
-O sistema separa claramente a **ingestão** (produção de dados a partir de documentos) da **operação** (aprovação e integração), com o OracleDB como ponto de encontro entre os dois mundos.
+O caminho típico de uma mutação é **Server Action → Repository → Database (OracleDB)**, com Server Components como padrão e `'use client'` reservado para o que realmente precisa de estado no navegador.
 
 ```mermaid
 flowchart TD
-    N["Pastas de rede<br/>(XML/PDF/imagem)"] --> W1
-    subgraph W["WORKER DE INGESTÃO (Node.js/TypeScript)"]
+    U["Navegador<br/>(comprador, aprovador, controladoria,<br/>fiscal, financeiro, admin, gerente, gerente regional)"] --> A1
+    subgraph APP["APLICAÇÃO WEB (Next.js 15 App Router · React 19)"]
         direction TB
-        W1["chokidar (watch) → hash SHA-256 (idempotência)"]
-        X["XmlExtractor<br/>(NF-e/NFS-e)"]
-        L["LlmExtractor<br/>(PDF/imagem, LLM)"]
-        W2["Validação fiscal → score de confiança"]
-        W1 --> X --> W2
-        W1 --> L --> W2
-    end
-    W2 -->|insert cabeçalho + itens, mesma transação| DB["OracleDB<br/>notas + itens + auditoria + cadastros"]
-    DB --> A1
-    U["Navegador<br/>(comprador, aprovador, controladoria,<br/>fiscal, admin)"] --> A1
-    subgraph APP["APLICAÇÃO WEB (Next.js 15 App Router)"]
-        direction TB
-        A1["Server Actions → Repository → Database"]
-        A2["Máquina de estados de aprovação"]
-        A3["node-cron (jobs) · BullMQ + Redis (filas)"]
+        A1["Server Actions<br/>secureRoleAction / secureFormAction<br/>injeta usuário + valida papel + Zod"]
+        A2["Repository<br/>1 módulo por agregado, SQL co-localizado"]
+        A3["Database<br/>pool OracleDB singleton (globalThis)"]
+        A4["Máquina de estados de aprovação"]
+        A5["node-cron (jobs) · BullMQ + Redis (filas)"]
         A1 --> A2 --> A3
+        A1 --> A4
+        A1 --> A5
     end
-    APP -->|fila de integração| ERP["ERP corporativo (API)"]
+    DB["OracleDB<br/>notas + itens + auditoria + cadastros<br/>(inserida pelo worker de ingestão)"] --> A3
+    APP -->|fila de integração, retry com backoff| ERP["ERP corporativo (API)"]
+    A5 -->|e-mails de aprovação e pagamento urgente| MAIL["Fila de e-mail (BullMQ)"]
 ```
 
-### Aplicação web
+### Camadas
 
-Construída em **Next.js 15 (App Router)** com **React 19**, priorizando **Server Components + Server Actions** — o caminho típico de uma mutação é **Server Action → Repository → Database (OracleDB)**. As camadas são bem isoladas:
-
-- **Actions** — Server Actions agrupadas por domínio (notas, compradores, aprovadores, fornecedores, usuários). Toda ação sensível passa por um _wrapper_ de segurança que injeta o usuário autenticado e **exige os papéis permitidos**; formulários são validados com **Zod**.
-- **Repository** — acesso a dados, um módulo por agregado. O SQL fica em arquivos `.sql.ts` co-localizados, e cada repositório recebe uma instância de `Database` no construtor.
-- **Database** — uma classe que encapsula o **pool de conexões OracleDB**. É possível passar uma conexão existente para rodar várias instruções em uma **única transação**.
-- **Rotas por papel** — o dashboard é agrupado por perfil (admin, aprovador, comprador, controladoria, financeiro, fiscal, gestor); um middleware protege cada rota conforme os papéis permitidos.
-
-### Worker de ingestão
-
-Um serviço Node.js/TypeScript separado, com **arquitetura hexagonal** (domínio, aplicação, infraestrutura, portas). Ele observa as pastas de entrada em tempo real e transforma documentos brutos em registros estruturados e validados na base — detalhado na próxima seção.
-
-## Pipeline de Ingestão
-
-Cada área de custo tem uma pasta de entrada monitorada. Quando um arquivo aparece, o worker executa:
-
-1. **Detecção** — o `chokidar` detecta o novo arquivo na pasta de entrada.
-2. **Idempotência** — calcula o **SHA-256** do arquivo e checa na base se ele já foi processado; duplicatas são descartadas sem reprocessar.
-3. **Extração** — dois caminhos conforme o tipo:
-   - **XML** → parsing estruturado direto (NF-e modelo 55 e NFS-e ABRASF).
-   - **PDF / imagem** → **LLM com saída estruturada** (schema Zod), cobrindo NF-e, NFS-e, notas de comunicação, boletos, faturas, notas de débito e recibos. Campos críticos do cabeçalho recebem _double-check_ automático, e a concorrência de chamadas ao LLM é limitada.
-   - **Itens/produtos** são extraídos no mesmo passo (código, descrição, NCM, CFOP, quantidade, valores, ICMS, IPI…).
-4. **Validação fiscal** — um motor de validação confere **CNPJ (mód-11)**, **chave de acesso da NF-e**, coerência de valores e datas. Cada falha aplica penalidade e reduz o **score de confiança** do documento.
-5. **Enriquecimento** — resolve fornecedor, tipo e loja na base; detecta e corrige inversão de CNPJs (emitente × destinatário).
-6. **Persistência** — insere **cabeçalho + itens na mesma transação** (rollback atômico se qualquer parte falhar) e registra a auditoria.
-7. **Roteamento do arquivo** — conforme o resultado, o arquivo é movido para `Arquivos Lidos`, `Revisão` (score abaixo do limiar) ou `Falhas`, sempre organizado por `ano/mês`.
-
-O limiar de _auto-insert_ sem revisão humana é **0,70**. Abaixo disso, a nota vai para uma fila de revisão em vez de entrar direto no fluxo.
+- **Actions (`src/actions/`)** — Server Actions agrupadas por domínio (notas, compradores, aprovadores, fornecedores, usuários…). Toda ação sensível é embrulhada por um wrapper (`secureRoleAction`/`secureAction`) que injeta o usuário autenticado e **exige os papéis permitidos**; ações baseadas em formulário passam por `secureFormAction`/`validatedAction` com um schema **Zod**. Erros são funilados por um handler único que devolve uma resposta de ação uniforme, e toda mutação chama `revalidatePath` ao final.
+- **Repository (`src/repository/`)** — um módulo por agregado (nota, item, fornecedor, comprador, aprovador, centro de custo, natureza de despesa…), cada um recebendo uma instância de `Database` no construtor. O SQL fica em arquivos próprios co-localizados por agregado, mantendo a query perto do código que a usa.
+- **Database (`src/database/`)** — uma classe que encapsula o **pool de conexões OracleDB**, exposta como singleton guardado em `globalThis` para sobreviver a hot-reload em desenvolvimento. É possível passar uma conexão já aberta para rodar várias instruções em uma **única transação**.
+- **Rotas por papel (`src/app/(dashboard)/`)** — o dashboard é agrupado por perfil (admin, comprador, aprovador, controladoria, fiscal, financeiro, gerente, gerente regional); um middleware de rota casa o primeiro segmento do caminho contra a lista de papéis permitidos, redireciona não-autenticados para o login e usuários sem permissão para uma página de acesso negado.
 
 ## Regras de Negócio
 
-O coração do sistema é a **máquina de estados** que rege a vida de cada nota fiscal.
+O coração da aplicação é a **máquina de estados** que rege a vida de cada nota fiscal — mais rica do que um simples "aguardando → aprovada": além dos estados de triagem (`sem fornecedor`, `sem natureza`, `detalhes inválidos`) e do ciclo comprador → aprovador → fiscal → integrada, existe uma **trilha fiscal estendida** para casos que exigem conferência adicional antes da integração (CPD fiscal → conferência → patrimônio → concluída) — usada quando a natureza da despesa envolve controle patrimonial. Estados terminais e de integração **não reentram** no fluxo de aprovação, uma invariante importante para evitar reprocessamento indevido.
 
 ### Fluxo de aprovação
 
-Uma nota recém-ingerida entra como **não processada**. Um job tenta **vinculá-la automaticamente** ao fornecedor, à natureza de despesa e ao aprovador responsável, usando as associações cadastradas. A partir daí:
+Uma nota recém-ingerida chega da base já com uma tentativa automática de vínculo (fornecedor, natureza de despesa, aprovador). A partir daí:
 
 - Se os dados estão incompletos ou inválidos, a nota vai para a **controladoria** corrigir (ex.: fornecedor desconhecido, natureza desconhecida, detalhes inválidos).
-- Se estão completos, segue para **validação do comprador** e depois para o **aprovador**.
-- Aprovada, vai para o **fiscal**, responsável por sincronizar com o ERP.
+- Se estão completos, segue opcionalmente para **validação do comprador** e depois para o **aprovador**, que pode aprovar, reprovar ou transferir a nota para outro aprovador.
+- Aprovada, vai para o **fiscal** — direto para integração ou, se a natureza exigir, pela trilha fiscal estendida — responsável por sincronizar os dados com o ERP.
 - Sincronizada com sucesso, atinge o estado terminal.
-
-Estados terminais e de integração **não reentram** no fluxo de aprovação — uma invariante importante para evitar reprocessamento indevido.
 
 ### Alçada por valor e escalonamento
 
-Cada aprovador tem um **valor máximo** que pode aprovar. Se o valor da nota **excede** esse limite, ela é **automaticamente transferida** para o aprovador superior definido na hierarquia. Isso garante que gastos altos sempre passem por um nível de alçada compatível, sem depender de disciplina manual.
+Cada aprovador tem um **valor máximo** que pode aprovar. Se o valor da nota **excede** esse limite, a ação de aprovação já bloqueia a operação por regra de negócio antes de chegar ao banco — o aprovador correto é resolvido pela hierarquia, garantindo que gastos altos sempre passem por um nível de alçada compatível, sem depender de disciplina manual. Um administrador do sistema pode aprovar em nome de qualquer aprovador, como via de exceção.
 
 ### Férias e aprovador substituto
 
-Se um aprovador está **de férias** (com período configurado), as notas destinadas a ele são **redirecionadas automaticamente** para o aprovador substituto. A resolução do "aprovador efetivo" acontece no momento do roteamento, mantendo o fluxo sempre com um responsável ativo.
+Se um aprovador está **de férias** (com período configurado), a resolução do "aprovador efetivo" no momento da aprovação aponta automaticamente para o **substituto** cadastrado — o fluxo nunca fica sem um responsável ativo, mesmo com o titular ausente.
+
+### Pagamentos urgentes
+
+Ao aprovar uma nota, além de avançar o status, a aplicação **enfileira e-mails de pagamento urgente** para fiscal e financeiro sempre que a despesa se enquadra nos critérios de urgência — cada área recebe um e-mail com link direto para sua própria tela, já filtrada pelas notas urgentes. A falha ao enfileirar esse e-mail é logada mas **nunca reverte a aprovação** já confirmada.
 
 ### Cálculo de DIFAL
 
-Em compras **interestaduais**, incide o **diferencial de alíquota de ICMS (DIFAL)** — a diferença entre a alíquota interestadual (destacada pelo fornecedor) e a alíquota interna do estado de destino para aquele **NCM**. O sistema separa três grupos de dados por item:
+Em compras **interestaduais**, incide o **diferencial de alíquota de ICMS (DIFAL)** — a diferença entre a alíquota interestadual (destacada pelo fornecedor) e a alíquota interna do estado de destino para aquele **NCM**. A aplicação separa três grupos de dados por item:
 
-- **Extraídos** pelo LLM/XML (valores, alíquota interestadual…).
+- **Extraídos** pelo worker de ingestão (valores, alíquota interestadual…).
 - **Enriquecidos** pelo fiscal (a alíquota **interna** do estado de destino, que varia por NCM/decreto e não é confiável extrair automaticamente).
 - **Calculados** pela aplicação, no momento em que a alíquota interna é preenchida:
 
@@ -118,48 +86,43 @@ O cálculo é **"por dentro"** (base incluída), conforme a LC 190/2022. Exemplo
 
 ### Auditoria
 
-Toda ação relevante sobre uma nota (aprovar, reprovar, transferir, comentar, atualizar) é registrada em uma **trilha de auditoria** com autor e timestamp, permitindo reconstruir o histórico completo de cada despesa.
+Toda ação relevante sobre uma nota (aprovar, reprovar, transferir, comentar, atualizar) é registrada com autor e timestamp em um histórico por nota, permitindo reconstruir a linha do tempo completa de cada despesa.
 
 ## Integrações
 
-- **Autenticação no ERP corporativo** — o login não usa base de usuários local: um provedor de autenticação customizado (Next-Auth v5, sessão JWT) valida as credenciais contra o **ERP corporativo**. Os papéis do usuário vêm dessa integração e determinam o que ele enxerga e pode fazer.
-- **Integração de saída (fila)** — quando uma nota é aprovada, ela entra em uma **fila de integração** (BullMQ + Redis) que a envia para a **API do ERP**, com _retries_ e status de acompanhamento (`aguardando`, `integrando`, `integrada`, `falha`). Isolar a integração em uma fila evita travar a UI e absorve instabilidades do ERP.
+- **Autenticação no ERP corporativo** — o login não usa base de usuários local: um provedor de autenticação customizado do Next-Auth v5 (sessão JWT) valida as credenciais contra o **ERP corporativo**. Os papéis do usuário vêm dessa integração e determinam o que ele enxerga e pode fazer.
+- **Integração de saída (fila)** — quando uma nota é aprovada, ela entra em uma **fila de integração** (BullMQ + Redis, com até 3 tentativas e backoff exponencial) que a envia para a **API do ERP** por meio de um cliente HTTP autenticado (token de acesso cacheado em memória, renovado sob demanda). Os produtores da fila (Server Actions, jobs) usam uma conexão Redis separada da do worker: falha rápido em vez de travar a ação do usuário se o Redis estiver indisponível, em vez de acumular comandos esperando reconectar. Status de acompanhamento (`aguardando`, `integrando`, `integrada`, `falha`) ficam visíveis na UI.
 - **Conversão NFe → PDF** — um **serviço lateral (sidecar) em PHP**, em container próprio, converte o XML da NF-e em PDF para visualização, mantendo essa dependência específica fora do processo principal.
+
+## Processos em Background
+
+Rodando apenas no runtime Node (nunca na edge), inicializados uma vez no bootstrap do processo:
+
+- **node-cron** — quatro jobs agendados: reprocessa notas pendentes a cada 5 minutos (tentando vincular fornecedor/natureza/aprovador), promove diariamente às 3h os lançamentos futuros que venceram, notifica aprovadores em dias úteis às 8h com um resumo diário de pendências, e — de hora em hora, em horário comercial nos dias úteis — cobra especificamente quem está com uma **despesa urgente** parada na etapa atual (aprovador, fiscal ou financeiro), com cooldown mínimo entre lembretes e um teto de notificações por dia guardados no Redis para não virar spam.
+- **BullMQ workers** — a fila de integração com o ERP e uma fila separada de e-mail (aprovações, pagamentos urgentes), ambas fechadas de forma graciosa em `SIGTERM`/`SIGINT`.
 
 ## Principais Dificuldades
 
-- **Extração confiável de documentos heterogêneos.** XML é estruturado, mas PDFs e imagens não. Usar um LLM com **saída estruturada + score de confiança + limiar de revisão** foi o que permitiu automatizar sem abrir mão do controle: o que o modelo não tem certeza vai para revisão humana, em vez de entrar errado na base.
-- **Distinção entre `null` e `"0.00"`.** Um campo **não impresso** na nota (`null`) é semanticamente diferente de um valor **destacado como zero** (isento/não incidente). Preservar essa diferença é essencial para o tratamento fiscal correto.
-- **Transação atômica cabeçalho + itens.** Uma nota sem seus itens (ou vice-versa) é um estado inválido. Inserir os dois na **mesma transação**, com rollback automático, garante consistência mesmo sob falha parcial.
-- **A nuance fiscal do DIFAL.** A alíquota interna varia por NCM e por decreto estadual — algo que **não dá para automatizar com segurança**. A solução foi um desenho híbrido: automatizar o que é seguro (extração, cálculo) e deixar explícito o ponto que exige o especialista fiscal (alíquota interna), inclusive com um índice de "itens aguardando revisão fiscal".
-- **Idempotência.** Um mesmo arquivo pode reaparecer na pasta. O **hash SHA-256** com verificação prévia garante que reprocessar nunca gere duplicatas.
-- **Processos em background.** Jobs agendados (**node-cron**) processam notas pendentes a cada poucos minutos, promovem lançamentos futuros que venceram e notificam aprovadores; workers **BullMQ/Redis** cuidam da integração e dos e-mails. Todos precisam de _graceful shutdown_ e rodar apenas no runtime Node — não na edge.
+- **Alçada e escalonamento sem gargalo manual.** Bloquear a aprovação quando o valor excede o limite do aprovador — e resolver automaticamente quem é o aprovador correto pela hierarquia — evita tanto o excesso de autonomia quanto a dependência de alguém lembrar de escalar manualmente.
+- **Trilha fiscal estendida como exceção, não regra.** Nem toda nota aprovada precisa de conferência patrimonial extra; desenhar essa trilha como um desvio opcional da máquina de estados principal, e não como um novo fluxo paralelo, manteve a lógica de aprovação central simples.
+- **Resiliência de fila sob falha de infraestrutura.** Separar a conexão Redis de quem produz (Server Actions, jobs) da de quem consome (worker) — com timeouts agressivos e sem fila offline do lado do produtor — evita que uma instabilidade no Redis trave a ação de um usuário no navegador.
+- **A nuance fiscal do DIFAL.** A alíquota interna varia por NCM e por decreto estadual — algo que **não dá para automatizar com segurança**. A solução foi um desenho híbrido: o worker de ingestão extrai o que é seguro, a aplicação calcula o resultado, e o fiscal preenche explicitamente o único ponto que exige o especialista (alíquota interna).
+- **Segurança por papel na borda da ação.** Em vez de espalhar checagens de permissão pela UI, cada Server Action é embrulhada por um wrapper que valida papel e injeta o usuário autenticado — a autorização mora em um único lugar, e SQL sempre parametrizado nos repositórios mitiga injeção.
 
 ## Tecnologias Utilizadas
-
-### Aplicação web
 
 - **Next.js 15** (App Router) + **React 19** + **TypeScript** — Server Components e Server Actions.
 - **Tailwind CSS** + componentes acessíveis (Radix/shadcn) — interface responsiva.
 - **Next-Auth v5** — autenticação integrada ao ERP corporativo (sessão JWT).
 - **Zod** — validação de schemas em todas as entradas.
-
-### Worker de ingestão
-
-- **Node.js / TypeScript** — arquitetura hexagonal (domínio, aplicação, infraestrutura).
-- **LLM com saída estruturada** — extração de PDFs e imagens; **fast-xml-parser** para XML.
-- **chokidar** — observação das pastas de entrada em tempo real.
-
-### Dados, filas e infraestrutura
-
 - **OracleDB** — base transacional e cadastral (pool de conexões, binds parametrizados).
-- **Redis + BullMQ** — filas assíncronas (integração e e-mail).
+- **Redis + BullMQ** — filas assíncronas (integração com o ERP e e-mail).
 - **node-cron** — tarefas agendadas.
-- **Docker** — empacotamento de todos os serviços (web, worker e o sidecar PHP).
+- **Docker** — empacotamento da aplicação e do sidecar PHP de conversão de PDF.
 
 ## Notas Técnicas
 
-- **Separação ingestão × operação.** Manter o worker de ingestão como serviço próprio permite escalá-lo e implantá-lo independentemente da web app; o OracleDB é o contrato entre os dois.
-- **Segurança por papel na borda da ação.** Em vez de espalhar checagens de permissão pela UI, cada Server Action é embrulhada por um _wrapper_ que valida papel e injeta o usuário autenticado — a autorização mora em um único lugar.
-- **SQL co-localizado e parametrizado.** As queries ficam em arquivos próprios por agregado e sempre usam _binds_, mitigando injeção de SQL.
+- **Divisão clara de responsabilidade com o worker de ingestão.** A aplicação web nunca lê arquivos nem chama LLMs para extrair dados de nota fiscal — ela recebe registros já validados e persistidos, e se concentra inteiramente na aprovação, nas regras fiscais que dependem de julgamento humano e na integração de saída. Os detalhes de extração e ingestão estão no [post dedicado ao worker](/post/gestao-despesas-ingestor).
+- **Segurança por papel na borda da ação.** Em vez de espalhar checagens de permissão pela UI, cada Server Action é embrulhada por um wrapper que valida papel e injeta o usuário autenticado.
+- **SQL co-localizado e parametrizado.** As queries ficam em arquivos próprios por agregado e sempre usam binds, mitigando injeção de SQL.
 - **Anonimização.** Nomes de empresa, sistemas proprietários, endereços de rede, schema do banco e URLs internas foram deliberadamente omitidos deste post — o foco é a engenharia, não os dados corporativos.

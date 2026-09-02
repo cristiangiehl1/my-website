@@ -6,6 +6,10 @@ A corporate intelligent assistant platform that centralizes all internal company
 
 The system uses a multi-agent architecture with central orchestration via the OpenAI Responses API. An orchestrator agent interprets the user's intent and delegates to domain-specialized agents, which in turn query corporate databases, internal services, and document knowledge bases to compose consolidated responses.
 
+![Corporate assistant chat screen](/images/orchestrator-agent-chat.png)
+
+_Chat interface — branding, logo, and user identity were removed from the screenshot._
+
 **Key Differentiators**
 
 - **Semantic Search with RAG:** Document base indexed with embeddings for contextual retrieval and augmented generation
@@ -13,7 +17,42 @@ The system uses a multi-agent architecture with central orchestration via the Op
 - **Async Processing:** Job queues with Redis and BullMQ for operations that require background processing
 - **Multiple Channels:** Web interface plus Telegram integration as an additional communication channel
 
+![Login screen with corporate authentication](/images/orchestrator-agent-login.png)
+
+_Active Directory login — branding, logo, and username were removed from the screenshot._
+
+## The Problem
+
+Before a single assistant existed, every day-to-day question meant opening a different system: the store management system for inventory or sales, the expense system for an invoice, the HR or IT portal for an institutional question, the helpdesk to open a ticket. Each with its own navigation, its own filters, and often its own login session — the employee was the one doing the integration by hand, knowing which system to check and how to phrase the right query.
+
+The assistant's goal is to collapse that fragmentation into a single conversational interface: the user describes what they need in natural language, and it's the **orchestrator** — not the user — who decides which system to query, builds the corresponding technical request, and returns a consolidated answer. That holds both for a one-off question ("which stores sold the most this week?") and for a multi-step flow (opening a ticket, generating a PDF report from data already discussed in the conversation).
+
 ## Agent Architecture
+
+```mermaid
+flowchart TD
+    U1["User — Web"] --> ORC
+    U2["User — Telegram"] --> POLL["Polling service<br/>(separate process/container)"] --> ORC
+    subgraph ORC["OrchestratorAgent (OpenAI Responses API)"]
+        direction TB
+        O1["Interprets intent · routes by topic<br/>history segregated per sub-agent"]
+    end
+    ORC -->|"askExpenseAgent"| A1["Expense Management<br/>(agent)"]
+    ORC -->|"askStoreOpsAgent"| A2["Store Operations<br/>(agent)"]
+    ORC -->|"openTicket"| A3["Helpdesk<br/>(agent)"]
+    ORC -->|"searchDocuments"| A4["Document Indexer<br/>(librarian agent)"]
+    A1 --> DB["Oracle (ERP/inventory/expenses)"]
+    A2 --> DB
+    A4 --> VEC["Supabase + pgvector<br/>(embeddings)"]
+    ORC --> ADM["Admin Panel<br/>(cost, tracing, health check)"]
+    ORC -.->|"LDAP/Active Directory"| AUTH["Authentication and RBAC<br/>(AD groups)"]
+```
+
+![Real agent interconnection map, generated from the code](/images/orchestrator-agent-diagram.png)
+
+_Agent map generated automatically from the orchestrator's tool registry — internal names were swapped for the generic names used in this post._
+
+Each sub-agent is its own class (`BaseAgent`) with its own `systemPrompt`, model, and tool set — the orchestrator never executes domain logic directly; it **delegates** through a specific tool (`askExpenseAgent`, `askStoreOpsAgent`, `openTicket`) and forwards the response back to the user.
 
 The system is composed of **5 specialized AI agents**, each scoped to a domain, orchestrated by a central agent that interprets user intent and decides which sub-agent or tool should handle each request.
 
@@ -204,6 +243,10 @@ The admin panel (`/admin`) provides full visibility into platform usage for **co
 
 Three main dashboards offer visibility at different levels of granularity:
 
+![Per-store consumption dashboard in the admin panel](/images/orchestrator-agent-consumo.png)
+
+_Per-store consumption — branding, user identity, and the real token/cost/volume figures were removed from the screenshot._
+
 **Per-User Usage:**
 
 - Aggregated KPI cards: total tokens consumed, distinct active users, total questions processed
@@ -254,6 +297,15 @@ The system status page (`/admin/status`) monitors the health of all services:
 - **Tracked sessions**: every login records IP, user-agent, timestamp, and a cryptographic token (`crypto.randomBytes(48)`) with a 7-day expiration
 - **AD-based authorization**: admin routes require membership in specific groups verified via LDAP; unauthorized access clears the session cookie
 - **Activity logging**: while there is no dedicated audit table, the LLM call records, messages, and tool calls themselves form a complete trail of all interactions — who did what, when, with which model, and at what cost
+
+## Key Challenges
+
+- **Correct routing across sub-agents.** With multiple domains (expenses, inventory/store operations, helpdesk, document search) sharing the same chat, the orchestrator's system prompt has to exhaustively list each topic's vocabulary (e.g. "SKU, gondola, picking, pallet shortage" for store operations) to pick the right tool — a wrong route means asking the wrong system and returning "not found" for something that existed in another domain.
+- **History segregated per sub-agent.** Each sub-agent only sees turns where it was previously consulted — it has no access to answers given directly by the orchestrator or by another agent. This keeps a sub-agent from "seeing" data outside its domain, but requires the orchestrator to explicitly copy any relevant out-of-scope data when delegating a follow-up, or the sub-agent loses context.
+- **Preserving query scope across follow-ups.** When a user relaxes a filter ("don't filter by product", "show me all"), the system has to keep the modules already queried in the previous question instead of widening the search to modules that were never part of the original question — an explicit prompt rule, not something the model reliably infers on its own.
+- **Consistent behavior across channels.** Web and Telegram are both served by the same `OrchestratorAgent`, but Telegram supports only a subset of HTML, can't render charts, and receives voice instead of text. Solving this with a `source` parameter and a per-channel formatting prompt avoided duplicating business logic — the adaptation stays in the presentation layer only.
+- **Tracking cost with real granularity.** Every model call is logged individually (agent, model, input/output/reasoning tokens, hyperparameters), and USD cost is computed separately via a per-token price table — separating "what was consumed" (database layer) from "what it cost" (application layer) lets the model or the price table change without migrating historical data.
+- **Degrading without taking the service down.** Rate limiting, the distributed lock, and deduplication on the Telegram side all depend on Redis; instead of failing when Redis goes down, each mechanism has an explicit fallback (local memory, bypass) — the platform keeps responding, with weaker guarantees, instead of stopping.
 
 ## Confidentiality Notice
 

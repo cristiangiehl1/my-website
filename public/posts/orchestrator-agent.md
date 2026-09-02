@@ -6,6 +6,10 @@ Plataforma corporativa de assistente inteligente que centraliza as interações 
 
 O sistema utiliza uma arquitetura multi-agente com orquestração central via OpenAI Responses API. Um agente orquestrador interpreta a intenção do usuário e delega a agentes especializados por domínio, que por sua vez consultam bancos de dados corporativos, serviços internos e bases de conhecimento documental para compor respostas consolidadas.
 
+![Tela de chat do assistente corporativo](/images/orchestrator-agent-chat.png)
+
+_Interface de chat — marca, logo e identificação do usuário foram removidos da captura._
+
 **Diferenciais**
 
 - **Busca Semântica com RAG:** Base documental indexada com embeddings para recuperação contextual e geração aumentada
@@ -13,7 +17,42 @@ O sistema utiliza uma arquitetura multi-agente com orquestração central via Op
 - **Processamento Assíncrono:** Filas de jobs com Redis e BullMQ para operações que exigem processamento em background
 - **Múltiplos Canais:** Interface web e integração com Telegram como canal adicional de comunicação
 
+![Tela de login com autenticação corporativa](/images/orchestrator-agent-login.png)
+
+_Login via Active Directory — marca, logo e nome de usuário foram removidos da captura._
+
+## O Problema
+
+Antes de um assistente único, cada pergunta do dia a dia exigia abrir um sistema diferente: o sistema de gestão de loja para consultar inventário ou vendas, o sistema de despesas para uma nota fiscal, o portal de RH ou TI para uma dúvida institucional, o helpdesk para abrir um chamado. Cada um com sua própria navegação, seus próprios filtros e, frequentemente, sua própria sessão de login — o colaborador é quem faz a integração manualmente, sabendo em qual sistema procurar e como montar a consulta certa.
+
+O objetivo do assistente é colapsar essa fragmentação em uma única interface conversacional: o usuário descreve o que precisa em linguagem natural, e é o **orquestrador** — não o usuário — quem decide a qual sistema recorrer, monta a consulta técnica correspondente e devolve uma resposta consolidada. Isso vale tanto para uma pergunta pontual ("quais lojas venderam mais essa semana?") quanto para um fluxo de várias etapas (abrir um chamado, gerar um relatório em PDF a partir de dados já discutidos na conversa).
+
 ## Arquitetura de Agentes
+
+```mermaid
+flowchart TD
+    U1["Usuário — Web"] --> ORC
+    U2["Usuário — Telegram"] --> POLL["Serviço de polling<br/>(processo/container separado)"] --> ORC
+    subgraph ORC["OrchestratorAgent (OpenAI Responses API)"]
+        direction TB
+        O1["Interpreta intenção · roteia por tema<br/>histórico segregado por sub-agente"]
+    end
+    ORC -->|"askExpenseAgent"| A1["Gestão de Despesas<br/>(agent)"]
+    ORC -->|"askStoreOpsAgent"| A2["Operações de Loja<br/>(agent)"]
+    ORC -->|"openTicket"| A3["Helpdesk<br/>(agent)"]
+    ORC -->|"searchDocuments"| A4["Indexador de Documentos<br/>(librarian agent)"]
+    A1 --> DB["Oracle (ERP/estoque/despesas)"]
+    A2 --> DB
+    A4 --> VEC["Supabase + pgvector<br/>(embeddings)"]
+    ORC --> ADM["Painel Admin<br/>(custos, tracing, health check)"]
+    ORC -.->|"LDAP/Active Directory"| AUTH["Autenticação e RBAC<br/>(grupos AD)"]
+```
+
+![Mapa real de interconexão dos agentes, gerado a partir do código](/images/orchestrator-agent-diagram.png)
+
+_Mapa de agentes gerado automaticamente a partir do registro de tools do orquestrador — nomes internos foram trocados pelos nomes genéricos usados neste post._
+
+Cada sub-agente é uma classe própria (`BaseAgent`) com seu próprio `systemPrompt`, modelo e conjunto de tools — o orquestrador não executa a lógica de domínio diretamente, ele **delega** via uma tool específica (`askExpenseAgent`, `askStoreOpsAgent`, `openTicket`) e repassa a resposta ao usuário.
 
 O sistema é composto por **5 agentes de IA** especializados por domínio, orquestrados por um agente central que interpreta a intenção do usuário e decide qual sub-agente ou ferramenta deve processar a requisição.
 
@@ -204,6 +243,10 @@ O painel de administração (`/admin`) fornece visibilidade completa sobre o con
 
 Três dashboards principais oferecem visibilidade em diferentes níveis de granularidade:
 
+![Dashboard de consumo por loja no painel administrativo](/images/orchestrator-agent-consumo.png)
+
+_Consumo por loja — marca, identificação do usuário e os valores reais de tokens/custo/volume foram removidos da captura._
+
 **Uso por Usuário:**
 
 - Cards de KPI agregados: total de tokens consumidos, usuários ativos distintos, total de perguntas processadas
@@ -254,6 +297,15 @@ A página de status do sistema (`/admin/status`) monitora a saúde de todos os s
 - **Sessões rastreadas**: cada login registra IP, user-agent, timestamp e token criptográfico (`crypto.randomBytes(48)`) com expiração de 7 dias
 - **Autorização por AD**: rotas administrativas exigem pertencimento a grupos específicos verificados via LDAP; acessos não autorizados limpam o cookie de sessão
 - **Registro de atividade**: embora não exista uma tabela de auditoria dedicada, os próprios registros de chamadas LLM, mensagens e tool calls compõem uma trilha completa de todas as interações — quem fez o quê, quando, com qual modelo e a que custo
+
+## Principais Dificuldades
+
+- **Roteamento correto entre sub-agentes.** Com múltiplos domínios (despesas, inventário/operações de loja, helpdesk, busca documental) compartilhando o mesmo chat, o system prompt do orquestrador precisa listar de forma exaustiva o vocabulário de cada tema (ex.: "SKU, gôndola, picking, ruptura em palete" para operações de loja) para decidir corretamente qual tool chamar — um roteamento errado significa perguntar ao sistema errado e devolver "não encontrei" para algo que existia no outro domínio.
+- **Histórico segregado por sub-agente.** Cada sub-agente só enxerga os turnos em que ele próprio foi consultado anteriormente — ele não tem acesso a respostas dadas diretamente pelo orquestrador ou por outro agente. Isso evita que um sub-agente "veja" dados fora do seu domínio, mas exige que o orquestrador copie explicitamente qualquer dado relevante de fora desse histórico ao delegar um follow-up, senão o sub-agente perde contexto.
+- **Preservar o escopo de uma consulta em follow-ups.** Quando o usuário afrouxa um filtro ("sem filtrar por produto", "traz todas"), o sistema precisa manter os módulos já consultados na pergunta anterior em vez de ampliar a busca para módulos que nunca fizeram parte da pergunta original — uma regra explícita no prompt, não algo que o modelo infere sozinho de forma confiável.
+- **Comportamento consistente entre canais.** Web e Telegram são atendidos pelo mesmo `OrchestratorAgent`, mas Telegram tem um subconjunto de HTML suportado, não renderiza gráficos e recebe áudio em vez de texto. Resolver isso com um parâmetro `source` e um prompt de formatação por canal evitou duplicar a lógica de negócio — a adaptação fica só na camada de apresentação.
+- **Rastrear custo com granularidade real.** Cada chamada ao modelo é registrada individualmente (agente, modelo, tokens de entrada/saída/raciocínio, hiperparâmetros), e o custo em USD é calculado à parte, por uma tabela de preço por token — separar "o que foi consumido" (camada de banco) de "quanto isso custou" (camada de aplicação) permite trocar de modelo ou de tabela de preços sem migrar dados históricos.
+- **Degradar sem derrubar o serviço.** Rate limiting, lock distribuído e deduplicação do lado do Telegram dependem do Redis; em vez de falhar quando o Redis cai, cada mecanismo tem um fallback explícito (memória local, bypass) — a plataforma continua respondendo, com menos garantias, em vez de parar.
 
 ## Nota sobre Confidencialidade
 

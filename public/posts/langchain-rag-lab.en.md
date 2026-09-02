@@ -49,16 +49,26 @@ flowchart TD
 
 **Summarized flow:** the document is loaded (`DocumentLoader`), split (`DocumentProcessor`), embedded by the HuggingFace Inference API (`EmbeddingsService`), and persisted (`VectorStoreRepository`). At chat time, the `ChatService` embeds the question, retrieves the most similar _chunks_, and builds the context for the LLM.
 
+`EmbeddingsService` and `VectorStoreRepository` are **lazy singletons** (`getInstance()`): the HuggingFace client and the `PGVectorStore` connection pool are created once and reused across requests — avoiding a fresh connection on every call in a serverless environment, at the cost of an explicitly logged "cold start" on first creation.
+
 ## Ingestion Pipeline
 
 ![LangChain RAG Lab ingestion page](/images/rag-ingestao.png)
 
 The `/ingest` page exposes each step of document preparation:
 
-1. **Document** — paste text or attach a `.txt` / `.md` / `.pdf` file (PDF via LangChain's `PDFLoader`).
+1. **Document** — paste text or attach a `.txt` / `.md` / `.pdf` file (PDF via LangChain's `PDFLoader`, with `splitPages: false` — all pages are combined into a single text before splitting; an unsupported file type throws an explicit error).
 2. **Split configuration** — using `RecursiveCharacterTextSplitter`, adjust `chunkSize`, `chunkOverlap`, and optional separators.
 3. **Preview chunks** — shows all chunks numbered and with their sizes. **Nothing is sent to the model or the database at this step.**
-4. **Confirm and generate embeddings** — each chunk is embedded via the HuggingFace Inference API and saved to pgvector with metadata (`source`, `chunkIndex`, etc.). Changing the text or configuration invalidates the preview and requires previewing again.
+4. **Confirm and generate embeddings** — each chunk is embedded via the HuggingFace Inference API and saved to pgvector with metadata (`source`, `chunkIndex`, `totalChunks`, `chunkSize`, `chunkOverlap`, `splitter`, `ingestedAt`). Changing the text or configuration invalidates the preview and requires previewing again.
+
+### Vector store inspector
+
+The same `/ingest` page exposes a **pgvector stats panel**, extending the "nothing stays opaque" philosophy beyond the chunk preview:
+
+- **Total vectors** stored, plus a badge per document (`source · chunk count`).
+- A **paginated listing** (20 per page, with "load more") of each individual vector, filterable by document, showing: the **first 8 raw embedding values** (`vector_dims` + the `vector::real[][1:8]` slice), the full stored chunk text, and the entire `metadata` jsonb.
+- A **clear all** button (`DELETE FROM embeddings`, with confirmation) to wipe the vector store and restart an experiment from scratch.
 
 ## RAG Chat
 
@@ -68,8 +78,8 @@ On the `/chat` page, the app embeds the question, retrieves the `topK` most simi
 
 - Each response displays the **retrieved sources** with their **similarity score** (cosine), the model used, and the **applied parameters**.
 - The **side panel** is fully configurable and persisted in `localStorage`:
-  - **Retrieval:** `topK` and minimum score threshold.
-  - **Generation:** `temperature`, `top_p`, `top_k` (sampling — distinct from the retrieval `topK`), `max_tokens`, `frequency_penalty`, `presence_penalty`, and `system prompt`.
+  - **Retrieval:** `topK` and minimum score threshold — `minScore` is applied **in application code, after the search** (filtering results pgvector already returned), not as part of the SQL query.
+  - **Generation:** `temperature`, `top_p`, `top_k` (sampling — distinct from the retrieval `topK`), `max_tokens`, `frequency_penalty`, `presence_penalty`, and `system prompt`. Since `top_k` isn't a native OpenAI parameter, it's sent via `modelKwargs` and forwarded verbatim by OpenRouter to the underlying model provider.
 - The **prompt is structured** (`promptConfig` + templates) and assembled into `SystemMessage` (persona/rules) + `HumanMessage` (context/question), with an optional free-form system prompt override.
 
 ## Structured Prompt
@@ -194,6 +204,7 @@ The model becomes smaller **primarily because of the 4-bit weights**, while keep
 
 - **Displayed similarity** = `1 - cosine_distance` from pgvector (0..1, higher = more similar).
 - `serverExternalPackages` in `next.config.mjs` prevents `pdf-parse` and `pg` from being bundled into the server bundle; `outputFileTracingIncludes` ensures prompt files (read via `fs`) are included in the Vercel function.
-- The chat endpoint first sends a JSON block with sources, a delimiter, and then streams the response tokens (protocol in `src/lib/stream.ts`).
 - The vector dimension (`384`) is coupled to the embedding model; switching models requires re-ingesting all documents.
 - Every environment variable is validated with Zod on boot (`src/lib/env.ts`) — if anything is missing or invalid, the application fails at startup with a clear message.
+- **pgvector indexes.** The `embeddings` table keeps an `hnsw (vector vector_cosine_ops)` index for similarity search plus a separate index on `metadata->>'source'`, used when chat or the inspector filter by a specific document.
+- **Streaming protocol.** The `/api/chat` response body is `<metadata JSON><delimiter>__ANSWER__<answer tokens...>`; if generation fails mid-stream, a second delimiter (`__ERROR__`) is appended with the error message — the client can always tell metadata, answer text, and a late failure apart within the same response body.

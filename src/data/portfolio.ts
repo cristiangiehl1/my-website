@@ -4,6 +4,25 @@ import { getAuthorBySlug } from '@/helpers/get-author'
 
 export const __PORTFOLIO__: Project[] = [
   {
+    id: 9,
+    slug: 'gestao-despesas-ingestor',
+    coverUrl: generateImgUrl('gestao-despesas-ingestor.png'),
+    technologies: [
+      'typescript',
+      'node',
+      'oracle',
+      'docker',
+      'zod',
+      'openai',
+      'chokidar',
+      'sftp',
+    ],
+    category: 'backend',
+    author: getAuthorBySlug('cristian-giehl'),
+    featured: true,
+    createdAt: '09/02/2026',
+  },
+  {
     id: 8,
     slug: 'resumo-diario-de-frota',
     coverUrl: generateImgUrl('resumo-diario-de-frota.png'),
@@ -45,7 +64,7 @@ export const __PORTFOLIO__: Project[] = [
   {
     id: 3,
     slug: 'orchestrator-agent',
-    coverUrl: generateImgUrl('ai-agent.png'),
+    coverUrl: generateImgUrl('orchestrator-agent-diagram.png'),
     technologies: [
       'typescript',
       'next',
@@ -79,7 +98,6 @@ export const __PORTFOLIO__: Project[] = [
       'redis',
       'bullmq',
       'docker',
-      'openai',
       'zod',
       'nextauth',
       'node',

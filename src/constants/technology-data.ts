@@ -51,6 +51,8 @@ import {
   TbBrandCypress,
   TbBrandReactNative,
   TbClock,
+  TbFileUpload,
+  TbFolderSearch,
   TbMailCode,
   TbMailSearch,
   TbMasksTheater,
@@ -496,6 +498,26 @@ export const TECHNOLOGY_DATA = {
     style: { iconColor: 'text-sky-400' },
     category: 'Tool',
     link: 'https://github.com/postalsys/imapflow',
+  },
+
+  // File watching
+  chokidar: {
+    value: 'chokidar',
+    label: 'Chokidar',
+    icon: TbFolderSearch,
+    style: { iconColor: 'text-lime-500' },
+    category: 'Tool',
+    link: 'https://github.com/paulmillr/chokidar',
+  },
+
+  // File transfer protocol
+  sftp: {
+    value: 'sftp',
+    label: 'SFTP',
+    icon: TbFileUpload,
+    style: { iconColor: 'text-slate-400' },
+    category: 'Tool',
+    link: 'https://github.com/theophilusx/ssh2-sftp-client',
   },
 
   // Markdown

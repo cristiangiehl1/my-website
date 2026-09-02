@@ -1,112 +1,80 @@
 ## About the Project
 
-**Gestão de Despesas** is an **internal** system for a retail company, built to manage **non-resale purchase expenses** — everything the company buys to operate (services, materials, maintenance, marketing, IT…) that **doesn't** go on the shelf. Each invoice goes through a role-based approval workflow and, at the end, is integrated back into the **corporate ERP**.
+**Gestão de Despesas** is the internal web application of a retail company for managing **non-resale purchase expenses** — everything the company buys to operate (services, materials, maintenance, marketing, IT…) that **doesn't** go on the shelf. Built on **Next.js 15 (App Router)** with **React 19**, it receives invoices already extracted and persisted by a dedicated ingestion worker (see the [Gestão de Despesas — Ingestor](/en-US/post/gestao-despesas-ingestor) post), routes each one through an **eight-role approval workflow**, applies tax and authority-level rules, and integrates the result back into the **corporate ERP**.
 
-> ⚠️ **Internal project — no public link.** Because this is a corporate system handling real tax and financial data, **there is no public URL or GitHub repository available**. This post describes the **architecture, business rules, integrations, and key challenges** in an anonymized way — without exposing sensitive data, internal addresses, proprietary system names, or credentials.
-
-The system is, in practice, **two components** that form a single pipeline:
-
-- An **ingestion worker** (Node.js/TypeScript) that watches network folders, extracts invoice data, and inserts it into the database.
-- A **web application** (Next.js 15) where invoices are validated, approved through multiple levels, and integrated into the ERP.
+> ⚠️ **Internal project — no public link.** Because this is a corporate system handling real tax and financial data, **there is no public URL or GitHub repository available**. This post describes the **architecture, business rules, and key challenges** of the web application in an anonymized way — without exposing sensitive data, internal addresses, proprietary system names, or credentials.
 
 ## The Problem
 
-Before the system existed, non-resale purchase expenses arrived in a **fragmented** way — invoices in XML, PDF, or even images, sent by email or dropped into shared folders by each cost center (accounting, marketing, HR, IT, maintenance, procurement). From there, the process was manual and brittle:
+Before the system existed, non-resale purchase expenses arrived in a **fragmented** way — invoices sent by email or dropped into shared folders by each cost center (accounting, marketing, HR, IT, maintenance, procurement). From there, the approval process was manual and brittle:
 
 - **No traceability:** there was no record of who approved what, when, or for how much.
 - **No consistent approval authority:** approvals outside a manager's responsibility limit went unnoticed.
 - **Manual ERP entry:** someone would re-read the invoice and retype the data into the ERP — slow and error-prone.
 - **Tax complexity:** calculations like **DIFAL** (the ICMS interstate tax differential) required manual lookup and separate calculation.
 
-The system's goal is to **close this cycle end-to-end**: capture the invoice automatically, extract and validate its data, run it through an auditable approval workflow with authority levels, and **integrate it into the ERP without rekeying**.
+The application's goal is to close the half of the cycle that starts **after** the invoice is already in the database: route it through an auditable approval workflow with authority levels, apply the tax rules that require human judgment, and **integrate it into the ERP without rekeying**.
 
 ## Architecture
 
-The system cleanly separates **ingestion** (producing structured data from documents) from **operations** (approval and integration), with OracleDB as the shared contract between both worlds.
+A typical mutation flows as **Server Action → Repository → Database (OracleDB)**, with Server Components as the default and `'use client'` reserved for what genuinely needs browser state.
 
 ```mermaid
 flowchart TD
-    N["Network folders<br/>(XML/PDF/image)"] --> W1
-    subgraph W["INGESTION WORKER (Node.js/TypeScript)"]
+    U["Browser<br/>(buyer, approver, accounting,<br/>tax, finance, admin, manager, regional manager)"] --> A1
+    subgraph APP["WEB APPLICATION (Next.js 15 App Router · React 19)"]
         direction TB
-        W1["chokidar (watch) → SHA-256 hash (idempotency)"]
-        X["XmlExtractor<br/>(NF-e/NFS-e)"]
-        L["LlmExtractor<br/>(PDF/image, LLM)"]
-        W2["Tax validation → confidence score"]
-        W1 --> X --> W2
-        W1 --> L --> W2
-    end
-    W2 -->|insert header + line items, same transaction| DB["OracleDB<br/>invoices + items + audit + reference data"]
-    DB --> A1
-    U["Browser<br/>(buyer, approver, accounting,<br/>tax, admin)"] --> A1
-    subgraph APP["WEB APPLICATION (Next.js 15 App Router)"]
-        direction TB
-        A1["Server Actions → Repository → Database"]
-        A2["Approval state machine"]
-        A3["node-cron (jobs) · BullMQ + Redis (queues)"]
+        A1["Server Actions<br/>secureRoleAction / secureFormAction<br/>injects user + enforces role + Zod"]
+        A2["Repository<br/>one module per aggregate, co-located SQL"]
+        A3["Database<br/>OracleDB pool singleton (globalThis)"]
+        A4["Approval state machine"]
+        A5["node-cron (jobs) · BullMQ + Redis (queues)"]
         A1 --> A2 --> A3
+        A1 --> A4
+        A1 --> A5
     end
-    APP -->|integration queue| ERP["Corporate ERP (API)"]
+    DB["OracleDB<br/>invoices + items + audit + reference data<br/>(inserted by the ingestion worker)"] --> A3
+    APP -->|integration queue, retry with backoff| ERP["Corporate ERP (API)"]
+    A5 -->|approval and urgent-payment emails| MAIL["Email queue (BullMQ)"]
 ```
 
-### Web application
+### Layers
 
-Built on **Next.js 15 (App Router)** with **React 19**, leaning heavily on **Server Components + Server Actions** — a typical mutation flows as **Server Action → Repository → Database (OracleDB)**. The layers are well isolated:
-
-- **Actions** — Server Actions grouped by domain (invoices, buyers, approvers, suppliers, users). Every sensitive action goes through a security wrapper that injects the authenticated user and **enforces required roles**; forms are validated with **Zod**.
-- **Repository** — data access, one module per aggregate. SQL lives in co-located `.sql.ts` files, and each repository receives a `Database` instance in its constructor.
-- **Database** — a class that wraps the **OracleDB connection pool**. An existing connection can be passed in to run multiple statements within a **single transaction**.
-- **Role-based routes** — the dashboard is grouped by profile (admin, approver, buyer, accounting, finance, tax, manager); middleware protects each route based on the allowed roles.
-
-### Ingestion worker
-
-A separate Node.js/TypeScript service with **hexagonal architecture** (domain, application, infrastructure, ports). It watches the input folders in real time and transforms raw documents into structured, validated records in the database — detailed in the next section.
-
-## Ingestion Pipeline
-
-Each cost center has a monitored input folder. When a file appears, the worker runs:
-
-1. **Detection** — `chokidar` detects the new file in the input folder.
-2. **Idempotency** — computes the **SHA-256** hash of the file and checks the database to see if it has already been processed; duplicates are discarded without reprocessing.
-3. **Extraction** — two paths depending on the file type:
-   - **XML** → direct structured parsing (NF-e model 55 and NFS-e ABRASF).
-   - **PDF / image** → **LLM with structured output** (Zod schema), covering NF-e, NFS-e, communication invoices, bank slips, bills, debit notes, and receipts. Critical header fields receive automatic double-checking, and LLM call concurrency is capped.
-   - **Line items/products** are extracted in the same step (code, description, NCM, CFOP, quantity, values, ICMS, IPI…).
-4. **Tax validation** — a validation engine checks **CNPJ (mod-11)**, **NF-e access key**, value consistency, and dates. Each failure applies a penalty and reduces the document's **confidence score**.
-5. **Enrichment** — resolves the supplier, type, and store in the database; detects and corrects CNPJ inversion (issuer vs. recipient).
-6. **Persistence** — inserts **header + line items in the same transaction** (atomic rollback if any part fails) and writes the audit record.
-7. **File routing** — depending on the result, the file is moved to `Files Read`, `Review` (score below the threshold), or `Failures`, always organized by `year/month`.
-
-The auto-insert threshold without human review is **0.70**. Below that, the invoice goes to a review queue instead of entering the workflow directly.
+- **Actions (`src/actions/`)** — Server Actions grouped by domain (invoices, buyers, approvers, suppliers, users…). Every sensitive action is wrapped by a handler (`secureRoleAction`/`secureAction`) that injects the authenticated user and **enforces the allowed roles**; form-based actions go through `secureFormAction`/`validatedAction` with a **Zod** schema. Errors are funneled through a single handler that returns a uniform action response, and every mutation calls `revalidatePath` at the end.
+- **Repository (`src/repository/`)** — one module per aggregate (invoice, line item, supplier, buyer, approver, cost center, expense type…), each receiving a `Database` instance in its constructor. SQL lives in its own co-located files per aggregate, keeping queries close to the code that uses them.
+- **Database (`src/database/`)** — a class wrapping the **OracleDB connection pool**, exposed as a singleton stored on `globalThis` to survive hot reload in development. An existing connection can be passed in to run multiple statements within a **single transaction**.
+- **Role-based routes (`src/app/(dashboard)/`)** — the dashboard is grouped by profile (admin, buyer, approver, accounting, tax, finance, manager, regional manager); route middleware matches the first path segment against the allowed roles, redirecting unauthenticated users to login and unauthorized users to an access-denied page.
 
 ## Business Rules
 
-The heart of the system is the **state machine** that governs the lifecycle of each invoice.
+The heart of the application is the **state machine** that governs the lifecycle of each invoice — richer than a simple "pending → approved": besides the triage states (`unknown supplier`, `unknown expense type`, `invalid details`) and the buyer → approver → tax → integrated cycle, there is an **extended tax track** for cases requiring extra review before integration (fiscal desk → check → asset registration → completed) — used when the expense type involves asset control. Terminal and integration states **do not re-enter** the approval workflow, an important invariant to prevent unintended reprocessing.
 
 ### Approval workflow
 
-A newly ingested invoice enters as **unprocessed**. A job attempts to **automatically link** it to the supplier, expense type, and responsible approver using the configured associations. From there:
+A newly ingested invoice arrives from the database already with an automatic linking attempt (supplier, expense type, approver). From there:
 
 - If the data is incomplete or invalid, the invoice goes to **accounting** for correction (e.g., unknown supplier, unknown expense type, invalid details).
-- If the data is complete, it moves on to **buyer validation** and then to the **approver**.
-- Once approved, it goes to the **tax officer**, who is responsible for syncing with the ERP.
+- If the data is complete, it optionally moves on to **buyer validation** and then to the **approver**, who can approve, reject, or transfer the invoice to another approver.
+- Once approved, it goes to the **tax officer** — directly to integration, or through the extended tax track if the expense type requires it — responsible for syncing with the ERP.
 - Successfully synced, it reaches the terminal state.
-
-Terminal and integration states **do not re-enter** the approval workflow — an important invariant to prevent unintended reprocessing.
 
 ### Approval authority by amount and escalation
 
-Each approver has a **maximum amount** they can approve. If an invoice's amount **exceeds** that limit, it is **automatically transferred** to the next approver in the hierarchy. This ensures that large expenses always pass through an appropriate authority level, without relying on manual discipline.
+Each approver has a **maximum amount** they can approve. If an invoice's amount **exceeds** that limit, the approval action itself blocks the operation as a business rule before it reaches the database — the correct approver is resolved through the hierarchy, ensuring large expenses always pass through an appropriate authority level, without relying on manual discipline. A system administrator can approve on behalf of any approver as an exception path.
 
 ### Vacation and substitute approver
 
-If an approver is **on vacation** (with a configured period), invoices assigned to them are **automatically redirected** to the substitute approver. The "effective approver" is resolved at routing time, so the workflow always has an active responsible party.
+If an approver is **on vacation** (with a configured period), resolving the "effective approver" at approval time automatically points to the registered **substitute** — the workflow never ends up without an active responsible party, even with the primary approver away.
+
+### Urgent payments
+
+When approving an invoice, besides advancing its status, the application **queues urgent-payment emails** for the tax and finance teams whenever the expense meets the urgency criteria — each team gets an email with a direct link to their own screen, already filtered to urgent invoices. A failure to queue that email is logged but **never reverts** an approval that has already been confirmed.
 
 ### DIFAL calculation
 
-For **interstate purchases**, the **ICMS interstate tax differential (DIFAL)** applies — the difference between the interstate rate (as shown by the supplier) and the destination state's internal rate for that **NCM** code. The system separates three data groups per line item:
+For **interstate purchases**, the **ICMS interstate tax differential (DIFAL)** applies — the difference between the interstate rate (as shown by the supplier) and the destination state's internal rate for that **NCM** code. The application separates three data groups per line item:
 
-- **Extracted** by the LLM/XML (values, interstate rate…).
+- **Extracted** by the ingestion worker (values, interstate rate…).
 - **Enriched** by the tax officer (the **internal** rate for the destination state, which varies by NCM/state decree and is not reliable to extract automatically).
 - **Calculated** by the application when the internal rate is filled in:
 
@@ -118,48 +86,43 @@ The calculation is **"tax-inclusive"** (inclusive base), per LC 190/2022. Sample
 
 ### Audit trail
 
-Every significant action on an invoice (approve, reject, transfer, comment, update) is recorded in an **audit trail** with author and timestamp, making it possible to reconstruct the full history of any expense.
+Every significant action on an invoice (approve, reject, transfer, comment, update) is recorded with author and timestamp in a per-invoice history, making it possible to reconstruct the full timeline of any expense.
 
 ## Integrations
 
-- **Corporate ERP authentication** — login does not use a local user database: a custom authentication provider (Next-Auth v5, JWT session) validates credentials against the **corporate ERP**. User roles come from this integration and determine what each user can see and do.
-- **Outbound integration (queue)** — when an invoice is approved, it enters an **integration queue** (BullMQ + Redis) that sends it to the **ERP API**, with retries and status tracking (`pending`, `integrating`, `integrated`, `failed`). Isolating the integration in a queue prevents the UI from blocking and absorbs ERP instability.
+- **Corporate ERP authentication** — login does not use a local user database: a custom Next-Auth v5 authentication provider (JWT session) validates credentials against the **corporate ERP**. User roles come from this integration and determine what each user can see and do.
+- **Outbound integration (queue)** — when an invoice is approved, it enters an **integration queue** (BullMQ + Redis, up to 3 attempts with exponential backoff) that sends it to the **ERP API** through an authenticated HTTP client (an in-memory cached access token, refreshed on demand). Queue producers (Server Actions, jobs) use a Redis connection separate from the worker's: it fails fast instead of blocking the user's action if Redis is unavailable, rather than piling up commands waiting to reconnect. Tracking statuses (`pending`, `integrating`, `integrated`, `failed`) are visible in the UI.
 - **NF-e XML → PDF conversion** — a **PHP sidecar service**, in its own container, converts the NF-e XML to PDF for viewing, keeping this specific dependency out of the main process.
+
+## Background Processes
+
+Running only in the Node runtime (never on the edge), initialized once at process bootstrap:
+
+- **node-cron** — four scheduled jobs: reprocess pending invoices every 5 minutes (attempting to link supplier/expense type/approver), promote future-dated entries that have matured daily at 3am, notify approvers with a daily pending-items digest on weekdays at 8am, and — hourly during business hours on weekdays — chase whoever is holding up an **urgent invoice** at its current stage (approver, fiscal, or finance), with a minimum cooldown between reminders and a daily cap stored in Redis to avoid turning into spam.
+- **BullMQ workers** — the ERP integration queue and a separate email queue (approvals, urgent payments), both shut down gracefully on `SIGTERM`/`SIGINT`.
 
 ## Key Challenges
 
-- **Reliable extraction from heterogeneous documents.** XML is structured, but PDFs and images are not. Using an LLM with **structured output + confidence score + review threshold** was what made automation possible without sacrificing control: what the model isn't confident about goes to human review instead of entering the database incorrectly.
-- **Distinguishing between `null` and `"0.00"`.** A field **not printed** on the invoice (`null`) is semantically different from a value **explicitly stated as zero** (exempt/not applicable). Preserving that difference is essential for correct tax treatment.
-- **Atomic header + line item transaction.** An invoice without its line items (or vice versa) is an invalid state. Inserting both in the **same transaction**, with automatic rollback, ensures consistency even under partial failure.
-- **The tax nuance of DIFAL.** The internal rate varies by NCM and by state decree — something that **cannot be automated safely**. The solution was a hybrid design: automate what's safe (extraction, calculation) and make the point requiring a tax expert explicit (internal rate), including an index of "items awaiting tax review."
-- **Idempotency.** The same file can reappear in the folder. The **SHA-256 hash** with a pre-check guarantees that reprocessing never creates duplicates.
-- **Background processes.** Scheduled jobs (**node-cron**) process pending invoices every few minutes, promote future-dated entries that have matured, and notify approvers; **BullMQ/Redis** workers handle integration and email delivery. All of them need graceful shutdown and must run only in the Node runtime — not on the edge.
+- **Approval authority and escalation without manual bottlenecks.** Blocking approval when the amount exceeds the approver's limit — and automatically resolving the correct approver through the hierarchy — avoids both excess autonomy and dependence on someone remembering to escalate manually.
+- **Extended tax track as the exception, not the rule.** Not every approved invoice needs extra asset-registration review; designing that track as an optional detour from the main state machine, rather than a parallel workflow, kept the core approval logic simple.
+- **Queue resilience under infrastructure failure.** Separating the Redis connection used by producers (Server Actions, jobs) from the one used by the consumer (worker) — with aggressive timeouts and no offline queue on the producer side — prevents Redis instability from blocking a user's action in the browser.
+- **The tax nuance of DIFAL.** The internal rate varies by NCM and by state decree — something that **cannot be automated safely**. The solution was a hybrid design: the ingestion worker extracts what's safe, the application calculates the result, and the tax officer explicitly fills in the one point that requires a specialist (internal rate).
+- **Role enforcement at the action boundary.** Rather than scattering permission checks throughout the UI, each Server Action is wrapped by a handler that validates the role and injects the authenticated user — authorization lives in one place, and parameterized SQL in the repositories mitigates injection.
 
 ## Technologies Used
-
-### Web application
 
 - **Next.js 15** (App Router) + **React 19** + **TypeScript** — Server Components and Server Actions.
 - **Tailwind CSS** + accessible components (Radix/shadcn) — responsive UI.
 - **Next-Auth v5** — authentication integrated with the corporate ERP (JWT session).
 - **Zod** — schema validation on all inputs.
-
-### Ingestion worker
-
-- **Node.js / TypeScript** — hexagonal architecture (domain, application, infrastructure).
-- **LLM with structured output** — PDF and image extraction; **fast-xml-parser** for XML.
-- **chokidar** — real-time file watching on input folders.
-
-### Data, queues, and infrastructure
-
 - **OracleDB** — transactional and reference database (connection pool, parameterized binds).
-- **Redis + BullMQ** — async queues (integration and email).
+- **Redis + BullMQ** — async queues (ERP integration and email).
 - **node-cron** — scheduled tasks.
-- **Docker** — packaging for all services (web, worker, and the PHP sidecar).
+- **Docker** — packaging for the application and the PHP PDF-conversion sidecar.
 
 ## Technical Notes
 
-- **Ingestion vs. operations separation.** Keeping the ingestion worker as its own service allows it to be scaled and deployed independently of the web app; OracleDB is the contract between the two.
-- **Role enforcement at the action boundary.** Rather than scattering permission checks throughout the UI, each Server Action is wrapped by a handler that validates the role and injects the authenticated user — authorization lives in one place.
+- **Clean separation from the ingestion worker.** The web application never reads files or calls LLMs to extract invoice data — it receives records that are already validated and persisted, and focuses entirely on approval, the tax rules that require human judgment, and outbound integration. Extraction and ingestion details live in the [dedicated worker post](/en-US/post/gestao-despesas-ingestor).
+- **Role enforcement at the action boundary.** Rather than scattering permission checks throughout the UI, each Server Action is wrapped by a handler that validates the role and injects the authenticated user.
 - **Co-located, parameterized SQL.** Queries live in their own files per aggregate and always use binds, mitigating SQL injection.
 - **Anonymization.** Company names, proprietary system names, network addresses, database schema, and internal URLs have been deliberately omitted from this post — the focus is the engineering, not the corporate data.

@@ -61,7 +61,9 @@ As a safety net for an occasional Structured Outputs slip (the same plate showin
 
 ## Delivery and scheduling
 
-The final email is delivered via `EmailApiService`, a thin HTTP client over Grupo Koch's internal email microservice — one `POST` per recipient configured in `CONFIG.reportRecipients`. Delivery failures are logged but don't crash the process, since the job runs once a day and a single failure shouldn't take down the scheduler.
+The final email is delivered via `EmailApiService`, a thin HTTP client (`ky`, 30s timeout, **no automatic retry**) over Grupo Koch's internal email microservice — one `POST` per recipient configured in `CONFIG.reportRecipients`. The service distinguishes two failure types via dedicated error classes: `InvalidEmailDataError` (HTTP 400 — invalid payload) and `EmailServiceUnavailableError` (any other failure, including timeout). Delivery failures are logged but don't crash the process, since the job runs once a day and a single failure shouldn't take down the scheduler.
+
+When there are no emails for the day, the service doesn't even call the model: `OpenAiSummaryService.summarizeDay` detects the empty list before building the prompt and returns a canonical summary directly ("No emails were received on this day"), skipping a pointless AI call.
 
 In production, `src/index.ts` boots two components side by side:
 
