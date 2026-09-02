@@ -14,24 +14,19 @@ O objetivo do serviço é fechar esse ciclo sozinho: **coletar** os alertas do d
 
 O fluxo é único e compartilhado entre a execução de produção, a coleta completa (sem filtro de data) e a depuração local:
 
-```
-IMAP (caixa dedicada, Skymail)
-        │
-        ▼
-  collectEmails()          ──▶ conecta, busca e lê os e-mails do dia anterior (D-1)
-        │
-        ▼
-  OpenAiSummaryService     ──▶ Structured Outputs (schema Zod)
-        │                      a IA apenas conta, prioriza e categoriza;
-        │                      a renderização em markdown/HTML é determinística, em código
-        ▼
-  runCollection()
-        │
-        ├─▶ (--save-locally) grava relatórios locais para depuração
-        │
-        ▼
-  EmailApiService           ──▶ microsserviço interno de e-mail do Grupo Koch
-                                 um envio por destinatário configurado
+```mermaid
+flowchart TD
+    I["Caixa IMAP dedicada<br/>(Skymail)"] --> C
+    subgraph P["PIPELINE DE COLETA"]
+        direction TB
+        C["collectEmails()<br/>conecta, busca e lê os e-mails do dia anterior (D-1)"]
+        A["OpenAiSummaryService<br/>Structured Outputs (schema Zod)<br/>a IA apenas conta, prioriza e categoriza"]
+        R["runCollection()<br/>markdown/HTML renderizados de forma determinística, em código"]
+        C --> A --> R
+    end
+    R -->|"--save-locally"| L["Relatórios locais<br/>(depuração)"]
+    R --> E["EmailApiService"]
+    E --> M["Microsserviço interno de e-mail<br/>do Grupo Koch<br/>(um envio por destinatário configurado)"]
 ```
 
 Decisões arquiteturais que sustentam esse fluxo:

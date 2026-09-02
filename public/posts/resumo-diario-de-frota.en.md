@@ -14,24 +14,19 @@ The service closes that loop on its own: **collect** the previous day's alerts, 
 
 The flow is a single shared pipeline across the production run, the full backfill collection (no date filter), and local debugging:
 
-```
-IMAP (dedicated mailbox, Skymail)
-        │
-        ▼
-  collectEmails()          ──▶ connects, searches and reads the previous day's (D-1) emails
-        │
-        ▼
-  OpenAiSummaryService     ──▶ Structured Outputs (Zod schema)
-        │                      the AI only counts, prioritizes and categorizes;
-        │                      markdown/HTML rendering is deterministic, in code
-        ▼
-  runCollection()
-        │
-        ├─▶ (--save-locally) writes local reports for debugging
-        │
-        ▼
-  EmailApiService           ──▶ Grupo Koch's internal email microservice
-                                 one request per configured recipient
+```mermaid
+flowchart TD
+    I["Dedicated IMAP mailbox<br/>(Skymail)"] --> C
+    subgraph P["COLLECTION PIPELINE"]
+        direction TB
+        C["collectEmails()<br/>connects, searches and reads the previous day's (D-1) emails"]
+        A["OpenAiSummaryService<br/>Structured Outputs (Zod schema)<br/>the AI only counts, prioritizes and categorizes"]
+        R["runCollection()<br/>markdown/HTML rendered deterministically, in code"]
+        C --> A --> R
+    end
+    R -->|"--save-locally"| L["Local reports<br/>(debugging)"]
+    R --> E["EmailApiService"]
+    E --> M["Grupo Koch's internal<br/>email microservice<br/>(one request per configured recipient)"]
 ```
 
 Architectural decisions behind that flow:
