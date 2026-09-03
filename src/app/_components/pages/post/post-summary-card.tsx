@@ -38,12 +38,7 @@ export function PostSummaryCard({ project, className }: PostSummaryCardProps) {
 
   return (
     <div
-      className={cn(
-        'border-border bg-card shadow-primary/10 relative overflow-hidden rounded-xl border p-4 shadow-lg',
-        className
-      )}>
-      <div className='bg-primary absolute inset-x-0 top-0 h-0.5' />
-
+      className={cn('border-border bg-card rounded-xl border p-4', className)}>
       <div className='mb-3 flex items-start justify-between gap-2'>
         <span className='text-primary font-mono text-[0.65rem] tracking-wider uppercase'>
           {category}
