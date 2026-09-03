@@ -20,7 +20,7 @@ The project follows **hexagonal architecture** (ports & adapters): the domain kn
 
 ```mermaid
 flowchart TD
-    N["Monitored network folders<br/>(one per cost center: accounting, marketing, HR, IT...)"] -->|chokidar (watcher)| UC
+    N["Monitored network folders<br/>(one per cost center: accounting, marketing, HR, IT...)"] -->|"chokidar (watcher)"| UC
     subgraph APP["APPLICATION"]
         UC["ProcessDocumentUseCase<br/>idempotency → extraction → validation → persistence → routing"]
         EP["ExtractionPipeline<br/>orchestrates XML vs. LLM, applies penalties, infers document type"]

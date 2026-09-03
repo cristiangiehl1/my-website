@@ -3,9 +3,13 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { Container, MainContainer } from '@/app/_components/container'
 import { MarkdownContent } from '@/app/_components/pages/post/markdown-content'
+import { PostBackLink } from '@/app/_components/pages/post/post-back-link'
+import { PostCardRail } from '@/app/_components/pages/post/post-card-rail'
 import { PostFooter } from '@/app/_components/pages/post/post-footer'
 import { PostHeader } from '@/app/_components/pages/post/post-header'
+import { PostSidebar } from '@/app/_components/pages/post/post-sidebar'
 import { __PORTFOLIO__ } from '@/data/portfolio'
+import { extractHeadings } from '@/helpers/extract-headings'
 import { generateReadingTime } from '@/helpers/generate-reading-time'
 import { getMarkdown } from '@/helpers/get-markdown'
 import { getNearbyProjects } from '@/helpers/get-nearby-projects'
@@ -52,6 +56,7 @@ export default async function PostPage({ params }: PostPageParams) {
   const project = getProjectBySlug(slug)
   const { content, isFallback } = await getMarkdown(slug, locale)
   const { minutes } = generateReadingTime(content)
+  const headings = extractHeadings(content)
   const t = await getTranslations('portfolio')
   const tPost = await getTranslations('post')
 
@@ -66,15 +71,30 @@ export default async function PostPage({ params }: PostPageParams) {
 
   return (
     <Container>
-      <MainContainer className='relative'>
-        <PostHeader project={{ ...project, title, description, minutes }} />
-        {isFallback && (
-          <div className='border-border bg-muted/50 text-muted-foreground mb-6 rounded-lg border px-4 py-3 text-sm'>
-            {tPost('fallbackNotice')}
+      <MainContainer className='relative max-w-7xl xl:max-w-[96rem]'>
+        {/* Below lg: no rail, so the back link renders here instead. From lg
+            it moves into PostSidebar, at the end of the contents list. */}
+        <PostBackLink className='mb-8 lg:hidden' />
+
+        {/* Grid starts here (not above, with the back link) so both sticky
+            rails line up with the cover image instead of with that button. */}
+        <div className='lg:grid lg:grid-cols-[220px_minmax(0,1fr)] lg:items-start lg:gap-12 xl:grid-cols-[240px_minmax(0,1fr)_240px] xl:gap-16'>
+          <PostSidebar headings={headings} />
+          <div className='min-w-0'>
+            <PostHeader
+              project={{ ...project, title, description, minutes }}
+              headings={headings}
+            />
+            {isFallback && (
+              <div className='border-border bg-muted/50 text-muted-foreground mb-6 rounded-lg border px-4 py-3 text-sm'>
+                {tPost('fallbackNotice')}
+              </div>
+            )}
+            <MarkdownContent content={content} headings={headings} />
+            <PostFooter nearbyProjects={nearbyProjects} />
           </div>
-        )}
-        <MarkdownContent content={content} />
-        <PostFooter nearbyProjects={nearbyProjects} />
+          <PostCardRail project={{ ...project, title, minutes }} />
+        </div>
       </MainContainer>
     </Container>
   )

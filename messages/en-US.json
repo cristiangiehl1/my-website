@@ -328,9 +328,8 @@
   },
   "post": {
     "back": "Back",
-    "backToPortfolio": "Back to portfolio",
+    "toc": "On this page",
     "related": "Related posts",
-    "thanks": "Thanks for reading!",
     "readingTime": "{minutes} min read",
     "repository": "Repository",
     "viewDemo": "View demo",

@@ -1,53 +1,28 @@
 'use client'
 
-import { ArrowLeft, Calendar, Clock, ExternalLink, Github } from 'lucide-react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 
 import type { Project } from '@/@types/project'
 import { TECHNOLOGY_DATA } from '@/constants/technology-data'
+import type { PostHeading } from '@/helpers/extract-headings'
 import { cn } from '@/lib/utils'
 
 import { Button } from '../../ui/button'
+import { PostMobileToc } from './post-mobile-toc'
+import { PostSummaryCard } from './post-summary-card'
 
 interface PostHeaderProps {
   project: Project & { title: string; description: string; minutes: number }
+  headings: PostHeading[]
 }
 
-export function PostHeader({
-  project: {
-    author,
-    createdAt,
-    description,
-    minutes,
-    technologies,
-    title,
-    coverUrl,
-    deploy,
-    github,
-  },
-}: PostHeaderProps) {
+export function PostHeader({ project, headings }: PostHeaderProps) {
+  const { description, technologies, title, coverUrl } = project
   const t = useTranslations('post')
-  const locale = useLocale()
-
-  const formattedDate = new Intl.DateTimeFormat(locale, {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-  }).format(new Date(createdAt))
-
-  const { back } = useRouter()
 
   return (
     <header className='mb-10 w-full'>
-      <button
-        onClick={() => back()}
-        className='text-muted-foreground hover:text-primary group mb-8 inline-flex items-center gap-2 text-sm transition-colors'>
-        <ArrowLeft className='h-4 w-4 transition-transform group-hover:-translate-x-1' />
-        <span>{t('back')}</span>
-      </button>
-
       {/* Cover image */}
       {coverUrl && (
         <div className='border-border relative mb-8 aspect-16/8 overflow-hidden rounded-xl border'>
@@ -72,35 +47,16 @@ export function PostHeader({
         {description}
       </p>
 
-      {/* Author & Meta info */}
-      <div className='text-muted-foreground flex flex-wrap items-center gap-5 text-sm'>
-        <a
-          href={author.github}
-          target='_blank'
-          rel='noopener noreferrer'
-          className='group/author hover:text-foreground flex items-center gap-2.5 transition-colors'>
-          <Image
-            src={author.avatar || '/placeholder.svg'}
-            alt={author.name}
-            width={32}
-            height={32}
-            className='ring-border group-hover/author:ring-primary/50 rounded-full ring-2 transition-all'
-          />
-          <span className='text-foreground group-hover/author:text-primary font-medium transition-colors'>
-            {author.name}
-          </span>
-        </a>
-        <span className='text-border hidden sm:inline' aria-hidden='true'>
-          |
-        </span>
-        <div className='flex items-center gap-1.5'>
-          <Calendar className='text-primary h-4 w-4' />
-          <time dateTime={createdAt}>{formattedDate}</time>
-        </div>
-        <div className='flex items-center gap-1.5'>
-          <Clock className='text-primary h-4 w-4' />
-          <span>{t('readingTime', { minutes })}</span>
-        </div>
+      {/* Mobile-only — desktop gets the same contents/card in PostSidebar */}
+      {/* Below lg: the rail is gone, so the contents disclosure comes back. */}
+      <div className='mb-4 lg:hidden'>
+        <PostMobileToc headings={headings} />
+      </div>
+
+      {/* Below xl: no room yet for a third (card) column, so it sits here
+          instead. From xl the rail's own PostCardRail replaces it. */}
+      <div className='mb-6 xl:hidden'>
+        <PostSummaryCard project={project} />
       </div>
 
       {/* Technologies */}
@@ -117,32 +73,6 @@ export function PostHeader({
           )
         })}
       </div>
-
-      {/* GitHub & Demo links */}
-      {(github || deploy) && (
-        <div className='mt-6 flex flex-wrap items-center gap-3'>
-          {github && (
-            <a
-              href={github}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='border-border bg-card text-foreground hover:border-primary/40 hover:text-primary inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors'>
-              <Github className='h-4 w-4' />
-              {t('repository')}
-            </a>
-          )}
-          {deploy && (
-            <a
-              href={deploy}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors'>
-              <ExternalLink className='h-4 w-4' />
-              {t('viewDemo')}
-            </a>
-          )}
-        </div>
-      )}
 
       <div className='bg-border mt-8 h-px' />
     </header>

@@ -326,9 +326,8 @@
   },
   "post": {
     "back": "Voltar",
-    "backToPortfolio": "Voltar ao portfólio",
+    "toc": "Neste post",
     "related": "Posts relacionados",
-    "thanks": "Obrigado por ler!",
     "readingTime": "{minutes} min de leitura",
     "repository": "Repositório",
     "viewDemo": "Ver demo",

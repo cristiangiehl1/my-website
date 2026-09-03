@@ -20,7 +20,7 @@ O projeto segue **arquitetura hexagonal** (ports & adapters): o domínio não co
 
 ```mermaid
 flowchart TD
-    N["Pastas de rede monitoradas<br/>(uma por área de custo: Controladoria, Marketing, RH, TI...)"] -->|chokidar (watcher)| UC
+    N["Pastas de rede monitoradas<br/>(uma por área de custo: Controladoria, Marketing, RH, TI...)"] -->|"chokidar (watcher)"| UC
     subgraph APP["APPLICATION"]
         UC["ProcessDocumentUseCase<br/>idempotência → extração → validação → persistência → roteamento"]
         EP["ExtractionPipeline<br/>orquestra XML vs LLM, aplica penalidades, infere tipo de documento"]
