@@ -10,7 +10,7 @@ interface PostCardRailProps {
 // Between lg and xl, PostHeader renders the same card inline instead.
 export function PostCardRail({ project }: PostCardRailProps) {
   return (
-    <aside className='top-24 hidden self-start xl:sticky xl:block'>
+    <aside className='top-28.5 hidden self-start xl:sticky xl:block'>
       <PostSummaryCard project={project} />
     </aside>
   )

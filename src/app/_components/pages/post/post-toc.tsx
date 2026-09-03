@@ -1,5 +1,6 @@
 'use client'
 
+import { useLenis } from 'lenis/react'
 import { useTranslations } from 'next-intl'
 
 import type { PostHeading } from '@/helpers/extract-headings'
@@ -11,16 +12,16 @@ interface PostTocProps {
   className?: string
 }
 
-function scrollToHeading(id: string) {
-  document
-    .getElementById(id)
-    ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-}
-
 export function PostToc({ headings, className }: PostTocProps) {
   const t = useTranslations('post')
+  const lenis = useLenis()
   const ids = headings.map((heading) => heading.id)
   const activeId = useScrollSpy(ids)
+
+  function scrollToHeading(id: string) {
+    if (lenis) lenis.scrollTo(`#${id}`)
+    else document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   if (headings.length === 0) return null
 

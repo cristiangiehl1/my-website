@@ -14,7 +14,7 @@ interface PostSidebarProps {
 // than the space below it.
 export function PostSidebar({ headings }: PostSidebarProps) {
   return (
-    <aside className='top-24 hidden self-start lg:sticky lg:block'>
+    <aside className='top-28.5 hidden self-start lg:sticky lg:block'>
       <PostToc headings={headings} />
       <PostBackLink className='mt-6' />
     </aside>
