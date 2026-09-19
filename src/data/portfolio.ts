@@ -4,6 +4,33 @@ import { getAuthorBySlug } from '@/helpers/get-author'
 
 export const __PORTFOLIO__: Project[] = [
   {
+    id: 10,
+    slug: 'meeting-voice-reports',
+    coverUrl: generateImgUrl('meeting-voice-reports.png'),
+    technologies: [
+      'typescript',
+      'node',
+      'fastify',
+      'langchain',
+      'langgraph',
+      'openrouter',
+      'zod',
+      'react',
+      'vite',
+      'tailwind',
+      'web-speech-api',
+      'pwa',
+      'resend',
+      'netlify',
+    ],
+    category: 'full-stack',
+    author: getAuthorBySlug('cristian-giehl'),
+    github: 'https://github.com/cristiangiehl1/meeting-voice-reports',
+    deploy: 'https://resume-re-ai.netlify.app/',
+    featured: true,
+    createdAt: '09/19/2026',
+  },
+  {
     id: 9,
     slug: 'gestao-despesas-ingestor',
     coverUrl: generateImgUrl('gestao-despesas-ingestor.png'),

@@ -32,6 +32,7 @@ import {
   SiOpenai,
   SiOracle,
   SiPrisma,
+  SiPwa,
   SiPython,
   SiRadixui,
   SiReact,
@@ -45,6 +46,7 @@ import {
   SiTelegram,
   SiThreedotjs,
   SiTypescript,
+  SiVite,
   SiZod,
 } from 'react-icons/si'
 import {
@@ -56,8 +58,10 @@ import {
   TbMailCode,
   TbMailSearch,
   TbMasksTheater,
+  TbMicrophone,
   TbProtocol,
   TbRouter,
+  TbTopologyStar3,
   TbVector,
 } from 'react-icons/tb'
 
@@ -216,6 +220,22 @@ export const TECHNOLOGY_DATA = {
     style: { iconColor: 'text-blue-500' },
     category: 'DevOps',
     link: 'https://github.com/docker',
+  },
+  vite: {
+    value: 'vite',
+    label: 'Vite',
+    icon: SiVite,
+    style: { iconColor: 'text-violet-400' },
+    category: 'Tool',
+    link: 'https://vite.dev/',
+  },
+  pwa: {
+    value: 'pwa',
+    label: 'PWA',
+    icon: SiPwa,
+    style: { iconColor: 'text-purple-400' },
+    category: 'Tool',
+    link: 'https://vite-pwa-org.netlify.app/',
   },
   netlify: {
     value: 'netlify',
@@ -416,6 +436,22 @@ export const TECHNOLOGY_DATA = {
     style: { iconColor: 'text-teal-500' },
     category: 'AI',
     link: 'https://github.com/langchain-ai/langchainjs',
+  },
+  langgraph: {
+    value: 'langgraph',
+    label: 'LangGraph',
+    icon: TbTopologyStar3,
+    style: { iconColor: 'text-teal-400' },
+    category: 'AI',
+    link: 'https://github.com/langchain-ai/langgraphjs',
+  },
+  'web-speech-api': {
+    value: 'web-speech-api',
+    label: 'Web Speech API',
+    icon: TbMicrophone,
+    style: { iconColor: 'text-rose-400' },
+    category: 'AI',
+    link: 'https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API',
   },
   huggingface: {
     value: 'huggingface',

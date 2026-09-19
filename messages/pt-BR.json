@@ -286,6 +286,10 @@
       "results": "{count, plural, one {# resultado encontrado} other {# resultados encontrados}}"
     },
     "projects": {
+      "meeting-voice-reports": {
+        "title": "Meeting Voice Reports",
+        "description": "Aplicação full-stack que transcreve reuniões, entrevistas e agendamentos em tempo real e gera um relatório estruturado ao final da sessão. O reconhecimento de fala roda 100% no navegador via Web Speech API (sem custo de STT e sem áudio trafegando pela rede); o backend Fastify acumula os trechos finais e, no fechamento da sessão, um grafo LangGraph extrai o relatório via LLM (OpenRouter) validado por um schema Zod específico para cada tipo de sessão. O frontend é um PWA em React 19 + Vite com transcrição em parágrafos, medidor de áudio, wake lock de tela e retomada de gravação, e o relatório pronto pode ser enviado por email para vários destinatários via Resend."
+      },
       "resumo-diario-de-frota": {
         "title": "Resumo Diário de Frota",
         "description": "Serviço interno do Grupo Koch que coleta via IMAP os alertas de rastreamento veicular do dia anterior enviados pela Link Monitoramento, gera um resumo estruturado com OpenAI (Structured Outputs) — contagem e categorização de eventos, ranking de veículos por risco, padrões de horário e excesso de velocidade — e o distribui por e-mail através do microsserviço interno de e-mail, com renderização em markdown/HTML feita de forma determinística em código. Roda como processo persistente com agendamento diário via node-cron, timezone calculado explicitamente para evitar deslocamento da janela de coleta. Por ser um projeto interno, não possui URL pública nem repositório disponível."
