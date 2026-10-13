@@ -136,6 +136,14 @@
       "tanstack": {
         "description": "TanStack Query: data caching and synchronization"
       },
+      "vite": { "description": "Fast builds and dev server for React SPAs" },
+      "hono": { "description": "Lightweight, typed APIs with OpenAPI and Zod" },
+      "fastify": {
+        "description": "High-performance APIs with plugins and schemas"
+      },
+      "mcp": {
+        "description": "MCP servers and plugins for agents (Claude Code)"
+      },
       "react-markdown": { "description": "Markdown rendering with remark-gfm" },
       "react-native": { "description": "Cross-platform mobile apps" },
       "threejs": { "description": "3D scenes and interactive elements" },

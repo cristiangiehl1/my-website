@@ -31,7 +31,7 @@ const frontendSkills: Skill[] = [
   },
   {
     name: 'tanstack',
-    level: 'Intermediario',
+    level: 'Avançado',
     yearsOfExperience: 1,
   },
   {
@@ -46,12 +46,15 @@ const frontendSkills: Skill[] = [
   },
   { name: 'threejs', level: 'Basico', yearsOfExperience: 1 },
   { name: 'gsap', level: 'Basico', yearsOfExperience: 1 },
+  { name: 'vite', level: 'Intermediario', yearsOfExperience: 1 },
   { name: 'shadcn', level: 'Avançado', yearsOfExperience: 2 },
   { name: 'radix', level: 'Avançado', yearsOfExperience: 2 },
 ]
 
 const backendSkills: Skill[] = [
   { name: 'node', level: 'Avançado', yearsOfExperience: 2 },
+  { name: 'hono', level: 'Intermediario', yearsOfExperience: 1 },
+  { name: 'fastify', level: 'Intermediario', yearsOfExperience: 1 },
   {
     name: 'express',
     level: 'Intermediario',
@@ -65,7 +68,7 @@ const backendSkills: Skill[] = [
   { name: 'zod', level: 'Avançado', yearsOfExperience: 2 },
   {
     name: 'bullmq',
-    level: 'Intermediario',
+    level: 'Avançado',
     yearsOfExperience: 1,
   },
   {
@@ -84,7 +87,7 @@ const databaseSkills: Skill[] = [
   },
   {
     name: 'oracle',
-    level: 'Intermediario',
+    level: 'Avançado',
     yearsOfExperience: 1,
   },
   {
@@ -117,7 +120,7 @@ const databaseSkills: Skill[] = [
 const aiSkills: Skill[] = [
   {
     name: 'openai',
-    level: 'Intermediario',
+    level: 'Avançado',
     yearsOfExperience: 1,
   },
   {
@@ -125,6 +128,7 @@ const aiSkills: Skill[] = [
     level: 'Intermediario',
     yearsOfExperience: 1,
   },
+  { name: 'mcp', level: 'Intermediario', yearsOfExperience: 1 },
   {
     name: 'huggingface',
     level: 'Basico',
@@ -140,7 +144,7 @@ const aiSkills: Skill[] = [
 const toolsSkills: Skill[] = [
   {
     name: 'docker',
-    level: 'Intermediario',
+    level: 'Avançado',
     yearsOfExperience: 2,
   },
   {
@@ -160,7 +164,7 @@ const toolsSkills: Skill[] = [
   },
   {
     name: 'telegram',
-    level: 'Basico',
+    level: 'Intermediario',
     yearsOfExperience: 1,
   },
   {

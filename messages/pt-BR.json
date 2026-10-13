@@ -132,6 +132,14 @@
       "tanstack": {
         "description": "TanStack Query: cache e sincronização de dados"
       },
+      "vite": { "description": "Build e dev server rápidos para SPAs React" },
+      "hono": { "description": "APIs tipadas e leves com OpenAPI e Zod" },
+      "fastify": {
+        "description": "APIs de alta performance com plugins e schemas"
+      },
+      "mcp": {
+        "description": "Servers MCP e plugins para agentes (Claude Code)"
+      },
       "react-markdown": {
         "description": "Renderização de markdown com remark-gfm"
       },
