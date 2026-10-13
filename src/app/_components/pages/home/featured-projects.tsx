@@ -9,10 +9,6 @@ const FEATURED_SLUGS = [
   'kontrata',
   'orchestrator-agent',
   'giehl-dev-toolkit',
-  'gestao-de-despesas',
-  'gestao-de-projetos-mcp',
-  'gestao-despesas-ingestor',
-  'resumo-diario-de-frota',
 ] as const
 
 export async function FeaturedProjects({

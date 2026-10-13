@@ -1,11 +1,23 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import type { ComponentProps, PointerEvent, ReactNode } from 'react'
 import { forwardRef, useCallback, useRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 
-import { StickerPeel, type StickerPeelHandle } from './sticker-peel'
+import type { StickerPeelHandle } from './sticker-peel'
+
+// three.js + framer-motion live in this chunk; it is only fetched once the
+// marquee is idle (see preloadStickerPeel) or on the first icon hover, never
+// on the critical path of the home page.
+const loadStickerPeel = () => import('./sticker-peel')
+export const preloadStickerPeel = () => void loadStickerPeel()
+
+const StickerPeel = dynamic(
+  () => loadStickerPeel().then((mod) => mod.StickerPeel),
+  { ssr: false }
+)
 
 const SVG_NS = 'http://www.w3.org/2000/svg'
 const STICKER_SIZE = 40

@@ -239,7 +239,7 @@
   }
 }
 
-.stack-marquee-track {
+.stack-marquee-track-ready {
   /* Duration is tied to the track's length so the scrolling speed stays
      constant: the full stack is split across two rows, so each row travels
      roughly half the distance of a single combined row would. */
