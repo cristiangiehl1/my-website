@@ -46,8 +46,9 @@ export function LanguageSwitcher({ className }: { className?: string }) {
             className={cn(
               'rounded px-2 py-1 text-sm font-medium transition-colors',
               active
-                ? 'bg-primary text-primary-foreground'
-                : 'text-muted-foreground hover:text-foreground'
+                ? 'bg-primary text-primary-foreground cursor-default'
+                : 'text-muted-foreground hover:text-foreground cursor-pointer',
+              isPending && 'cursor-wait'
             )}>
             {loc === 'pt-BR' ? 'PT' : 'EN'}
           </button>
