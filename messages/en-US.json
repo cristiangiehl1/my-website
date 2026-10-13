@@ -356,7 +356,7 @@
     "metaTitle": "About Me",
     "hero": {
       "title": "Full Stack <hl>Developer</hl>",
-      "intro": "2+ years building end-to-end solutions, from frontend to backend. I'm currently a mid-level developer at <b>Grupo Koch SA</b>, specializing in AI: I build multi-agent platforms with <b>Claude Code</b>, <b>opencode</b>, and <b>OpenAI</b>, plus RAG pipelines and corporate process automation.",
+      "intro": "3+ years building end-to-end solutions, from frontend to backend. I'm currently a mid-level developer at <b>Grupo Koch SA</b>, specializing in AI: I build multi-agent platforms with <b>Claude Code</b>, <b>opencode</b>, and <b>OpenAI</b>, plus RAG pipelines and corporate process automation.",
       "cards": {
         "frontend": {
           "title": "Frontend",
@@ -375,7 +375,7 @@
     "experience": {
       "title": "Experience & Stack",
       "p1": "I'm currently a <b>mid-level developer at Grupo Koch SA</b>, where I specialize in AI applied to corporate platform development with multi-agent integration. I use tools like <b>Claude Code</b>, <b>opencode</b>, and <b>OpenAI</b> to orchestrate agents that automate processes and centralize internal interactions.",
-      "p2": "With more than 2 years of experience, I've built a solid foundation in the frontend ecosystem with <b>TanStack</b>, <b>shadcn/ui</b>, <b>Zod</b>, and <b>Tailwind CSS</b>, plus good testing habits with <b>Jest</b> and <b>Cypress</b>. On the backend I work with Node.js and Next.js (Server Actions), <b>OracleDB</b> and <b>PostgreSQL / pgvector</b>, async queues with <b>Redis</b> and <b>BullMQ</b>, and integrations with ERPs and legacy systems. I also build <b>RAG</b> pipelines and LLM-based document ingestion with <b>LangChain</b>, <b>OpenAI</b>, and <b>HuggingFace</b>."
+      "p2": "With more than 3 years of experience, I've built a solid foundation in the frontend ecosystem with <b>TanStack</b>, <b>shadcn/ui</b>, <b>Zod</b>, and <b>Tailwind CSS</b>, plus good testing habits with <b>Jest</b> and <b>Cypress</b>. On the backend I work with Node.js and Next.js (Server Actions), <b>OracleDB</b> and <b>PostgreSQL / pgvector</b>, async queues with <b>Redis</b> and <b>BullMQ</b>, and integrations with ERPs and legacy systems. I also build <b>RAG</b> pipelines and LLM-based document ingestion with <b>LangChain</b>, <b>OpenAI</b>, and <b>HuggingFace</b>."
     },
     "personal": {
       "title": "About",

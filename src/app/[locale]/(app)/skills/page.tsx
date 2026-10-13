@@ -272,7 +272,7 @@ export default async function SkillsPage({
               value={`${totalTechnologies}+`}
               label={t('stats.technologies')}
             />
-            <StatItem value='2+' label={t('stats.experience')} />
+            <StatItem value='3+' label={t('stats.experience')} />
             <StatItem
               value={softSkillsCount.toString()}
               label={t('stats.softSkills')}
