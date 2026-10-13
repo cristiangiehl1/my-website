@@ -59,7 +59,7 @@ export async function buildMetadata(locale: string): Promise<Metadata> {
       type: 'website',
       images: [
         {
-          url: '/images/og-img.png',
+          url: '/images/og-img-v2.png',
           width: 1200,
           height: 630,
           alt: 'Portfolio de Cristian Giehl',
@@ -72,7 +72,7 @@ export async function buildMetadata(locale: string): Promise<Metadata> {
       title: t('siteTitle'),
       description: t('description'),
       creator: '@cristiangiehl',
-      images: ['/images/og-img.png'],
+      images: ['/images/og-img-v2.png'],
     },
 
     robots: {
