@@ -61,9 +61,11 @@ export function MarkdownContent({ content, headings }: MarkdownContentProps) {
       )
     },
     h3: ({ children }) => (
-      <h3 className='text-foreground mt-6 mb-3 text-xl font-semibold'>
-        {children}
-      </h3>
+      <Reveal>
+        <h3 className='text-foreground mt-6 mb-3 text-xl font-semibold'>
+          {children}
+        </h3>
+      </Reveal>
     ),
     h4: ({ children }) => (
       <h4 className='text-foreground mt-4 mb-2 text-lg font-medium'>
@@ -71,7 +73,9 @@ export function MarkdownContent({ content, headings }: MarkdownContentProps) {
       </h4>
     ),
     p: ({ children }) => (
-      <p className='text-foreground/85 mb-5 leading-7'>{children}</p>
+      <Reveal>
+        <p className='text-foreground/85 mb-5 leading-7'>{children}</p>
+      </Reveal>
     ),
     a: ({ href, children }) => (
       <a
@@ -89,14 +93,18 @@ export function MarkdownContent({ content, headings }: MarkdownContentProps) {
       <em className='text-foreground/80 italic'>{children}</em>
     ),
     ul: ({ children }) => (
-      <ul className='text-foreground/85 mb-5 ml-6 list-disc space-y-2'>
-        {children}
-      </ul>
+      <Reveal>
+        <ul className='text-foreground/85 mb-5 ml-6 list-disc space-y-2'>
+          {children}
+        </ul>
+      </Reveal>
     ),
     ol: ({ children }) => (
-      <ol className='text-foreground/85 mb-5 ml-6 list-decimal space-y-2'>
-        {children}
-      </ol>
+      <Reveal>
+        <ol className='text-foreground/85 mb-5 ml-6 list-decimal space-y-2'>
+          {children}
+        </ol>
+      </Reveal>
     ),
     li: ({ children }) => <li className='leading-7'>{children}</li>,
     blockquote: ({ children }) => (
@@ -125,7 +133,11 @@ export function MarkdownContent({ content, headings }: MarkdownContentProps) {
       if (child?.props?.className === 'language-mermaid') {
         return <>{children}</>
       }
-      return <pre className={CODE_BLOCK_PRE_CLASSES}>{children}</pre>
+      return (
+        <Reveal>
+          <pre className={CODE_BLOCK_PRE_CLASSES}>{children}</pre>
+        </Reveal>
+      )
     },
     hr: () => <hr className='border-border my-8' />,
     // ScrollTiltImage drives its own scroll-linked opacity/tilt, so it isn't
@@ -134,12 +146,12 @@ export function MarkdownContent({ content, headings }: MarkdownContentProps) {
       <ScrollTiltImage src={(src as string) || ''} alt={alt ?? ''} />
     ),
     table: ({ children }) => (
-      <div className='relative mb-5'>
+      <Reveal className='relative mb-5'>
         <div className='overflow-x-auto'>
           <table className='w-full border-collapse text-sm'>{children}</table>
         </div>
         <div className='from-background pointer-events-none absolute inset-y-0 right-0 w-8 bg-linear-to-l to-transparent' />
-      </div>
+      </Reveal>
     ),
     thead: ({ children }) => (
       <thead className='border-border border-b-2'>{children}</thead>
