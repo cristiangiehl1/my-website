@@ -62,7 +62,7 @@ export function AppHeader() {
             onClick={() => setCommandOpen(true)}
             aria-label='Open command palette'
             aria-keyshortcuts='Meta+K Control+K'
-            className='border-border text-muted-foreground hover:border-primary hover:text-foreground rounded-md border px-2 py-1 font-mono text-xs transition-colors'>
+            className='border-border bg-secondary text-foreground hover:border-primary hover:text-primary rounded-md border px-2 py-1 font-mono text-xs transition-colors'>
             ⌘K
           </button>
           <LanguageSwitcher />
