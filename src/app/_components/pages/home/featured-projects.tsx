@@ -6,9 +6,13 @@ import { Link } from '@/i18n/navigation'
 import { FeaturedProjectsShowcase } from './featured-projects-showcase'
 
 const FEATURED_SLUGS = [
+  'kontrata',
   'orchestrator-agent',
+  'giehl-dev-toolkit',
   'gestao-de-despesas',
-  'langchain-rag-lab',
+  'gestao-de-projetos-mcp',
+  'gestao-despesas-ingestor',
+  'resumo-diario-de-frota',
 ] as const
 
 export async function FeaturedProjects({

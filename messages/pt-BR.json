@@ -286,6 +286,10 @@
       "results": "{count, plural, one {# resultado encontrado} other {# resultados encontrados}}"
     },
     "projects": {
+      "kontrata": {
+        "title": "Kontrata",
+        "description": "Sistema ATS (Applicant Tracking System) de ponta a ponta do Grupo Koch, ainda em homologação: cobre desde a divulgação das vagas até a última etapa do processo, a integração do novo colaborador no Senior ERP. É um monorepo com quatro peças — a API (Node 24 + Hono + OpenAPI), o portal dos candidatos (Next.js 16 com BFF), o portal dos recrutadores (SPA Vite + React + TanStack Router) e o sistema de filas (13 filas BullMQ/Redis processadas por um worker dedicado) que roda análise de currículo com IA, classificação do banco de talentos com pgvector, verificação de antecedentes e o envio da admissão para a Senior. Quando entrar em produção, elimina dois custos internos com serviços de terceiros: o Recrut.ai e o Collab da Senior, ambos serão cortados. Por ser um projeto interno, não possui URL pública nem repositório disponível."
+      },
       "meeting-voice-reports": {
         "title": "Meeting Voice Reports",
         "description": "Aplicação full-stack que transcreve reuniões, entrevistas e agendamentos em tempo real e gera um relatório estruturado ao final da sessão. O reconhecimento de fala roda 100% no navegador via Web Speech API (sem custo de STT e sem áudio trafegando pela rede); o backend Fastify acumula os trechos finais e, no fechamento da sessão, um grafo LangGraph extrai o relatório via LLM (OpenRouter) validado por um schema Zod específico para cada tipo de sessão. O frontend é um PWA em React 19 + Vite com transcrição em parágrafos, medidor de áudio, wake lock de tela e retomada de gravação, e o relatório pronto pode ser enviado por email para vários destinatários via Resend."

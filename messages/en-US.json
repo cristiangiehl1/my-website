@@ -288,6 +288,10 @@
       "results": "{count, plural, one {# result found} other {# results found}}"
     },
     "projects": {
+      "kontrata": {
+        "title": "Kontrata",
+        "description": "End-to-end ATS (Applicant Tracking System) for Grupo Koch, still in staging: it covers everything from job posting to the final step of the process, onboarding the new hire into Senior ERP. It is a monorepo with four pieces — the API (Node 24 + Hono + OpenAPI), the candidate portal (Next.js 16 with a BFF), the recruiter portal (Vite + React + TanStack Router SPA) and the queue system (13 BullMQ/Redis queues handled by a dedicated worker) that runs AI résumé analysis, pgvector-based talent-pool ranking, background checks and the admission handoff to Senior. Once in production it eliminates two internal third-party costs: Recrut.ai and Senior's Collab, both of which will be cut. Being an internal project, it has no public URL or repository available."
+      },
       "meeting-voice-reports": {
         "title": "Meeting Voice Reports",
         "description": "A full-stack app that transcribes meetings, interviews, and scheduling calls in real time and generates a structured report when the session ends. Speech recognition runs 100% in the browser through the Web Speech API (no STT cost and no audio leaving the device); the Fastify backend accumulates the final transcript chunks and, on finalize, a LangGraph graph extracts the report via LLM (OpenRouter), validated against a Zod schema specific to each session type. The frontend is a React 19 + Vite PWA with paragraph-grouped transcription, an audio level meter, screen wake lock, and resumable recording, and the finished report can be emailed to multiple recipients through Resend."

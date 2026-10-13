@@ -19,6 +19,7 @@ import {
   SiExpress,
   SiFastify,
   SiGreensock,
+  SiHono,
   SiHtml5,
   SiHuggingface,
   SiJavascript,
@@ -164,6 +165,14 @@ export const TECHNOLOGY_DATA = {
     style: { iconColor: 'text-gray-700 dark:text-gray-200' },
     category: 'Framework',
     link: 'https://github.com/expressjs/express',
+  },
+  hono: {
+    value: 'hono',
+    label: 'Hono',
+    icon: SiHono,
+    style: { iconColor: 'text-orange-500' },
+    category: 'Framework',
+    link: 'https://hono.dev/',
   },
 
   // Animation
