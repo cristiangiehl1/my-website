@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl'
 import type { HTMLAttributes } from 'react'
 
+import { __SOCIAL__ } from '@/constants/social'
 import { cn } from '@/lib/utils'
 
 interface AppFooterProps extends HTMLAttributes<HTMLElement> {
@@ -15,7 +16,14 @@ export function AppFooter({ className, ...props }: AppFooterProps) {
     <footer
       className={cn('border-border mt-auto w-full border-t py-6', className)}
       {...props}>
-      <p className='text-muted-foreground text-center text-xs'>{t('rights')}</p>
+      <div className='text-muted-foreground flex flex-col items-center gap-1 text-xs'>
+        <a
+          href={__SOCIAL__.email.href}
+          className='hover:text-primary transition-colors'>
+          {__SOCIAL__.email.href.replace('mailto:', '')}
+        </a>
+        <p>{t('rights')}</p>
+      </div>
     </footer>
   )
 }

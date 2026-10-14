@@ -12,5 +12,5 @@ export const __SOCIAL__ = {
     icon: FaLinkedin,
   },
   whatsapp: { href: 'https://wa.me/+5521999815903', icon: IoLogoWhatsapp },
-  email: { href: 'mailto:cristiangiehl@email.com', icon: Mail },
+  email: { href: 'mailto:cristian.giehl@gmail.com', icon: Mail },
 }

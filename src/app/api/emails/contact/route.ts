@@ -6,8 +6,24 @@ import { contactReceivedObj, initClient } from '@/services/email'
 const contactSchema = makeContactSchema((k) => k)
 
 export async function POST(req: Request) {
-  const body = await req.json()
-  const { email, message, name, phone, subject } = contactSchema.parse(body)
+  let body: unknown
+  try {
+    body = await req.json()
+  } catch {
+    return Response.json(
+      { message: 'Corpo da requisição inválido' },
+      { status: 400 }
+    )
+  }
+
+  const parsed = contactSchema.safeParse(body)
+  if (!parsed.success) {
+    return Response.json(
+      { message: 'Dados inválidos', issues: parsed.error.issues },
+      { status: 400 }
+    )
+  }
+  const { email, message, name, phone, subject } = parsed.data
 
   const resend = initClient()
 
