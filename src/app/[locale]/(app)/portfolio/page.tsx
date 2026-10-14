@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { PorfolioMain } from '@/app/_components/pages/portfolio/portfolio'
 import { __PORTFOLIO__ } from '@/data/portfolio'
+import { buildAlternates } from '@/helpers/build-url'
 
 export async function generateMetadata({
   params,
@@ -11,7 +12,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'portfolio' })
-  return { title: t('metaTitle') }
+  return {
+    title: t('metaTitle'),
+    alternates: buildAlternates(locale, 'portfolio'),
+  }
 }
 
 export default async function PortfolioPage({

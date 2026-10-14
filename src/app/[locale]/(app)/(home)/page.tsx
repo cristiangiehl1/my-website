@@ -4,13 +4,16 @@ import { BiCodeAlt } from 'react-icons/bi'
 import { FaArrowRight, FaDownload } from 'react-icons/fa'
 
 import { Container, MainContainer } from '@/app/_components/container'
+import { JsonLd } from '@/app/_components/json-ld'
 import { FeaturedProjects } from '@/app/_components/pages/home/featured-projects'
 import { StackMarquee } from '@/app/_components/pages/home/stack-marquee'
 import { TerminalPanel } from '@/app/_components/pages/home/terminal-panel'
 import { SocialLink } from '@/app/_components/social-link'
 import { Button } from '@/app/_components/ui/button'
 import { __SOCIAL__ } from '@/constants/social'
+import { buildUrl } from '@/helpers/build-url'
 import { getResumeHref } from '@/helpers/get-resume-href'
+import { buildPersonJsonLd } from '@/helpers/json-ld'
 import { Link } from '@/i18n/navigation'
 
 const CTA_BUTTONS: Array<{ icon: IconType; href: string; label: string }> = [
@@ -40,9 +43,20 @@ export default async function HomePage({
   setRequestLocale(locale)
   const t = await getTranslations('home')
   const tc = await getTranslations('common')
+  const tMeta = await getTranslations('meta')
 
   return (
     <Container>
+      <JsonLd data={buildPersonJsonLd(tMeta('jobTitle'))} />
+      <JsonLd
+        data={{
+          '@type': 'WebSite',
+          name: 'Cristian Giehl',
+          url: buildUrl(locale),
+          description: tMeta('description'),
+          inLanguage: locale,
+        }}
+      />
       <MainContainer className='flex flex-col'>
         {/* Hero */}
         <section className='grid gap-12 lg:grid-cols-2'>

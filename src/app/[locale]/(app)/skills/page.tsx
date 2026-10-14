@@ -7,6 +7,7 @@ import { Container, MainContainer } from '@/app/_components/container'
 import { SkillCard } from '@/app/_components/pages/skills/skill-card'
 import { SoftSkills } from '@/app/_components/pages/skills/soft-skills'
 import { softSkillsCount } from '@/app/_components/pages/skills/soft-skills-data'
+import { buildAlternates } from '@/helpers/build-url'
 
 const frontendSkills: Skill[] = [
   { name: 'react', level: 'Avançado', yearsOfExperience: 2 },
@@ -191,7 +192,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'skills' })
-  return { title: t('metaTitle') }
+  return {
+    title: t('metaTitle'),
+    alternates: buildAlternates(locale, 'skills'),
+  }
 }
 
 export default async function SkillsPage({

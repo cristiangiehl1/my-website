@@ -2,6 +2,7 @@
   "meta": {
     "siteTitle": "Cristian Giehl — Full Stack Developer",
     "description": "Portfolio of Cristian Giehl, a Full Stack developer working with TypeScript, Next.js, Rust and Python. Building for American startups with a focus on performance and scalability.",
+    "jobTitle": "Full Stack Developer",
     "ogDescription": "Projects and experience from Cristian Giehl — modern web development with React, Next.js, Node.js and TypeScript."
   },
   "notFound": {
@@ -346,6 +347,7 @@
     "back": "Back",
     "toc": "On this page",
     "related": "Related posts",
+    "updated": "Updated {date}",
     "readingTime": "{minutes} min read",
     "repository": "Repository",
     "viewDemo": "View demo",

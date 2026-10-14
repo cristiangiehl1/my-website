@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 
+import { buildAlternates, buildUrl } from '@/helpers/build-url'
+
 export const siteUrl = process.env.BASE_URL!
 
 // kept for backward-compat: sitemap.ts / robot.ts import this
@@ -10,7 +12,7 @@ export async function buildMetadata(locale: string): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'meta' })
 
   const ogLocale = locale === 'pt-BR' ? 'pt_BR' : 'en_US'
-  const canonicalUrl = locale === 'pt-BR' ? siteUrl : `${siteUrl}/en-US`
+  const canonicalUrl = buildUrl(locale)
 
   return {
     metadataBase: new URL(siteUrl),
@@ -93,12 +95,6 @@ export async function buildMetadata(locale: string): Promise<Metadata> {
       apple: '/icons/apple-touch-icon.png',
     },
 
-    alternates: {
-      languages: {
-        'pt-BR': '/',
-        'en-US': '/en-US',
-      },
-      canonical: canonicalUrl,
-    },
+    alternates: buildAlternates(locale),
   }
 }

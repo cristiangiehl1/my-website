@@ -1,12 +1,20 @@
 'use client'
 
-import { Calendar, Clock, ExternalLink, Github, Sparkles } from 'lucide-react'
+import {
+  Calendar,
+  Clock,
+  ExternalLink,
+  Github,
+  RefreshCw,
+  Sparkles,
+} from 'lucide-react'
 import Image from 'next/image'
 import { useLocale, useTranslations } from 'next-intl'
 
 import type { Project } from '@/@types/project'
 import { Badge } from '@/app/_components/ui/badge'
 import { Button } from '@/app/_components/ui/button'
+import { toIsoDate } from '@/helpers/to-iso-date'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
@@ -19,6 +27,7 @@ export function PostSummaryCard({ project, className }: PostSummaryCardProps) {
   const {
     author,
     createdAt,
+    updatedAt,
     minutes,
     category,
     featured,
@@ -30,11 +39,12 @@ export function PostSummaryCard({ project, className }: PostSummaryCardProps) {
   const tPortfolio = useTranslations('portfolio')
   const locale = useLocale()
 
-  const formattedDate = new Intl.DateTimeFormat(locale, {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  }).format(new Date(createdAt))
+  const formatDate = (date: string) =>
+    new Intl.DateTimeFormat(locale, {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    }).format(new Date(date))
 
   return (
     <div
@@ -71,8 +81,16 @@ export function PostSummaryCard({ project, className }: PostSummaryCardProps) {
       <div className='border-border mb-4 space-y-2 border-t pt-3'>
         <div className='text-muted-foreground flex items-center gap-2 text-xs'>
           <Calendar className='text-primary size-3.5 shrink-0' />
-          <time dateTime={createdAt}>{formattedDate}</time>
+          <time dateTime={toIsoDate(createdAt)}>{formatDate(createdAt)}</time>
         </div>
+        {updatedAt && (
+          <div className='text-muted-foreground flex items-center gap-2 text-xs'>
+            <RefreshCw className='text-primary size-3.5 shrink-0' />
+            <time dateTime={toIsoDate(updatedAt)}>
+              {t('updated', { date: formatDate(updatedAt) })}
+            </time>
+          </div>
+        )}
         <div className='text-muted-foreground flex items-center gap-2 text-xs'>
           <Clock className='text-primary size-3.5 shrink-0' />
           {t('readingTime', { minutes })}

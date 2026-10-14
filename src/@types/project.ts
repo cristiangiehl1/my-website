@@ -16,5 +16,8 @@ export type Project = {
   deploy?: string
 
   featured: boolean
+  /** MM/DD/YYYY */
   createdAt: string
+  /** MM/DD/YYYY — only set when the post is meaningfully revised */
+  updatedAt?: string
 }

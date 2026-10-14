@@ -5,6 +5,7 @@ import { Container, MainContainer } from '@/app/_components/container'
 import { AboutExperience } from '@/app/_components/pages/about/about-experience'
 import { AboutHero } from '@/app/_components/pages/about/about-hero'
 import { AboutPersonal } from '@/app/_components/pages/about/about-personal'
+import { buildAlternates } from '@/helpers/build-url'
 
 export async function generateMetadata({
   params,
@@ -13,7 +14,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'about' })
-  return { title: t('metaTitle') }
+  return {
+    title: t('metaTitle'),
+    alternates: buildAlternates(locale, 'about'),
+  }
 }
 
 export default async function AboutPage({

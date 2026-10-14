@@ -1,19 +1,13 @@
 import type { MetadataRoute } from 'next'
 
 import { __PORTFOLIO__ } from '@/data/portfolio'
+import { buildUrl } from '@/helpers/build-url'
+import { toIsoDate } from '@/helpers/to-iso-date'
 import { routing } from '@/i18n/routing'
-
-import { siteUrl } from './metadata'
 
 type SitemapEntry = MetadataRoute.Sitemap[0]
 
 const baseRoutes = ['', 'about', 'contact', 'skills', 'portfolio']
-
-function buildUrl(locale: string, path: string): string {
-  const prefix = locale === routing.defaultLocale ? '' : `/${locale}`
-  const suffix = path ? `/${path}` : ''
-  return `${siteUrl}${prefix}${suffix}`
-}
 
 function altLanguages(path: string): Record<string, string> {
   return Object.fromEntries(routing.locales.map((l) => [l, buildUrl(l, path)]))
@@ -22,9 +16,10 @@ function altLanguages(path: string): Record<string, string> {
 export default function sitemap(): MetadataRoute.Sitemap {
   const entries: SitemapEntry[] = []
 
+  const now = new Date()
   const defaults: Partial<SitemapEntry> = {
     changeFrequency: 'yearly',
-    lastModified: '2026',
+    lastModified: now,
   }
 
   // static routes — both locales
@@ -47,6 +42,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     for (const locale of routing.locales) {
       entries.push({
         ...defaults,
+        lastModified: toIsoDate(project.updatedAt ?? project.createdAt),
         url: buildUrl(locale, path),
         priority: 1,
         images: [project.coverUrl ?? '/images/project-placeholder.jpg'],
